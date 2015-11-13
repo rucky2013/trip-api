@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ulplanet.trip.dao.JourneyDao">
+    <select id="findAdvice" resultType="java.util.Map">
+        SELECT
+            a.path   AS path,
+            b.id     AS id,
+            b.`name` AS name,
+            b.score  AS score,
+            '1'      AS type
+        FROM food_file a
+            JOIN food b
+                ON a.food = b.id
+                AND b.published = '1'
+            JOIN city c
+                ON b.city = c.id
+            JOIN country d
+                ON c.country = d.id
+                   AND a.type = '1'
+                   AND b.cooper = '1'
+                   AND d.name = #{country}
+        UNION ALL
+        SELECT
+            a.path   AS path,
+            b.id     AS id,
+            b.`name` AS name,
+            b.score  AS score,
+            '2'      AS type
+        FROM scenic_file a
+            JOIN scenic b
+                ON a.scenic = b.id
+               AND b.published = '1'
+            JOIN city c
+                ON b.city = c.id
+            JOIN country d
+                ON c.country = d.id
+                   AND a.type = '1'
+                   AND b.cooper = '1'
+                   AND d.name = #{country}
+        UNION ALL
+        SELECT
+            a.path   AS path,
+            b.id     AS id,
+            b.`name` AS name,
+            b.score  AS score,
+            '3'      AS type
+        FROM shop_file a
+            JOIN shop b
+                ON a.shop = b.id
+                AND b.published = '1'
+            JOIN city c
+                ON b.city = c.id
+            JOIN country d
+                ON c.country = d.id
+                   AND a.type = '1'
+                   AND b.cooper = '1'
+                   AND d.name = #{country}
+    </select>
+    <select id="findFoodList" resultType="java.util.Map">
+        SELECT
+        a.path,
+        b.id,
+        b.name,
+        b.score,
+        ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{latitude} * PI() / 180 - b.latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(#{latitude} * PI() / 180) * COS(b.latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{longitude} * PI() / 180 - b.longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS distance
+        FROM
+        food_file a
+        JOIN food b ON a.food = b.id
+        JOIN city c ON b.city = c.id
+        JOIN country d ON c.country = d.id
+        AND b.published = '1'
+        AND a.type = '1'
+        AND d.name = #{country}
+        <if test="stype != null and stype != ''">
+            AND b.type = #{stype}
+        </if>
+        <choose>
+            <when test="order == 2">
+                ORDER BY b.score DESC
+            </when>
+            <otherwise>
+                ORDER BY distance ASC
+            </otherwise>
+        </choose>
+    </select>
+    <select id="findScenicList" resultType="java.util.Map">
+        SELECT
+        a.path,
+        b.id,
+        b.name,
+        b.score AS score,
+        ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{latitude} * PI() / 180 - b.latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(#{latitude} * PI() / 180) * COS(b.latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{longitude} * PI() / 180 - b.longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS distance
+        FROM
+        scenic_file a
+        JOIN scenic b ON a.scenic = b.id
+        JOIN city c ON b.city = c.id
+        JOIN country d ON c.country = d.id
+        AND b.published = '1'
+        AND a.type = '1'
+        AND d.name = #{country}
+        <if test="stype != null and stype != ''">
+            AND b.type = #{stype}
+        </if>
+        <choose>
+            <when test="order == 2">
+                ORDER BY b.score DESC
+            </when>
+            <otherwise>
+                ORDER BY distance ASC
+            </otherwise>
+        </choose>
+    </select>
+    <select id="findShopList" resultType="java.util.Map">
+        SELECT
+        a.path,
+        b.id,
+        b.name,
+        b.score AS score,
+        ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{latitude} * PI() / 180 - b.latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(#{latitude} * PI() / 180) * COS(b.latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{longitude} * PI() / 180 - b.longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS distance
+        FROM
+        shop_file a
+        JOIN shop b ON a.shop = b.id
+        JOIN city c ON b.city = c.id
+        JOIN country d ON c.country = d.id
+        AND b.published = '1'
+        AND a.type = '1'
+        AND d.name = #{country}
+        <if test="stype != null and stype != ''">
+            AND b.type = #{stype}
+        </if>
+        <choose>
+            <when test="order == 2">
+                ORDER BY b.score DESC
+            </when>
+            <otherwise>
+                ORDER BY distance ASC
+            </otherwise>
+        </choose>
+    </select>
+    <select id="findFood" resultType="java.util.Map">
+        SELECT
+            name,
+            score,
+            description,
+            address,
+            longitude,
+            latitude,
+            worktime,
+            price,
+            phone,
+            ROUND(
+                    6378.138 * 2 * ASIN(
+                            SQRT(
+                                    POW(
+                                            SIN(
+                                                    (
+                                                        #{latitude} * PI() / 180 - latitude * PI() / 180
+                                                    ) / 2
+                                            ),
+                                            2
+                                    ) + COS(#{latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+                                            SIN(
+                                                    (
+                                                        #{longitude} * PI() / 180 - longitude * PI() / 180
+                                                    ) / 2
+                                            ),
+                                            2
+                                    )
+                            )
+                    ) * 1000
+            ) AS distance
+        FROM
+            food
+        WHERE
+            id = #{id}
+    </select>
+    <select id="findFoodFiles" resultType="java.util.Map">
+        SELECT
+            path,
+            type
+        FROM
+            food_file
+        WHERE
+            food = #{foodid}
+    </select>
+    <select id="findScenic" resultType="java.util.Map">
+        SELECT
+            name,
+            score,
+            description,
+            address,
+            longitude,
+            latitude,
+            price,
+            hours,
+            tips,
+            ROUND(
+                    6378.138 * 2 * ASIN(
+                            SQRT(
+                                    POW(
+                                            SIN(
+                                                    (
+                                                        #{latitude} * PI() / 180 - latitude * PI() / 180
+                                                    ) / 2
+                                            ),
+                                            2
+                                    ) + COS(#{latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+                                            SIN(
+                                                    (
+                                                        #{longitude} * PI() / 180 - longitude * PI() / 180
+                                                    ) / 2
+                                            ),
+                                            2
+                                    )
+                            )
+                    ) * 1000
+            ) AS distance
+        FROM
+            scenic
+        WHERE
+            id = #{id}
+    </select>
+    <select id="findScenicFiles" resultType="java.util.Map">
+        SELECT
+            path,
+            type
+        FROM
+            scenic_file
+        WHERE
+            scenic = #{id}
+    </select>
+    <select id="findShop" resultType="java.util.Map">
+        SELECT
+            name,
+            score,
+            description,
+            address,
+            longitude,
+            latitude,
+            worktime,
+            ROUND(
+                    6378.138 * 2 * ASIN(
+                            SQRT(
+                                    POW(
+                                            SIN(
+                                                    (
+                                                        #{latitude} * PI() / 180 - latitude * PI() / 180
+                                                    ) / 2
+                                            ),
+                                            2
+                                    ) + COS(#{latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+                                            SIN(
+                                                    (
+                                                        #{longitude} * PI() / 180 - longitude * PI() / 180
+                                                    ) / 2
+                                            ),
+                                            2
+                                    )
+                            )
+                    ) * 1000
+            ) AS distance
+        FROM
+            shop
+        WHERE
+            id = #{id}
+    </select>
+    <select id="findShopFiles" resultType="java.util.Map">
+        SELECT
+            path,
+            type,
+            description
+        FROM
+            shop_file
+        WHERE
+            shop = #{id}
+    </select>
+</mapper>

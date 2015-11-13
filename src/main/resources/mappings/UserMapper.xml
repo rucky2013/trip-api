@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ulplanet.trip.dao.UserDao">
+    <select id="findUsers" resultType="java.util.Map">
+        SELECT
+            group_user.id,
+            user.name,
+            user.gender,
+            user.photo,
+            group_user.type,
+            group_user.code
+        FROM
+            user
+            JOIN group_user ON user.id = group_user.user
+        WHERE
+            group_user.group = #{groupid}
+    </select>
+    <select id="findUser" resultType="User">
+        SELECT
+            group_user.id,
+            user.name,
+            user.gender,
+            user.identity_card,
+            user.passport,
+            user.phone,
+            user.email,
+            user.photo,
+            group_user.`group`,
+            group_user.code,
+            group_user.type,
+            group_user.im_token
+        FROM
+            user
+            JOIN group_user ON user.id = group_user.`user`
+            JOIN `group` ON group_user.`group` = `group`.id
+        WHERE
+            group_user.code = #{code}
+    </select>
+
+    <select id="findUserByParam" resultType="User">
+        SELECT
+        user.id,
+        user.name,
+        user.gender,
+        user.identity_card,
+        user.passport,
+        user.phone,
+        user.email,
+        user.photo,
+        group_user.`group`,
+        group_user.code,
+        group_user.type,
+        group_user.im_token
+        FROM
+        user
+        JOIN group_user ON user.id = group_user.`user`
+        JOIN `group` ON group_user.`group` = `group`.id
+        <where>
+            1 = 1
+            <if test="group!=null and group!=''">
+                AND group_user.`group` = #{group}
+            </if>
+            <if test="id!=null and id!=''">
+                AND user.id = #{id}
+            </if>
+            <if test="code!=null and code!=''">
+                AND code = #{code}
+            </if>
+            <if test="type!=null and type!=''">
+                AND group_user.type = #{type}
+            </if>
+
+        </where>
+    </select>
+</mapper>

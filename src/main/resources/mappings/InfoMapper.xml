@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ulplanet.trip.dao.InfoDao">
+    <select id="findEmergency" resultType="java.util.Map">
+        SELECT
+            ambulance,
+            police,
+            fire,
+            sea_emerg,
+            road_emerg,
+            unionpay_call,
+            embassy_city,
+            embassy_addr,
+            embassy_call,
+            embassy_time
+        FROM
+            country
+        WHERE
+            name = #{country}
+    </select>
+    <select id="findCar" resultType="java.util.Map">
+        SELECT
+            type,
+            phone
+        FROM
+            car_rental
+            JOIN country ON car_rental.country = country.id
+        WHERE
+            country.name = #{country}
+    </select>
+    <select id="findTourists" resultType="java.util.Map">
+        SELECT
+            user.name,
+            user.phone
+        FROM
+            user
+            JOIN group_user ON user.id = group_user.user
+        WHERE
+            `group` = #{group}
+            AND type = 0
+        ORDER BY group_user.update_date
+    </select>
+    <select id="findCarPhone" resultType="java.lang.String">
+        SELECT car_rental.phone
+        FROM
+            car_rental
+            JOIN country ON car_rental.country = country.id
+        WHERE
+            country.name = #{country}
+            AND car_rental.type = '1'
+    </select>
+</mapper>

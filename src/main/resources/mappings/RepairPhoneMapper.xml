@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.ulplanet.trip.dao.RepairPhoneDao">
+
+    <resultMap id="RepairPhone" type="com.ulplanet.trip.bean.RepairPhone">
+        <result property="id" column="id"/>
+        <result property="phoneId" column="phone_id"/>
+        <result property="reason" column="reason"/>
+        <result property="repairTime" column="repair_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="comment" column="comment"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="createDate" column="create_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="remarks" column="remarks"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="BaseColumns">
+	    <![CDATA[
+
+            id,phone_id,reason,repair_time,end_time,comment,remarks,status
+
+        ]]>
+	</sql>
+
+    <sql id="BaseWhere">
+        <where>
+            <if test="id != null and id != ''">
+                AND id = #{id}
+            </if>
+            <if test="phoneId != null and phoneId != ''">
+                AND phone_id = #{phoneId}
+            </if>
+            <if test="reason != null and reason != ''">
+                AND reason = #{reason}
+            </if>
+            <if test="repairTime != null and repairTime != ''">
+                AND repair_time = #{repairTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND end_time = #{endTime}
+            </if>
+            <if test="comment != null and comment != ''">
+                AND comment = #{comment}
+            </if>
+            <if test="updateDate != null and updateDate != ''">
+                AND update_date = #{updateDate}
+            </if>
+            <if test="createDate != null and createDate != ''">
+                AND create_date = #{createDate}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by = #{createBy}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by = #{updateBy}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks = #{remarks}
+            </if>
+        </where>
+
+    </sql>
+
+    <sql id="UpdateWhere">
+        <where>
+            <if test="phoneId != null and phoneId != ''">
+                AND phone_id = #{phoneId},
+            </if>
+            <if test="reason != null and reason != ''">
+                AND reason = #{reason},
+            </if>
+            <if test="repairTime != null and repairTime != ''">
+                AND repair_time = #{repairTime},
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND end_time = #{endTime},
+            </if>
+            <if test="comment != null and comment != ''">
+                AND comment = #{comment},
+            </if>
+            <if test="updateDate != null and updateDate != ''">
+                AND update_date = #{updateDate},
+            </if>
+            <if test="createDate != null and createDate != ''">
+                AND create_date = #{createDate},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by = #{updateBy},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND remarks = #{remarks}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO repair_phone (
+        <trim suffix="" suffixOverrides=",">
+            id,
+            <if test="phoneId!=null and phoneId!=''">
+                phone_id ,
+            </if>
+            <if test="reason!=null and reason!=''">
+                reason ,
+            </if>
+            <if test="repairTime!=null and repairTime!=''">
+                repair_time ,
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                end_time ,
+            </if>
+            <if test="comment!=null and comment!=''">
+                comment ,
+            </if>
+            <if test="status!=null">
+                status,
+            </if>
+            update_date ,
+            create_date ,
+            <if test="createBy!=null">
+                create_by,
+            </if>
+            <if test="updateBy!=null">
+                update_by,
+            </if>
+            remarks ,
+        </trim>
+        ) VALUES (
+        <trim suffix="" suffixOverrides=",">
+            #{id},
+            <if test="phoneId!=null and phoneId!=''">
+                #{phoneId} ,
+            </if>
+            <if test="reason!=null and reason!=''">
+                #{reason} ,
+            </if>
+            <if test="repairTime!=null and repairTime!=''">
+                #{repairTime} ,
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                #{endTime} ,
+            </if>
+            <if test="comment!=null and comment!=''">
+                #{comment} ,
+            </if>
+            <if test="status!=null">
+                #{status} ,
+            </if>
+            #{updateDate} ,
+            #{createDate} ,
+            <if test="createBy!=null">
+                #{createBy} ,
+            </if>
+            <if test="updateBy!=null">
+                #{updateBy} ,
+            </if>
+            #{remarks} ,
+        </trim>
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE repair_phone
+        <set>
+            <if test="phoneId != null">
+                phone_id = #{phoneId},
+            </if>
+            <if test="reason != null">
+                reason = #{reason},
+            </if>
+            <if test="repairTime != null">
+                repair_time = #{repairTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="comment != null">
+                comment = #{comment},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks}
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        <![CDATA[
+
+            DELETE FROM repair_phone WHERE
+            id = #{id}
+
+        ]]>
+    </delete>
+
+    <select id="getById" resultMap="RepairPhone">
+        SELECT
+        <include refid="BaseColumns"/>
+        <![CDATA[
+		    FROM repair_phone
+	        WHERE
+		        id = #{id}
+	    ]]>
+    </select>
+
+
+    <select id="findPageCount" resultType="long">
+        SELECT count(1) FROM repair_phone
+        <include refid="BaseWhere"/>
+    </select>
+
+    <select id="findListByParams" resultMap="RepairPhone">
+        SELECT
+        <include refid="BaseColumns"/>
+        FROM repair_phone
+        <include refid="BaseWhere"/>
+    </select>
+
+    <select id="findList" resultMap="RepairPhone">
+        SELECT
+        <include refid="BaseColumns"/>
+        FROM repair_phone
+        where status != -1
+    </select>
+
+
+</mapper>
+
