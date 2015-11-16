@@ -392,6 +392,7 @@
     </dependencies>
 
 	<build>
+        <finalName>api</finalName>
 		<plugins>
             <!-- compiler插件 -->
 			<plugin>
