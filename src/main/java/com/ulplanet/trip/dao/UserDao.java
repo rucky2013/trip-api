@@ -16,4 +16,7 @@ public interface UserDao extends BaseDao {
 
     List<User> findUserByParam(User user);
 
+    int update(User user);
+
+
 }

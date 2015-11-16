@@ -2,6 +2,7 @@ package com.ulplanet.trip.service.impl;
 
 import com.ulplanet.trip.api.location.GeocodeService;
 import com.ulplanet.trip.bean.User;
+import com.ulplanet.trip.common.utils.FileManager;
 import com.ulplanet.trip.common.utils.JedisUtils;
 import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.common.utils.TokenUtils;
@@ -68,6 +69,7 @@ public class LoginServiceImpl implements LoginService {
         user.setCurrentCountry(geocode.getCountry());
         user.setCurrentCity(geocode.getCity());
         user.setLastUpdate(new Date().getTime());
+        user.setPhoto(FileManager.getFileUrlByRealpath(user.getPhoto()));
         String token = TokenUtils.getToken(imei);
         JedisUtils.set(token, new Gson().toJson(user), 60 * 60 * 24 * 10);
         JedisUtils.set(user.getId(), token, 60 * 60 * 24 * 10);
@@ -81,6 +83,13 @@ public class LoginServiceImpl implements LoginService {
         data.put("phone", user.getPhone());
         data.put("userid", user.getId());
         data.put("type", user.getType());
+        data.put("weChat", user.getWeChat());
+        data.put("qq", user.getQq());
+        data.put("birth", user.getBirth());
+        data.put("issueDate", user.getIssueDate());
+        data.put("expiryDate", user.getExpiryDate());
+        data.put("birthPlace", user.getBirthPlace());
+        data.put("issuePlace", user.getIssuePlace());
 
         return data;
     }
