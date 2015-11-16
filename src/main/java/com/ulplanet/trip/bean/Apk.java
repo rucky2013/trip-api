@@ -1,5 +1,6 @@
 package com.ulplanet.trip.bean;
 
+
 import com.ulplanet.trip.common.persistence.DataEntity;
 
 /**
