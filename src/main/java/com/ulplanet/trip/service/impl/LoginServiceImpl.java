@@ -11,6 +11,8 @@ import com.ulplanet.trip.service.LoginService;
 import com.ulplanet.trip.util.LoginConstants;
 import com.ulplanet.trip.util.LoginException;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import java.util.Map;
 
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
+
+    Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     @Autowired
     UserDao userdao;
@@ -62,6 +66,7 @@ public class LoginServiceImpl implements LoginService {
         GeocodeService.Geocode geocode = GeocodeService.get(longitude, latitude);
         if (geocode == null
                 || StringHelper.isEmpty(geocode.getCountry())) {
+            logger.error("login error user:" + userid + ",lng:" + longitude + ",lat:" + latitude);
             throw LoginConstants.LOGIN_ERROR;
         }
 
