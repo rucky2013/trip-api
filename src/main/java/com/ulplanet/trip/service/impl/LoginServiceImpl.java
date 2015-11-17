@@ -12,6 +12,7 @@ import com.ulplanet.trip.service.LoginService;
 import com.ulplanet.trip.util.LoginConstants;
 import com.ulplanet.trip.util.LoginException;
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +70,7 @@ public class LoginServiceImpl implements LoginService {
         user.setCurrentCountry(geocode.getCountry());
         user.setCurrentCity(geocode.getCity());
         user.setLastUpdate(new Date().getTime());
-        user.setPhoto(FileManager.getFileUrlByRealpath(user.getPhoto()));
+        user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : FileManager.getFileUrlByRealpath(user.getPhoto()));
         String token = TokenUtils.getToken(imei);
         JedisUtils.set(token, new Gson().toJson(user), 60 * 60 * 24 * 10);
         JedisUtils.set(user.getId(), token, 60 * 60 * 24 * 10);
