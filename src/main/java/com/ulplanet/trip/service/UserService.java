@@ -9,12 +9,11 @@ import java.util.Map;
 
 public interface UserService {
 
-    Map<String, Object> findUsers();
+    Map<String, Object> findUsers(String tag);
 
     List<User> findUserByParam(User user);
 
     Map<String, Object> update(User user);
 
-    //TODO 上传头像
     Map<String, Object> upload(MultipartFile file);
 }

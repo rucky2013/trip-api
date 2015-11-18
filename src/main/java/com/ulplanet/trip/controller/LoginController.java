@@ -22,8 +22,9 @@ public class LoginController {
                                        @RequestParam("userid") String userid,
                                        @RequestParam("userpwd") String userpwd,
                                        @RequestParam("longitude") double longitude,
-                                       @RequestParam("latitude") double latitude) {
-        return loginService.login(request, userid, userpwd, longitude, latitude);
+                                       @RequestParam("latitude") double latitude,
+                                       @RequestParam(value = "cphone", required = false) String cphone) {
+        return loginService.login(request, userid, userpwd, longitude, latitude, cphone);
     }
 
 }

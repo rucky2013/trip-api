@@ -3,6 +3,8 @@ package com.ulplanet.trip.service.impl;
 import com.ulplanet.trip.bean.User;
 import com.ulplanet.trip.bean.VersionTag;
 import com.ulplanet.trip.common.utils.FileManager;
+import com.ulplanet.trip.common.utils.IdGen;
+import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.common.utils.fservice.FileIndex;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.UserDao;
@@ -11,33 +13,53 @@ import com.ulplanet.trip.service.UserService;
 import com.ulplanet.trip.util.LocalContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
+
     @Autowired
     VersionTagDao versionTagDao;
 
     @Override
-    public Map<String, Object> findUsers() {
+    @Transactional(readOnly = false)
+    public Map<String, Object> findUsers(String tag) {
+
+        List<Map<String, Object>> userList = new ArrayList<>();
+        Map<String, Object> result = new HashMap<>();
 
         String groupid = LocalContext.getGroupId();
 
-        List<Map<String, Object>> userList = this.userDao.findUsers(groupid);
-        for (Map<String, Object> userMap : userList) {
-            if(userMap.get("photo")!=null)
-            userMap.put("photo", FileManager.getFileUrlByRealpath(String.valueOf(userMap.get("photo")))); //TODO 头像
+        VersionTag currentVersionTag = versionTagDao.get(new VersionTag(groupid, Constants.VERSION_TAG_USERLIST));
+
+        String currentTag;
+        if (currentVersionTag == null) {
+            currentTag = IdGen.uuid();
+            versionTagDao.insert(new VersionTag(groupid, Constants.VERSION_TAG_USERLIST, currentTag));
+        } else {
+            currentTag = currentVersionTag.getTag();
         }
 
-        Map<String, Object> result = new HashMap<>();
+        if (StringHelper.isEmpty(tag) || !tag.equals(currentTag)) {
+            for (Map<String, Object> userMap : this.userDao.findUsers(groupid)) {
+                Map<String, Object> resultMap = new HashMap<>();
+                resultMap.put("gender", Objects.toString(userMap.get("gender"), "1"));
+                resultMap.put("name", userMap.get("name"));
+                resultMap.put("id", userMap.get("id"));
+                resultMap.put("type", Objects.toString(userMap.get("type"), "1"));
+                resultMap.put("cphone", Objects.toString(userMap.get("cphone")));
+                resultMap.put("photo", FileManager.getFileUrlByRealpath(Objects.toString(userMap.get("photo"))));
+                userList.add(resultMap);
+            }
+        }
+
+        result.put("tag", currentTag);
         result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
         result.put(Constants.RETURN_FIELD_DATA, userList);
         return result;

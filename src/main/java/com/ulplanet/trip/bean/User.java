@@ -21,6 +21,7 @@ public class User extends DataEntity<User> {
     private String identityCard;
     private String passport;
     private String phone;
+    private String cphone; //使用设备手机号
     private String email;
     private String group;
     private String code;
@@ -149,6 +150,14 @@ public class User extends DataEntity<User> {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    public String getCphone() {
+        return cphone;
+    }
+
+    public void setCphone(String cphone) {
+        this.cphone = cphone;
     }
 
     public String getPhone() {

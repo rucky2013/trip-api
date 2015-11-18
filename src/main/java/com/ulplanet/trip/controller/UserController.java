@@ -19,8 +19,8 @@ public class UserController {
     UserService userService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Map<String, Object> getUsers() {
-        return this.userService.findUsers();
+    public Map<String, Object> getUsers(@RequestParam(value = "tag", required = false) String tag) {
+        return this.userService.findUsers(tag);
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)

@@ -19,6 +19,7 @@
             user.phone,
             user.email,
             user.photo,
+            group_user.cphone,
             group_user.type,
             group_user.code
         FROM
@@ -45,6 +46,7 @@
             user.phone,
             user.email,
             user.photo,
+            group_user.cphone,
             group_user.`group`,
             group_user.code,
             group_user.type,
@@ -125,14 +127,34 @@
             <if test="email!=null">
                 email = #{email},
             </if>
-            <if test="email!=null">
+            <if test="identityCard!=null">
                 identity_card = #{identityCard},
             </if>
             update_by = #{updateBy},
             update_date = #{updateDate},
             remarks = #{remarks}
         </set>
-        WHERE id = #{id}
-
+        WHERE id = #{userId}
     </update>
+
+    <update id="updateCPhone">
+        UPDATE group_user
+        <set>
+            cphone = #{cphone}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findJourneyCountry" resultType="java.util.Map">
+        SELECT
+            country. NAME AS country,
+            city. NAME AS city
+        FROM
+            journey_day
+            JOIN city ON SUBSTRING_INDEX(city_ids,',',1) = city.id
+            JOIN country ON city.country = country.id
+        WHERE
+            group_id = #{groupid}
+            AND day_number = 1
+    </select>
 </mapper>
