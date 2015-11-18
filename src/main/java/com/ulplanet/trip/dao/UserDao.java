@@ -18,5 +18,6 @@ public interface UserDao extends BaseDao {
 
     int update(User user);
 
+    int updateCPhone(User user);
 
 }

@@ -46,6 +46,7 @@
             user.phone,
             user.email,
             user.photo,
+            group_user.cphone,
             group_user.`group`,
             group_user.code,
             group_user.type,
@@ -126,14 +127,21 @@
             <if test="email!=null">
                 email = #{email},
             </if>
-            <if test="email!=null">
+            <if test="identityCard!=null">
                 identity_card = #{identityCard},
             </if>
             update_by = #{updateBy},
             update_date = #{updateDate},
             remarks = #{remarks}
         </set>
-        WHERE id = #{id}
+        WHERE id = #{userId}
+    </update>
 
+    <update id="updateCPhone">
+        UPDATE group_user
+        <set>
+            cphone = #{cphone}
+        </set>
+        WHERE id = #{id}
     </update>
 </mapper>

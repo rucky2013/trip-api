@@ -3,12 +3,14 @@ package com.ulplanet.trip.service.impl;
 import com.google.gson.Gson;
 import com.ulplanet.trip.api.location.GeocodeService;
 import com.ulplanet.trip.bean.User;
+import com.ulplanet.trip.bean.VersionTag;
 import com.ulplanet.trip.common.utils.FileManager;
 import com.ulplanet.trip.common.utils.JedisUtils;
 import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.common.utils.TokenUtils;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.UserDao;
+import com.ulplanet.trip.dao.VersionTagDao;
 import com.ulplanet.trip.service.LoginService;
 import com.ulplanet.trip.util.LoginConstants;
 import com.ulplanet.trip.util.LoginException;
@@ -17,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -31,12 +34,18 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     UserDao userdao;
 
+    @Autowired
+    VersionTagDao versionTagDao;
+
     @Override
-    public Map<String, Object> login(HttpServletRequest request, String userid, String userpwd, double longitude, double latitude) {
+    @Transactional(readOnly = false)
+    public Map<String, Object> login(HttpServletRequest request, String userid,
+                                     String userpwd, double longitude, double latitude, String cphone) {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            result.put(Constants.RETURN_FIELD_DATA, this.doLogin(request, userid, userpwd, longitude, latitude));
+            result.put(Constants.RETURN_FIELD_DATA,
+                    this.doLogin(request, userid, userpwd, longitude, latitude, cphone));
         } catch (LoginException e) {
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
             result.put(Constants.RETURN_FIELD_MESSAGE, e.getMessage());
@@ -47,7 +56,8 @@ public class LoginServiceImpl implements LoginService {
         return result;
     }
 
-    private Map<String, Object> doLogin(HttpServletRequest request, String userid, String userpwd, double longitude, double latitude) {
+    private Map<String, Object> doLogin(HttpServletRequest request, String userid,
+                                        String userpwd, double longitude, double latitude, String cphone) {
 
         String imei = request.getHeader(Constants.HEADER_IMEI);
         if (StringHelper.isEmpty(imei)) {
@@ -65,11 +75,17 @@ public class LoginServiceImpl implements LoginService {
             throw LoginConstants.USER_INVALID_PASSWORD;
         }
 
+        if (StringHelper.isNotEmpty(cphone) && !cphone.equals(user.getCphone())) {
+            user.setCphone(cphone);
+            userdao.updateCPhone(user);
+            versionTagDao.update(new VersionTag(user.getGroup(), Constants.VERSION_TAG_USERLIST));
+        }
+
         GeocodeService.Geocode geocode = GeocodeService.get(longitude, latitude);
         if (geocode == null
                 || StringHelper.isEmpty(geocode.getCountry())) {
-            logger.error("login error. user:" + userid + ",lng:" + longitude + ",lat:" + latitude);
-            throw LoginConstants.LOGIN_ERROR;
+            logger.error("google geocode error. user:" + userid + ",lng:" + longitude + ",lat:" + latitude);
+            throw LoginConstants.LOGIN_ERROR; //TODO 坐标解析
         }
 
         user.setCurrentCountry(geocode.getCountry());
@@ -84,7 +100,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("token", token);
         data.put("imtoken", user.getImToken());
         data.put("group", user.getGroup());
-        data.put("photo", user.getPhoto()); //TODO photo
+        data.put("photo", user.getPhoto());
         data.put("name", user.getName());
         data.put("phone", user.getPhone());
         data.put("userid", user.getId());

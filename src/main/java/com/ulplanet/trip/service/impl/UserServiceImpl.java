@@ -73,7 +73,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> update(User user) {
-        user.setId(LocalContext.getUser().getUserId());
         user.setUpdateBy(user.getId());
         user.setUpdateDate(new Date());
         int i = userDao.update(user);
@@ -90,7 +89,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> upload(MultipartFile file) {
         User user = LocalContext.getUser();
-        user.setId(user.getUserId());
         FileIndex ufi = new FileIndex();
         ufi.setmUpfile(file);
         ufi.setTruename(file.getOriginalFilename());
