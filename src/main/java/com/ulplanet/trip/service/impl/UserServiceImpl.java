@@ -1,10 +1,12 @@
 package com.ulplanet.trip.service.impl;
 
 import com.ulplanet.trip.bean.User;
+import com.ulplanet.trip.bean.VersionTag;
 import com.ulplanet.trip.common.utils.FileManager;
 import com.ulplanet.trip.common.utils.fservice.FileIndex;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.UserDao;
+import com.ulplanet.trip.dao.VersionTagDao;
 import com.ulplanet.trip.service.UserService;
 import com.ulplanet.trip.util.LocalContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    VersionTagDao versionTagDao;
 
     @Override
     public Map<String, Object> findUsers() {
@@ -47,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> update(User user) {
-        user.setId(LocalContext.getUser().getUserId());
+        user.setUserId(LocalContext.getUser().getUserId());
         user.setUpdateBy(user.getId());
         user.setUpdateDate(new Date());
         int i = userDao.update(user);
@@ -64,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> upload(MultipartFile file) {
         User user = LocalContext.getUser();
-        user.setId(user.getUserId());
+        user.setUserId(user.getUserId());
         FileIndex ufi = new FileIndex();
         ufi.setmUpfile(file);
         ufi.setTruename(file.getOriginalFilename());
@@ -74,6 +78,7 @@ public class UserServiceImpl implements UserService {
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
         if(i > 0){
+            versionTagDao.update(new VersionTag(LocalContext.getUser().getGroup(),1));
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
         }else{
             result.put(Constants.RETURN_FIELD_MESSAGE, "上传失败");

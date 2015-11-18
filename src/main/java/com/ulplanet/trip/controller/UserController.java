@@ -23,7 +23,7 @@ public class UserController {
         return this.userService.findUsers();
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public Map<String, Object> update(User user) {
         return this.userService.update(user);
     }
