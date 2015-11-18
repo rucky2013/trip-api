@@ -19,6 +19,7 @@
             user.phone,
             user.email,
             user.photo,
+            group_user.cphone,
             group_user.type,
             group_user.code
         FROM

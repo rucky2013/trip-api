@@ -42,6 +42,9 @@ public abstract class AbstractDownloadGetter extends AbstractFileGetter implemen
 
 	public String getFileUrl(String realpath) {
 		File dfile = new File(tmpfolder, realpath);
+        if (dfile.isDirectory()) {
+            return "";
+        }
 		if (dfile.exists()) {
             return calFileUrl(dfile);
         }
