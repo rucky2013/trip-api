@@ -3,6 +3,7 @@
 <mapper namespace="com.ulplanet.trip.dao.InfoDao">
     <select id="findEmergency" resultType="java.util.Map">
         SELECT
+            zcode,
             ambulance,
             police,
             fire,

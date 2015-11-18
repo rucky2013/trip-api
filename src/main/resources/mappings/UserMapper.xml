@@ -4,8 +4,20 @@
     <select id="findUsers" resultType="java.util.Map">
         SELECT
             group_user.id,
+            user.id as userId,
             user.name,
+            user.weChat,
+            user.qq,
+            user.birth,
+            user.issue_date,
+            user.expiry_date,
+            user.birth_place,
+            user.issue_place,
             user.gender,
+            user.identity_card,
+            user.passport,
+            user.phone,
+            user.email,
             user.photo,
             group_user.type,
             group_user.code
@@ -18,7 +30,15 @@
     <select id="findUser" resultType="User">
         SELECT
             group_user.id,
+            user.id as userId,
             user.name,
+            user.weChat,
+            user.qq,
+            user.birth,
+            user.issue_date,
+            user.expiry_date,
+            user.birth_place,
+            user.issue_place,
             user.gender,
             user.identity_card,
             user.passport,
@@ -39,8 +59,15 @@
 
     <select id="findUserByParam" resultType="User">
         SELECT
-        user.id,
+        user.id as userId,
         user.name,
+        user.weChat,
+        user.qq,
+        user.birth,
+        user.issue_date,
+        user.expiry_date,
+        user.birth_place,
+        user.issue_place,
         user.gender,
         user.identity_card,
         user.passport,
@@ -72,4 +99,40 @@
 
         </where>
     </select>
+
+
+    <update id="update">
+        UPDATE user
+        <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="weChat!=null">
+                weChat = #{weChat},
+            </if>
+            <if test="qq!=null">
+                qq = #{qq},
+            </if>
+            <if test="birth!=null">
+                birth = #{birth},
+            </if>
+            <if test="gender!=null">
+                gender = #{gender},
+            </if>
+            <if test="photo!=null">
+                photo = #{photo},
+            </if>
+            <if test="email!=null">
+                email = #{email},
+            </if>
+            <if test="email!=null">
+                identity_card = #{identityCard},
+            </if>
+            update_by = #{updateBy},
+            update_date = #{updateDate},
+            remarks = #{remarks}
+        </set>
+        WHERE id = #{id}
+
+    </update>
 </mapper>

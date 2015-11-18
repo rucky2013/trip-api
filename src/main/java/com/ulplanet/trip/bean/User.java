@@ -2,11 +2,21 @@ package com.ulplanet.trip.bean;
 
 import com.ulplanet.trip.common.persistence.DataEntity;
 
+import java.util.Date;
+
 public class User extends DataEntity<User> {
 
     private static final long serialVersionUID = 4200582752400724305L;
 
     private String name;
+    private String userId;
+    private String weChat;
+    private String qq;
+    private Date birth;
+    private String birthPlace;
+    private String issuePlace;
+    private Date issueDate;
+    private Date expiryDate;
     private String gender;
     private String identityCard;
     private String passport;
@@ -20,6 +30,70 @@ public class User extends DataEntity<User> {
     private String currentCountry;
     private String currentCity;
     private long lastUpdate;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getWeChat() {
+        return weChat;
+    }
+
+    public void setWeChat(String weChat) {
+        this.weChat = weChat;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public Date getBirth() {
+        return birth;
+    }
+
+    public void setBirth(Date birth) {
+        this.birth = birth;
+    }
+
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+
+    public void setBirthPlace(String birthPlace) {
+        this.birthPlace = birthPlace;
+    }
+
+    public String getIssuePlace() {
+        return issuePlace;
+    }
+
+    public void setIssuePlace(String issuePlace) {
+        this.issuePlace = issuePlace;
+    }
+
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
     public String getPhoto() {
         return photo;
