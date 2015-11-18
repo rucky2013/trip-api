@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
@@ -81,15 +82,24 @@ public class LoginServiceImpl implements LoginService {
             versionTagDao.update(new VersionTag(user.getGroup(), Constants.VERSION_TAG_USERLIST));
         }
 
+        String country = "中国";
+        String city = "北京";
         GeocodeService.Geocode geocode = GeocodeService.get(longitude, latitude);
         if (geocode == null
                 || StringHelper.isEmpty(geocode.getCountry())) {
             logger.error("google geocode error. user:" + userid + ",lng:" + longitude + ",lat:" + latitude);
-            throw LoginConstants.LOGIN_ERROR; //TODO 坐标解析
+            Map<String, Object> journeyCountryMap = userdao.findJourneyCountry(user.getGroup());
+            if (journeyCountryMap != null) {
+                country = Objects.toString(journeyCountryMap.get("country"), country);
+                city = Objects.toString(journeyCountryMap.get("city"), city);
+            }
+        } else {
+            country = geocode.getCountry();
+            city = geocode.getCity();
         }
 
-        user.setCurrentCountry(geocode.getCountry());
-        user.setCurrentCity(geocode.getCity());
+        user.setCurrentCountry(country);
+        user.setCurrentCity(city);
         user.setLastUpdate(new Date().getTime());
         user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : FileManager.getFileUrlByRealpath(user.getPhoto()));
         String token = TokenUtils.getToken(imei);
@@ -104,14 +114,13 @@ public class LoginServiceImpl implements LoginService {
         data.put("name", user.getName());
         data.put("phone", user.getPhone());
         data.put("userid", user.getId());
+        data.put("passport", user.getPassport());
         data.put("type", user.getType());
         data.put("weChat", user.getWeChat());
         data.put("qq", user.getQq());
         data.put("birth", user.getBirth());
-        data.put("issueDate", user.getIssueDate());
         data.put("expiryDate", user.getExpiryDate());
         data.put("birthPlace", user.getBirthPlace());
-        data.put("issuePlace", user.getIssuePlace());
 
         return data;
     }

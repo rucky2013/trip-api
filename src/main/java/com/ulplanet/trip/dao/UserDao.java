@@ -20,4 +20,6 @@ public interface UserDao extends BaseDao {
 
     int updateCPhone(User user);
 
+    Map<String, Object> findJourneyCountry(String groupid);
+
 }
