@@ -87,12 +87,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> upload(MultipartFile file) {
-        User user = LocalContext.getUser();
+        User user = new User();
         FileIndex ufi = new FileIndex();
         ufi.setmUpfile(file);
         ufi.setTruename(file.getOriginalFilename());
         ufi.setMcode("user");
         ufi = FileManager.save(ufi);
+        user.setUserId(LocalContext.getUser().getUserId());
         user.setPhoto(ufi.getPath());
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
