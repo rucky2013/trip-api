@@ -78,6 +78,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> result = new HashMap<>();
         if(i > 0){
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
+            result.put(Constants.RETURN_FIELD_DATA, new HashMap<>());
         }else{
             result.put(Constants.RETURN_FIELD_MESSAGE, "更新失败");
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
@@ -100,6 +101,7 @@ public class UserServiceImpl implements UserService {
         if(i > 0){
             versionTagDao.update(new VersionTag(LocalContext.getUser().getGroup(),1));
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
+            result.put(Constants.RETURN_FIELD_DATA, new HashMap<>());
         }else{
             result.put(Constants.RETURN_FIELD_MESSAGE, "上传失败");
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
