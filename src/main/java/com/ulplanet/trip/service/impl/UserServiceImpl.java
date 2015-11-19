@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> update(User user) {
         user.setUserId(LocalContext.getUser().getUserId());
-        user.setUpdateBy(user.getId());
+        user.setUpdateBy(user.getUserId());
         user.setUpdateDate(new Date());
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         ufi.setMcode("user");
         ufi = FileManager.save(ufi);
         user.setPhoto(ufi.getPath());
-        user.setUpdateBy(user.getId());
+        user.setUpdateBy(user.getUserId());
         user.setUpdateDate(new Date());
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
