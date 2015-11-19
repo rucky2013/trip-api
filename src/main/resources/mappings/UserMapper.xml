@@ -130,9 +130,6 @@
             <if test="identityCard!=null">
                 identity_card = #{identityCard},
             </if>
-            update_by = #{updateBy},
-            update_date = #{updateDate},
-            remarks = #{remarks}
         </set>
         WHERE id = #{userId}
     </update>
