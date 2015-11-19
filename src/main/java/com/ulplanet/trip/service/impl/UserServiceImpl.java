@@ -97,6 +97,8 @@ public class UserServiceImpl implements UserService {
         ufi.setMcode("user");
         ufi = FileManager.save(ufi);
         user.setPhoto(ufi.getPath());
+        user.setUpdateBy(user.getId());
+        user.setUpdateDate(new Date());
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
         if(i > 0){
