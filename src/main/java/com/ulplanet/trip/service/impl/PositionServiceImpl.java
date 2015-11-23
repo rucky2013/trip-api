@@ -82,6 +82,7 @@ public class PositionServiceImpl implements PositionService {
 
         List<Map<String, Object>> userList = this.userDao.findUsers(groupid);
         Map<String, Map<String, Object>> userKeyMap = new HashMap<>();
+        String type = LocalContext.getUser().getType();
         for (Map<String, Object> map : userList) {
             String userid = Objects.toString(map.get("id"), "");
             userKeyMap.put(userid, map);
@@ -90,10 +91,12 @@ public class PositionServiceImpl implements PositionService {
         if (userMap != null) {
             for (Map.Entry<String, Object> userMapEntry : userMap.entrySet()) {
                 String userid = userMapEntry.getKey();
+
                 if (LocalContext.getUserId().equals(userid)) {
                     continue;
                 }
                 Map<String, Object> userDataMap = userKeyMap.get(userid);
+                if("0".equals(String.valueOf(userDataMap.get("position_flag"))) && "1".equals(type))continue;
                 if (userDataMap != null) {
                     Map<String, Object> pointMap = (Map<String, Object>) userMapEntry.getValue();
                     pointMap.put("userid", userid);

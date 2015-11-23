@@ -75,6 +75,10 @@ public class UserServiceImpl implements UserService {
     public Map<String, Object> update(User user) {
         user.setUserId(LocalContext.getUser().getUserId());
         int i = userDao.update(user);
+        if(user.getPositionFlag()!=null) {
+            user.setCode(LocalContext.getUser().getCode());
+            i = userDao.updateGroupUser(user);
+        }
         Map<String, Object> result = new HashMap<>();
         if(i > 0){
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);

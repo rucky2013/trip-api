@@ -30,7 +30,16 @@ public class User extends DataEntity<User> {
     private String imToken;
     private String currentCountry;
     private String currentCity;
+    private Integer positionFlag;
     private long lastUpdate;
+
+    public Integer getPositionFlag() {
+        return positionFlag;
+    }
+
+    public void setPositionFlag(Integer positionFlag) {
+        this.positionFlag = positionFlag;
+    }
 
     public String getUserId() {
         return userId;

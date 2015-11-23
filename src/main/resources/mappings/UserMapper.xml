@@ -19,6 +19,7 @@
             user.phone,
             user.email,
             user.photo,
+            group_user.position_flag,
             group_user.cphone,
             group_user.type,
             group_user.code
@@ -46,6 +47,7 @@
             user.phone,
             user.email,
             user.photo,
+            group_user.position_flag,
             group_user.cphone,
             group_user.`group`,
             group_user.code,
@@ -76,6 +78,7 @@
         user.phone,
         user.email,
         user.photo,
+        group_user.position_flag,
         group_user.`group`,
         group_user.code,
         group_user.type,
@@ -103,9 +106,23 @@
     </select>
 
 
+
+    <update id="updateGroupUser">
+        UPDATE group_user
+        <set>
+            code = #{code},
+            <if test="positionFlag!=null">
+                position_flag = #{positionFlag},
+            </if>
+        </set>
+        WHERE code = #{code}
+    </update>
+
+
     <update id="update">
         UPDATE user
         <set>
+            id = #{userId},
             <if test="name!=null">
                 name = #{name},
             </if>
