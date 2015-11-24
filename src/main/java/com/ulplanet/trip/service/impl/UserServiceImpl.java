@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> update(User user) {
-        user.setUserId(LocalContext.getUser().getUserId());
+        user.setUserId(LocalContext.getUserId());
         int i = userDao.update(user);
         if(user.getPositionFlag()!=null) {
             user.setCode(LocalContext.getUser().getCode());
