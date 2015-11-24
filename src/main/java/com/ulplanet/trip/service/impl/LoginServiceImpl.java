@@ -120,6 +120,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("weChat", user.getWeChat());
         data.put("qq", user.getQq());
         data.put("birth", user.getBirth());
+        data.put("email", user.getEmail());
         data.put("birthPlace", user.getBirthPlace());
         data.put("positionFlag", user.getPositionFlag());
 
