@@ -44,9 +44,7 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         Map<String, Object> datas = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
         if(versionTag==null){
-            result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
-            result.put(Constants.RETURN_FIELD_MESSAGE, "版本号不存在");
-            return  result;
+            versionTag = new VersionTag();
         }
         if( tag.equals(versionTag.getTag())){
             datas.put("newRecord",0);
