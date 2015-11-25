@@ -82,7 +82,6 @@ public class PositionServiceImpl implements PositionService {
 
         List<Map<String, Object>> userList = this.userDao.findUsers(groupid);
         Map<String, Map<String, Object>> userKeyMap = new HashMap<>();
-        String type = LocalContext.getUser().getType();
         for (Map<String, Object> map : userList) {
             String userid = Objects.toString(map.get("id"), "");
             userKeyMap.put(userid, map);
@@ -96,13 +95,14 @@ public class PositionServiceImpl implements PositionService {
                     continue;
                 }
                 Map<String, Object> userDataMap = userKeyMap.get(userid);
-                if("0".equals(String.valueOf(userDataMap.get("position_flag"))) && "1".equals(type))continue;
+//                if("0".equals(String.valueOf(userDataMap.get("position_flag"))) && "1".equals(type))continue;
                 if (userDataMap != null) {
                     Map<String, Object> pointMap = (Map<String, Object>) userMapEntry.getValue();
                     pointMap.put("userid", userid);
                     pointMap.put("name", userDataMap.get("name"));
                     pointMap.put("type", userDataMap.get("type"));
                     pointMap.put("gender", userDataMap.get("gender"));
+                    pointMap.put("positionFlag", userDataMap.get("position_flag"));
                     pointMap.put("photo", userDataMap.get("photo")); //TODO 头像路径
                     datas.add(pointMap);
                 }
