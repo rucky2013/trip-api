@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         ufi.setMcode("user");
         ufi = FileManager.save(ufi);
         user.setUserId(LocalContext.getUser().getUserId());
-        user.setPhoto(ufi.getPath());
+        user.setPhoto(FileManager.getFileUrlByRealpath(ufi.getPath()));
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
         if(i > 0){
