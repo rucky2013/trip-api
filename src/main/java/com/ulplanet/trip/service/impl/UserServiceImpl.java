@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
                 resultMap.put("id", userMap.get("id"));
                 resultMap.put("type", Objects.toString(userMap.get("type"), "1"));
                 resultMap.put("cphone", Objects.toString(userMap.get("cphone")));
-                resultMap.put("photo", FileManager.getFileUrlByRealpath(Objects.toString(userMap.get("photo"))));
+                resultMap.put("photo", Objects.toString(userMap.get("photo")));
                 userList.add(resultMap);
             }
         }

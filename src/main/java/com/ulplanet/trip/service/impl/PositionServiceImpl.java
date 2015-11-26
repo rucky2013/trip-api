@@ -80,7 +80,7 @@ public class PositionServiceImpl implements PositionService {
         Map<String, Object> userMap = JedisUtils.getObjectMap(groupid);
         List<Map<String, Object>> datas = new ArrayList<>();
 
-        List<Map<String, Object>> userList = this.userDao.findUsers(groupid);
+            List<Map<String, Object>> userList = this.userDao.findUsers(groupid);
         Map<String, Map<String, Object>> userKeyMap = new HashMap<>();
         for (Map<String, Object> map : userList) {
             String userid = Objects.toString(map.get("id"), "");
@@ -103,7 +103,7 @@ public class PositionServiceImpl implements PositionService {
                     pointMap.put("type", userDataMap.get("type"));
                     pointMap.put("gender", userDataMap.get("gender"));
                     pointMap.put("positionFlag", userDataMap.get("position_flag"));
-                    pointMap.put("photo", userDataMap.get("photo")); //TODO 头像路径
+                    pointMap.put("photo", userDataMap.get("photo")); 
                     datas.add(pointMap);
                 }
             }
