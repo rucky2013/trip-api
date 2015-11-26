@@ -102,10 +102,12 @@ public class UserServiceImpl implements UserService {
         user.setPhoto(FileManager.getFileUrlByRealpath(ufi.getPath()));
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
+        Map<String, String> data = new HashMap<>();
+        data.put("photo",user.getPhoto());
         if(i > 0){
             versionTagDao.update(new VersionTag(LocalContext.getUser().getGroup(),1));
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
-            result.put(Constants.RETURN_FIELD_DATA, new HashMap<>());
+            result.put(Constants.RETURN_FIELD_DATA, data);
         }else{
             result.put(Constants.RETURN_FIELD_MESSAGE, "上传失败");
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
