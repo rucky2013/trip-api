@@ -62,8 +62,8 @@ public class PositionServiceImpl implements PositionService {
         GeocodeService.Geocode geocode = GeocodeService.get(longitude, latitude);
         if (geocode != null) {
             String country = geocode.getCountry();
-            String city = geocode.getCity();
-            if (StringHelper.isNotEmpty(country) && StringHelper.isNotEmpty(city)) {
+            String city = Objects.toString(geocode.getCity(), "");
+            if (StringHelper.isNotEmpty(country)) {
                 String token = request.getHeader(Constants.HEADER_TOKEN);
                 user.setCurrentCountry(country);
                 user.setCurrentCity(city);
