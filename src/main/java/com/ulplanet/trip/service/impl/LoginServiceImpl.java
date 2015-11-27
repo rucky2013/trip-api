@@ -11,7 +11,6 @@ import com.ulplanet.trip.dao.VersionTagDao;
 import com.ulplanet.trip.service.LoginService;
 import com.ulplanet.trip.util.LoginConstants;
 import com.ulplanet.trip.util.LoginException;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +92,7 @@ public class LoginServiceImpl implements LoginService {
             }
         } else {
             country = geocode.getCountry();
-            city = geocode.getCity();
+            city = Objects.toString(geocode.getCity(), "");
         }
 
         user.setCurrentCountry(country);
