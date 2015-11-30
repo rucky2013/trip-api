@@ -117,7 +117,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("identityCard", user.getIdentityCard());
         data.put("weChat", user.getWeChat());
         data.put("qq", user.getQq());
-        data.put("birth", user.getBirth()!=null?DateHelper.formatDate(user.getBirth(), "yyyy/MM/dd"):"");
+        data.put("birth", user.getBirth()!=null?DateHelper.formatDate(user.getBirth(), "yyyy/MM/dd"):null);
         data.put("email", user.getEmail());
         data.put("birthPlace", user.getBirthPlace());
         data.put("positionFlag", user.getPositionFlag());
