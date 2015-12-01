@@ -98,7 +98,7 @@ public class LoginServiceImpl implements LoginService {
         user.setCurrentCountry(country);
         user.setCurrentCity(city);
         user.setLastUpdate(new Date().getTime());
-        user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : FileManager.getFileUrlByRealpath(user.getPhoto()));
+        user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : user.getPhoto());
         String token = TokenUtils.getToken(imei);
         JedisUtils.set(token, new Gson().toJson(user), 60 * 60 * 24 * 10);
         JedisUtils.set(user.getId(), token, 60 * 60 * 24 * 10);
@@ -111,12 +111,14 @@ public class LoginServiceImpl implements LoginService {
         data.put("photo", user.getPhoto());
         data.put("name", user.getName());
         data.put("phone", user.getPhone());
+        data.put("cphone", user.getCphone());
         data.put("userid", user.getId());
         data.put("passport", user.getPassport());
         data.put("type", user.getType());
+        data.put("identityCard", user.getIdentityCard());
         data.put("weChat", user.getWeChat());
         data.put("qq", user.getQq());
-        data.put("birth", DateHelper.formatDate(user.getBirth(),"yyyy/MM/dd"));
+        data.put("birth", user.getBirth()!=null?DateHelper.formatDate(user.getBirth(), "yyyy/MM/dd"):null);
         data.put("email", user.getEmail());
         data.put("birthPlace", user.getBirthPlace());
         data.put("positionFlag", user.getPositionFlag());
