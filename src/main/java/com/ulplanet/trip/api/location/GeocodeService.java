@@ -1,8 +1,8 @@
 package com.ulplanet.trip.api.location;
 
+import com.google.gson.Gson;
 import com.ulplanet.trip.common.utils.HttpClientUtils;
 import com.ulplanet.trip.common.utils.JedisUtils;
-import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -199,7 +199,7 @@ public class GeocodeService {
 
         public String getCity(String country) {
             for (Components components : address_components) {
-                if (Objects.toString(CITY_NODE_MAP.get(country), "").equals(components.getType())) {
+                if (Objects.toString(CITY_NODE_MAP.get(country), DEFAULT_CITY_NODE).equals(components.getType())) {
                     return components.getLong_name();
                 }
             }
@@ -257,7 +257,7 @@ public class GeocodeService {
 //        Geocode g4 = get(24.944801, 60.169583); //赫尔辛基
 //        System.out.println(g4.getCountry());
 //        System.out.println(g4.getCity());
-        Geocode g5 = get(149.086086, -35.191384); //墨尔本
+        Geocode g5 = get(171.3312192, -42.180188); //新西兰
         System.out.println(g5.getCountry());
         System.out.println(g5.getCity());
     }
