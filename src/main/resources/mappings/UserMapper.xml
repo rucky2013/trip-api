@@ -17,6 +17,7 @@
             user.identity_card,
             user.passport,
             user.phone,
+            group_user.cphone,
             user.email,
             user.photo,
             group_user.position_flag,
@@ -45,6 +46,7 @@
             user.identity_card,
             user.passport,
             user.phone,
+            group_user.cphone,
             user.email,
             user.photo,
             group_user.position_flag,
@@ -74,6 +76,7 @@
         user.issue_place,
         user.gender,
         user.identity_card,
+        group_user.cphone,
         user.passport,
         user.phone,
         user.email,
@@ -113,6 +116,9 @@
             code = #{code},
             <if test="positionFlag!=null">
                 position_flag = #{positionFlag},
+            </if>
+            <if test="cphone!=null">
+                cphone = #{cphone},
             </if>
         </set>
         WHERE code = #{code}

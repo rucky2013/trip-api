@@ -111,6 +111,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("photo", user.getPhoto());
         data.put("name", user.getName());
         data.put("phone", user.getPhone());
+        data.put("cphone", user.getCphone());
         data.put("userid", user.getId());
         data.put("passport", user.getPassport());
         data.put("type", user.getType());
