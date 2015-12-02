@@ -78,6 +78,9 @@ public class UserServiceImpl implements UserService {
         if(user.getPositionFlag()!=null || user.getCphone()!=null) {
             user.setCode(LocalContext.getUser().getCode());
             i = userDao.updateGroupUser(user);
+            if(user.getCphone()!=null){
+                versionTagDao.update(new VersionTag(LocalContext.getUser().getGroup(), Constants.VERSION_TAG_USERLIST));
+            }
         }
         Map<String, Object> result = new HashMap<>();
         if(i > 0){

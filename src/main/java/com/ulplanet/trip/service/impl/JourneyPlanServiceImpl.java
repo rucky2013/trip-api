@@ -37,6 +37,7 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
 
     @Override
     public Map<String, Object> findList(String tag) {
+        if(tag==null)tag = "";
         VersionTag versionTag = new VersionTag();
         versionTag.setId(LocalContext.getUser().getGroup());
         versionTag.setType(2);
