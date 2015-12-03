@@ -88,26 +88,6 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         List<Map<String,Object>> planList = new ArrayList<>();
         String title = "";
         for(JourneyPlans jp : journeyPlans){
-            String id = jp.getInfoId();
-            int type = jp.getType();
-            String table = tableName(type);
-            if(table==null){
-                if(type==3 && id!=null){
-                    Flight flight = flightDao.get(id);
-                    jp.setDescription(flight.toString());
-                    jp.setName(flight.getFlightNo());
-                }
-            }else {
-                String col = col(type);
-                List<InfoBo> infoBos = journeyPlanDao.findInfoByTableName(table, null, id, col);
-                if (infoBos.size() > 0) {
-                    InfoBo infoBo = infoBos.get(0);
-                    jp.setDescription(infoBo.getDescription());
-                    jp.setName(infoBo.getName());
-                    jp.setLatitude(infoBo.getLatitude());
-                    jp.setLongitude(infoBo.getLongitude());
-                }
-            }
             if(num == 0){
                 num = jp.getDayNumber();
                 title = jp.getDayTitle();
