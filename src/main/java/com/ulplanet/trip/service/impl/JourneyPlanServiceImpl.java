@@ -92,7 +92,7 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
             int type = jp.getType();
             String table = tableName(type);
             if(table==null){
-                if(type==3){
+                if(type==3 && id!=null){
                     Flight flight = flightDao.get(id);
                     jp.setDescription(flight.toString());
                     jp.setName(flight.getFlightNo());
