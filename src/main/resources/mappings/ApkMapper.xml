@@ -3,16 +3,16 @@
 <mapper namespace="com.ulplanet.trip.dao.ApkDao">
 
     <select id="findList" resultType="Apk">
-        SELECT id,name,version,url,description,package_name as packageName,md5,size,tar  FROM apk
+        SELECT id,name,version,url,description,package_name as packageName,md5,size  FROM apk
         ORDER BY name
     </select>
 
     <select id="findByParam" resultType="Apk">
-        SELECT id,name,version,url,description,package_name as packageName,md5,size,tar  FROM apk
+        SELECT id,name,version,url,description,package_name as packageName,md5,size  FROM apk
         <where>
             1 = 1
             <if test="id!=null">
-               AND id = #{id}
+                AND id = #{id}
             </if>
             <if test="name!=null">
                 AND name = #{name}

@@ -4,9 +4,24 @@
     <select id="findUsers" resultType="java.util.Map">
         SELECT
             group_user.id,
+            user.id as userId,
             user.name,
+            user.weChat,
+            user.qq,
+            user.birth,
+            user.issue_date,
+            user.expiry_date,
+            user.birth_place,
+            user.issue_place,
             user.gender,
+            user.identity_card,
+            user.passport,
+            user.phone,
+            group_user.cphone,
+            user.email,
             user.photo,
+            group_user.position_flag,
+            group_user.cphone,
             group_user.type,
             group_user.code
         FROM
@@ -18,13 +33,24 @@
     <select id="findUser" resultType="User">
         SELECT
             group_user.id,
+            user.id as userId,
             user.name,
+            user.weChat,
+            user.qq,
+            user.birth,
+            user.issue_date,
+            user.expiry_date,
+            user.birth_place,
+            user.issue_place,
             user.gender,
             user.identity_card,
             user.passport,
             user.phone,
+            group_user.cphone,
             user.email,
             user.photo,
+            group_user.position_flag,
+            group_user.cphone,
             group_user.`group`,
             group_user.code,
             group_user.type,
@@ -39,14 +65,23 @@
 
     <select id="findUserByParam" resultType="User">
         SELECT
-        user.id,
+        user.id as userId,
         user.name,
+        user.weChat,
+        user.qq,
+        user.birth,
+        user.issue_date,
+        user.expiry_date,
+        user.birth_place,
+        user.issue_place,
         user.gender,
         user.identity_card,
+        group_user.cphone,
         user.passport,
         user.phone,
         user.email,
         user.photo,
+        group_user.position_flag,
         group_user.`group`,
         group_user.code,
         group_user.type,
@@ -71,5 +106,75 @@
             </if>
 
         </where>
+    </select>
+
+
+
+    <update id="updateGroupUser">
+        UPDATE group_user
+        <set>
+            code = #{code},
+            <if test="positionFlag!=null">
+                position_flag = #{positionFlag},
+            </if>
+            <if test="cphone!=null">
+                cphone = #{cphone},
+            </if>
+        </set>
+        WHERE code = #{code}
+    </update>
+
+
+    <update id="update">
+        UPDATE user
+        <set>
+            id = #{userId},
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="weChat!=null">
+                weChat = #{weChat},
+            </if>
+            <if test="qq!=null">
+                qq = #{qq},
+            </if>
+            <if test="birth!=null">
+                birth = #{birth},
+            </if>
+            <if test="gender!=null">
+                gender = #{gender},
+            </if>
+            <if test="photo!=null">
+                photo = #{photo},
+            </if>
+            <if test="email!=null">
+                email = #{email},
+            </if>
+            <if test="identityCard!=null">
+                identity_card = #{identityCard},
+            </if>
+        </set>
+        WHERE id = #{userId}
+    </update>
+
+    <update id="updateCPhone">
+        UPDATE group_user
+        <set>
+            cphone = #{cphone}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findJourneyCountry" resultType="java.util.Map">
+        SELECT
+            country. NAME AS country,
+            city. NAME AS city
+        FROM
+            journey_day
+            JOIN city ON SUBSTRING_INDEX(city_ids,',',1) = city.id
+            JOIN country ON city.country = country.id
+        WHERE
+            group_id = #{groupid}
+            AND day_number = 1
     </select>
 </mapper>

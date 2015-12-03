@@ -5,6 +5,7 @@ import java.util.Map;
 
 public interface LoginService {
 
-    Map<String, Object> login(HttpServletRequest request, String userid, String userpwd, double longitude, double latitude);
+    Map<String, Object> login(HttpServletRequest request, String userid,
+                              String userpwd, double longitude, double latitude, String cphone);
 
 }

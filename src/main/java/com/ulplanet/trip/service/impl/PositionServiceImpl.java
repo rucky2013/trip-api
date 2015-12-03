@@ -62,8 +62,8 @@ public class PositionServiceImpl implements PositionService {
         GeocodeService.Geocode geocode = GeocodeService.get(longitude, latitude);
         if (geocode != null) {
             String country = geocode.getCountry();
-            String city = geocode.getCity();
-            if (StringHelper.isNotEmpty(country) && StringHelper.isNotEmpty(city)) {
+            String city = Objects.toString(geocode.getCity(), "");
+            if (StringHelper.isNotEmpty(country)) {
                 String token = request.getHeader(Constants.HEADER_TOKEN);
                 user.setCurrentCountry(country);
                 user.setCurrentCity(city);
@@ -80,7 +80,7 @@ public class PositionServiceImpl implements PositionService {
         Map<String, Object> userMap = JedisUtils.getObjectMap(groupid);
         List<Map<String, Object>> datas = new ArrayList<>();
 
-        List<Map<String, Object>> userList = this.userDao.findUsers(groupid);
+            List<Map<String, Object>> userList = this.userDao.findUsers(groupid);
         Map<String, Map<String, Object>> userKeyMap = new HashMap<>();
         for (Map<String, Object> map : userList) {
             String userid = Objects.toString(map.get("id"), "");
@@ -90,17 +90,20 @@ public class PositionServiceImpl implements PositionService {
         if (userMap != null) {
             for (Map.Entry<String, Object> userMapEntry : userMap.entrySet()) {
                 String userid = userMapEntry.getKey();
+
                 if (LocalContext.getUserId().equals(userid)) {
                     continue;
                 }
                 Map<String, Object> userDataMap = userKeyMap.get(userid);
+//                if("0".equals(String.valueOf(userDataMap.get("position_flag"))) && "1".equals(type))continue;
                 if (userDataMap != null) {
                     Map<String, Object> pointMap = (Map<String, Object>) userMapEntry.getValue();
                     pointMap.put("userid", userid);
                     pointMap.put("name", userDataMap.get("name"));
                     pointMap.put("type", userDataMap.get("type"));
                     pointMap.put("gender", userDataMap.get("gender"));
-                    pointMap.put("photo", userDataMap.get("photo")); //TODO 头像路径
+                    pointMap.put("positionFlag", userDataMap.get("position_flag"));
+                    pointMap.put("photo", userDataMap.get("photo")); 
                     datas.add(pointMap);
                 }
             }

@@ -2,15 +2,26 @@ package com.ulplanet.trip.bean;
 
 import com.ulplanet.trip.common.persistence.DataEntity;
 
+import java.util.Date;
+
 public class User extends DataEntity<User> {
 
     private static final long serialVersionUID = 4200582752400724305L;
 
     private String name;
+    private String userId;
+    private String weChat;
+    private String qq;
+    private Date birth;
+    private String birthPlace;
+    private String issuePlace;
+    private Date issueDate;
+    private Date expiryDate;
     private String gender;
     private String identityCard;
     private String passport;
     private String phone;
+    private String cphone; //使用设备手机号
     private String email;
     private String group;
     private String code;
@@ -19,7 +30,80 @@ public class User extends DataEntity<User> {
     private String imToken;
     private String currentCountry;
     private String currentCity;
+    private Integer positionFlag;
     private long lastUpdate;
+
+    public Integer getPositionFlag() {
+        return positionFlag;
+    }
+
+    public void setPositionFlag(Integer positionFlag) {
+        this.positionFlag = positionFlag;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getWeChat() {
+        return weChat;
+    }
+
+    public void setWeChat(String weChat) {
+        this.weChat = weChat;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public Date getBirth() {
+        return birth;
+    }
+
+    public void setBirth(Date birth) {
+        this.birth = birth;
+    }
+
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+
+    public void setBirthPlace(String birthPlace) {
+        this.birthPlace = birthPlace;
+    }
+
+    public String getIssuePlace() {
+        return issuePlace;
+    }
+
+    public void setIssuePlace(String issuePlace) {
+        this.issuePlace = issuePlace;
+    }
+
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
     public String getPhoto() {
         return photo;
@@ -75,6 +159,14 @@ public class User extends DataEntity<User> {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    public String getCphone() {
+        return cphone;
+    }
+
+    public void setCphone(String cphone) {
+        this.cphone = cphone;
     }
 
     public String getPhone() {

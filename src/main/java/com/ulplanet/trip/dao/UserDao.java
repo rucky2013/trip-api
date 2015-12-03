@@ -16,4 +16,12 @@ public interface UserDao extends BaseDao {
 
     List<User> findUserByParam(User user);
 
+    int update(User user);
+
+    int updateCPhone(User user);
+
+    int updateGroupUser(User user);
+
+    Map<String, Object> findJourneyCountry(String groupid);
+
 }

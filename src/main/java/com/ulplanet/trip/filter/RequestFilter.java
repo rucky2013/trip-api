@@ -76,7 +76,6 @@ public class RequestFilter implements Filter {
 
         if (StringHelper.isEmpty(imei) || StringHelper.isEmpty(token)) {
             Map<String, Object> errorMap = new HashMap<>();
-            logger.error("未获取IMEI或Token. Token:" + token + ",IMEI:" + imei + ",Uri:" + uri);
             errorMap.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
             errorMap.put(Constants.RETURN_FIELD_MESSAGE, "未获取IMEI或Token");
             String errorMsg = new Gson().toJson(errorMap);

@@ -20,8 +20,8 @@ public class JourneyPlanController {
     private JourneyPlanService journeyPlanService;
 
     @RequestMapping(value = "/findList", method = RequestMethod.GET)
-    public Map<String,Object> findList(){
-        return journeyPlanService.findList();
+    public Map<String,Object> findList(@RequestParam(required = false) String tag){
+        return journeyPlanService.findList(tag);
     }
 
     @RequestMapping(value = "/getInfo",method = RequestMethod.POST)

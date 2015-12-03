@@ -2,6 +2,7 @@ package com.ulplanet.trip.service.impl;
 
 import com.ulplanet.trip.bean.Apk;
 import com.ulplanet.trip.common.persistence.Page;
+import com.ulplanet.trip.common.utils.FileManager;
 import com.ulplanet.trip.common.utils.JSONHelper;
 import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.constant.Constants;
@@ -10,7 +11,6 @@ import com.ulplanet.trip.service.ApkService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +66,10 @@ public class ApkServiceImpl implements ApkService {
             apk.setPackageName(packageName);
         }
         List<Apk> list = apkDao.findByParam(apk);
-        List<Map<String,Object>> datas = new ArrayList<>();
-        datas = JSONHelper.toMapList(list,"packageName","name","version","url","md5","size");
+        for(Apk a : list){
+            a.setUrl(FileManager.getFileUrlByRealpath(a.getUrl()));
+        }
+        List<Map<String,Object>> datas = JSONHelper.toMapList(list,"packageName","name","version","url","md5","size");
         Map<String, Object> result = new HashMap<>();
         result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
         result.put(Constants.RETURN_FIELD_DATA, datas);
