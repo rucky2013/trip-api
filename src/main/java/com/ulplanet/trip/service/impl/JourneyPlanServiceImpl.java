@@ -58,10 +58,8 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         User user = LocalContext.getUser();
         user.setGroup(group);
         List<Map<String,Object>> guides = new ArrayList<>();
-        List<JourneyPlans> journeyPlans = new ArrayList<>();
-        String passport = "";
-
-        passport = user.getPassport();
+        List<JourneyPlans> journeyPlans;
+        String passport = user.getPassport();
         user = new User();
         user.setGroup(group);
         user.setType("0");
@@ -147,23 +145,4 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         return result;
     }
 
-    private String tableName(int id){
-        switch (id){
-            case 5 : return "hotel";//旅馆
-            case 6 : return "food";//餐饮
-            case 7 : return "scenic";//景点
-            case 8 : return "shop";//商店
-            default:return null;
-        }
-
-    }
-
-    private String col(int id){
-        switch (id){
-            case 5 : return "phone";//旅馆
-            case 6 : return "phone";//餐饮
-            default:return "-1";
-        }
-
-    }
 }
