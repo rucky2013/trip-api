@@ -5,6 +5,7 @@ package com.ulplanet.trip.bean;
  */
 public class JourneyPlans{
 
+    private String planId;//每个行程的ID
     private String custuserId;//用户ID
     private Integer dayNumber;//第几天
     private String dayTitle;//每天的标题
@@ -19,7 +20,23 @@ public class JourneyPlans{
     private Integer sort;//排序
     private String longitude;
     private String latitude;
+    private Integer score;
 
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
 
     public String getInfoId() {
         return infoId;

@@ -1,7 +1,10 @@
 package com.ulplanet.trip.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.ulplanet.trip.bean.*;
+import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.constant.Constants;
+import com.ulplanet.trip.dao.EvaluateDao;
 import com.ulplanet.trip.dao.FlightDao;
 import com.ulplanet.trip.dao.JourneyPlanDao;
 import com.ulplanet.trip.dao.VersionTagDao;
@@ -12,10 +15,7 @@ import com.ulplanet.trip.util.LocalContext;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by makun on 2015/9/22.
@@ -33,6 +33,8 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
     private JourneyService journeyService;
     @Resource
     private VersionTagDao versionTagDao;
+    @Resource
+    private EvaluateDao evaluateDao;
 
 
     @Override
@@ -63,7 +65,7 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         user = new User();
         user.setGroup(group);
         user.setType("0");
-        journeyPlans = journeyPlanDao.queryAllPlanByGroup(group);
+        journeyPlans = journeyPlanDao.queryAllPlanByGroup(group,LocalContext.getUser().getCode());
         if (journeyPlans.size()==0){
             datas.put("plans",journeyPlans);
             datas.put("guide",guides);
@@ -142,6 +144,36 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         }
         result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
         result.put(Constants.RETURN_FIELD_MESSAGE, "信息不存在");
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> addEvaluate(Evaluate evaluate) {
+        Map<String,Object> result = new HashMap<>();
+        evaluate.setUserCode(LocalContext.getUser().getCode());
+        evaluate.setGroupId(LocalContext.getGroupId());
+        if(StringHelper.isEmpty(evaluate.getPlanId())){
+            result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
+            result.put(Constants.RETURN_FIELD_MESSAGE, "planId字段不能为空！");
+            return result;
+        }else if(!(evaluate.getScore()!=null && evaluate.getScore()>0 && evaluate.getScore()<=5)){
+            result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
+            result.put(Constants.RETURN_FIELD_MESSAGE, "score字段不符合规范！");
+            return result;
+        }else if(StringHelper.isEmpty(evaluate.getType())){
+            result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_FAILURE);
+            result.put(Constants.RETURN_FIELD_MESSAGE, "type字段不能为空！");
+            return result;
+        }
+        evaluate.setCreateDate(new Date());
+        evaluateDao.insert(evaluate);
+        Map<String,Object> data = new HashMap<>();
+        data.put("infoId",evaluate.getInfoId());
+        data.put("planId",evaluate.getPlanId());
+        data.put("score",evaluate.getScore());
+        data.put("feedback",evaluate.getFeedback());
+        result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
+        result.put(Constants.RETURN_FIELD_DATA, data);
         return result;
     }
 

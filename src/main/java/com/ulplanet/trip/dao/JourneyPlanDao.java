@@ -12,7 +12,7 @@ import java.util.List;
 @MyBatisDao
 public interface  JourneyPlanDao extends CrudDao<JourneyPlan> {
 	
-    List<JourneyPlans> queryAllPlanByGroup(String id);
+    List<JourneyPlans> queryAllPlanByGroup(@Param("group")String group,@Param("code")String code);
 
     List<InfoBo> findInfoByTableName(@Param(value = "table") String table,
                                      @Param(value = "ids") String[] ids, @Param(value = "infoId") String infoId,

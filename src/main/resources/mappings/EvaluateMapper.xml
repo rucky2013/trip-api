@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ulplanet.trip.dao.EvaluateDao">
+    <insert id="insert">
+        REPLACE INTO evaluate
+          (
+            user_code,
+            score,
+            info_id,
+            plan_id,
+            `type`,
+            `name`,
+            latitude,
+            longitude,
+            feedback,
+            comment,
+            create_date
+          )VALUES
+          (
+            #{userCode},
+            #{score},
+            #{infoId},
+            #{planId},
+            #{type},
+            #{name},
+            #{latitude},
+            #{longitude},
+            #{feedback},
+            #{comment},
+            #{createDate}
+          )
+    </insert>
+
+
+    <select id="findByUser">
+        SELECT id,user_code,info_id,plan_id,`type`,name,feedback,comment,latitude,longitude,create_date
+        FROM
+          evaluate
+        <where>
+            user_id = #{userId}
+            <if test="infoId != null">
+                AND info_id = #{info_id}
+            </if>
+            <if test="type != null">
+                AND `type` = #{type}
+            </if>
+        </where>
+    </select>
+</mapper>

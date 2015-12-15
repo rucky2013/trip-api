@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<!-- 涓嶄娇鐢╪amespace鐨勮瘽sql鎼滅储瀹氫綅浼氭瘮杈冩柟渚� -->
 <mapper namespace="com.ulplanet.trip.dao.JourneyPlanDao">
 
 	<resultMap id="JourneyPlan" type="com.ulplanet.trip.bean.JourneyPlan">
@@ -39,6 +38,7 @@
         <result property="sort" column="sort"/>
         <result property="longitude" column="longitude"/>
         <result property="latitude" column="latitude"/>
+        <result property="score" column="score"/>
     </resultMap>
 
     <resultMap id="InfoBo" type="com.ulplanet.trip.bean.InfoBo">
@@ -55,14 +55,15 @@
         select jd.day_number as dayNumber,jd.title as dayTitle,jp.info_id as info_id,
                 jp.type as type,jp.name as name,jp.time_flag as hasTime,
                 jp.time as time,jp.description as description,jp.message_flag as hasMessage,
-                jp.message as message,jp.sort as sort,jp.longitude as longitude,jp.latitude as latitude
+                jp.message as message,jp.sort as sort,jp.longitude as longitude,jp.latitude as latitude,
+                e.score as score,jp.id as planId
         from  journey_day jd
               INNER JOIN journey_plan jp on jp.day_id = jd.id
+              LEFT JOIN evaluate e on e.plan_id = jp.id and e.user_code = #{code}
         where jd.group_id = #{group}
         ORDER BY jd.day_number ASC ,jp.sort ASC
     </select>
 
-	<!-- 鐢ㄤ簬select鏌ヨ鍏敤鎶藉彇鐨勫垪 -->
 	<sql id="BaseColumns">
 	    <![CDATA[
             id,day_id,info_id,type,name,time,time_flag,description,message,message_flag,sort,create_by,create_date,update_by,update_date,remark,,longitude,latitude

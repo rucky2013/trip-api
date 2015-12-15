@@ -1,5 +1,6 @@
 package com.ulplanet.trip.controller;
 
+import com.ulplanet.trip.bean.Evaluate;
 import com.ulplanet.trip.service.JourneyPlanService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,10 @@ public class JourneyPlanController {
     public Map<String,Object> getInfo(@RequestParam(value = "type")int type,@RequestParam(value = "infoId")String infoId,
                                       @RequestParam("longitude") double longitude,
                                         @RequestParam("latitude") double latitude){
-        return journeyPlanService.getInfo(type,infoId,longitude,latitude);
+        return journeyPlanService.getInfo(type, infoId, longitude, latitude);
+    }
+    @RequestMapping(value = "/evaluate",method = RequestMethod.POST)
+    public Map<String,Object> evaluate(Evaluate evaluate){
+        return journeyPlanService.addEvaluate(evaluate);
     }
 }

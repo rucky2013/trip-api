@@ -1,5 +1,7 @@
 package com.ulplanet.trip.service;
 
+import com.ulplanet.trip.bean.Evaluate;
+
 import java.util.Map;
 
 /**
@@ -8,4 +10,5 @@ import java.util.Map;
 public interface JourneyPlanService {
     Map<String,Object> findList(String tag);
     Map<String,Object> getInfo(int type, String info, double longitude, double latitude);
+    Map<String,Object> addEvaluate(Evaluate evaluate);
 }
