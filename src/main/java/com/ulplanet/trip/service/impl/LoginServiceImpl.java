@@ -4,12 +4,14 @@ import com.google.gson.Gson;
 import com.ulplanet.trip.api.location.GeocodeService;
 import com.ulplanet.trip.bean.User;
 import com.ulplanet.trip.bean.VersionTag;
-import com.ulplanet.trip.common.utils.*;
+import com.ulplanet.trip.common.utils.DateHelper;
+import com.ulplanet.trip.common.utils.JedisUtils;
+import com.ulplanet.trip.common.utils.StringHelper;
+import com.ulplanet.trip.common.utils.TokenUtils;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.UserDao;
 import com.ulplanet.trip.dao.VersionTagDao;
 import com.ulplanet.trip.service.LoginService;
-import com.ulplanet.trip.util.LoginConstants;
 import com.ulplanet.trip.util.LoginException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -27,7 +29,7 @@ import java.util.Objects;
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
 
-    Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     @Autowired
     UserDao userdao;
@@ -59,18 +61,18 @@ public class LoginServiceImpl implements LoginService {
 
         String imei = request.getHeader(Constants.HEADER_IMEI);
         if (StringHelper.isEmpty(imei)) {
-            throw LoginConstants.USER_INVALID_DEVICE;
+            throw new LoginException("设备无效。");
         }
 
         User user = this.userdao.findUser(userid);
 
         if (user == null) {
-            throw LoginConstants.USER_NOT_EXISTS;
+            throw new LoginException("用户名不存在。");
         }
 
         if (StringHelper.isEmpty(userpwd) ||
                 !StringHelper.equals(userpwd, user.getPhone())) {
-            throw LoginConstants.USER_INVALID_PASSWORD;
+            throw new LoginException("密码无效。");
         }
 
         if (StringHelper.isNotEmpty(cphone) && !cphone.equals(user.getCphone())) {
@@ -118,7 +120,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("identityCard", user.getIdentityCard());
         data.put("weChat", user.getWeChat());
         data.put("qq", user.getQq());
-        data.put("birth", user.getBirth()!=null?DateHelper.formatDate(user.getBirth(), "yyyy/MM/dd"):null);
+        data.put("birth", DateHelper.formatDate(user.getBirth(), "yyyy/MM/dd"));
         data.put("email", user.getEmail());
         data.put("birthPlace", user.getBirthPlace());
         data.put("positionFlag", user.getPositionFlag());

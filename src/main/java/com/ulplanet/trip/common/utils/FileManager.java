@@ -1,16 +1,18 @@
 package com.ulplanet.trip.common.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import com.ulplanet.trip.base.AppContext;
 import com.ulplanet.trip.base.SpringContextHolder;
 import com.ulplanet.trip.common.utils.fservice.FileGetter;
 import com.ulplanet.trip.common.utils.fservice.FileIndex;
 import com.ulplanet.trip.common.utils.fservice.FileSaver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 
@@ -22,10 +24,10 @@ import com.ulplanet.trip.common.utils.fservice.FileSaver;
  *
  */
 public class FileManager {
-	
-	public static final String FOLDER_PHOTO = "photo/";
 
-	/**
+    private static Logger logger = LoggerFactory.getLogger(FileManager.class);
+
+    /**
 	 * 删除文件,包括数据库中的记录和实际文件.
 	 * 
 	 * @param filepath
@@ -33,10 +35,14 @@ public class FileManager {
 	 */
 	public static boolean delete(String filepath) {
 
-		// 调用文件存储器删除文件.
-		getFileSaver().deleteFile(filepath);
-			
-		return true;
+        try {
+            // 调用文件存储器删除文件.
+            getFileSaver().deleteFile(filepath);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 	}
 
 	/**
@@ -53,12 +59,11 @@ public class FileManager {
 		if (filePathList.size() == 1) {
 			return delete(filePathList.get(0));
 		}
-		
-		for (int i = 0; i < filePathList.size(); i++) {
-			String path = filePathList.get(i);
-			// 调用文件存储器删除文件.
-			getFileSaver().deleteFile(path);
-		}
+
+        for (String path : filePathList) {
+            // 调用文件存储器删除文件.
+            getFileSaver().deleteFile(path);
+        }
 		
 		return true;
 	}
@@ -66,7 +71,7 @@ public class FileManager {
 	/**
 	 * 将一个"未保存"的文件保存,返回保存后的信息.
 	 * 
-	 * @param FileIndex
+	 * @param ufi
 	 * @return 
 	 */
 	public static FileIndex save(FileIndex ufi) {
@@ -109,21 +114,21 @@ public class FileManager {
 				upFile = new File(saveFile);
 				try {
 					ufi.getmUpfile().transferTo(upFile);
-				} catch (IllegalStateException ex) {
-					throw new IllegalStateException(ex.getMessage());
-				} catch (IOException ex) {
+				} catch (IllegalStateException | IOException ex) {
 					throw new IllegalStateException(ex.getMessage());
 				}
-			}
+            }
 			
 			getFileSaver().saveFile(upFile, filePath);
 			if (ufi.getUpfile() == null && ufi.getmUpfile() != null) {
-				upFile.delete();
+				if (!upFile.delete()) {
+                    logger.debug("文件删除失败");
+                }
 			}
 			
 			arr.add(ufi);
 		}
-		return arr.toArray(new FileIndex[0]);
+		return arr.toArray(new FileIndex[arr.size()]);
 	}
 	
 	/**

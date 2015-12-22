@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  */
 public class RequestFilter implements Filter {
 
-    Logger logger = LoggerFactory.getLogger(RequestFilter.class);
+    private static Logger logger = LoggerFactory.getLogger(RequestFilter.class);
 
     private Pattern[] eps;
 

@@ -1,14 +1,13 @@
 package com.ulplanet.trip.common.utils;
 
+import com.ulplanet.trip.base.ServletContextHolder;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Objects;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
-import com.ulplanet.trip.base.ServletContextHolder;
 
 
 /**
@@ -32,7 +31,7 @@ public class WebUtil {
             String name = Objects.toString(enumeration.nextElement());
             String[] values = request.getParameterValues(name);
             
-            Object val = null;
+            Object val;
             if (values.length == 1) {
             	val = values[0];
             } else {
@@ -88,9 +87,8 @@ public class WebUtil {
 	 */
 	public static String getBaseURL(HttpServletRequest request) {
 	    String path = request.getContextPath();
-	    String basePath = request.getScheme() + "://"
-	            + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	    return basePath;
+        return request.getScheme() + "://"
+                + request.getServerName() + ":" + request.getServerPort() + path + "/";
 	}
 	
 }
@@ -131,16 +129,9 @@ class Another {
 		}
 
 		public boolean shouldEncode(char c) {
-			if (c > TOP_CHAR) {
-				return true;
-			}
+            return c > TOP_CHAR || isDefined(c);
 
-			if (isDefined(c)) {
-				return true;
-			}
-
-			return false;
-		}
+        }
 
 		private boolean isDefined(char c) {
 			for (char inner : inners) {
@@ -197,30 +188,11 @@ class Another {
 				addByte(sb, (byte) (((c >> 6) & 0x1f) | 0xc0));
 				addByte(sb, (byte) ((c & 0x3f) | 0x80));
 				
-			} else if (c < 65536) { // 2 ^ 16
+			} else { // 2 ^ 16
 				addByte(sb, (byte) (((c >> 12) & 0xf) | 0xe0));
 				addByte(sb, (byte) (((c >> 6) & 0x3f) | 0x80));
 				addByte(sb, (byte) ((c & 0x3f) | 0x80));
-				
-			} else if (c < 2097152) { // 2 ^ 21
-				addByte(sb, (byte) (((c >> 18) & 0x7) | 0xf0));
-				addByte(sb, (byte) (((c >> 12) & 0x3f) | 0x80));
-				addByte(sb, (byte) (((c >> 6) & 0x3f) | 0x80));
-				addByte(sb, (byte) ((c & 0x3f) | 0x80));
-				
-			} else if (c < 67108864) { // 2 ^ 26
-				addByte(sb, (byte) (((c >> 24) & 0x3) | 0xf8));
-				addByte(sb, (byte) (((c >> 18) & 0x3f) | 0x80));
-				addByte(sb, (byte) (((c >> 12) & 0x3f) | 0x80));
-				addByte(sb, (byte) (((c >> 6) & 0x3f) | 0x80));
-				addByte(sb, (byte) ((c & 0x3f) | 0x80));
-			} else { // 2 ^ 31
-				addByte(sb, (byte) (((c >> 30) & 0x1) | 0xfc));
-				addByte(sb, (byte) (((c >> 24) & 0x3f) | 0x80));
-				addByte(sb, (byte) (((c >> 18) & 0x3f) | 0x80));
-				addByte(sb, (byte) (((c >> 12) & 0x3f) | 0x80));
-				addByte(sb, (byte) (((c >> 6) & 0x3f) | 0x80));
-				addByte(sb, (byte) ((c & 0x3f) | 0x80));
+
 			}
 		}
 

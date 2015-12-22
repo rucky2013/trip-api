@@ -1,17 +1,15 @@
 package com.ulplanet.trip.common.persistence;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.bind.annotation.XmlTransient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ulplanet.trip.base.AppContext;
 import com.ulplanet.trip.common.config.Global;
 import com.ulplanet.trip.common.utils.StringHelper;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Entity支持类
@@ -61,7 +59,7 @@ public abstract class BaseEntity<T> implements Serializable {
 	@XmlTransient
 	public Page<T> getPage() {
 		if (page == null){
-			page = new Page<T>();
+			page = new Page<>();
 		}
 		return page;
 	}
@@ -130,13 +128,16 @@ public abstract class BaseEntity<T> implements Serializable {
             return false;
         }
         BaseEntity<?> that = (BaseEntity<?>) obj;
-        return null == this.getId() ? false : this.getId().equals(that.getId());
+        return null != this.getId() && this.getId().equals(that.getId());
     }
     
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
     }
-    
-	
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

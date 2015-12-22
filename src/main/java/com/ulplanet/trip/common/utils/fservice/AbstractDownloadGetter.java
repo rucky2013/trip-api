@@ -1,10 +1,10 @@
 package com.ulplanet.trip.common.utils.fservice;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.ulplanet.trip.base.AppContext;
 import com.ulplanet.trip.common.config.Global;
+
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -31,7 +31,7 @@ public abstract class AbstractDownloadGetter extends AbstractFileGetter implemen
 	    }
 		try {
 			if (!dfile.getParentFile().exists()) {
-				dfile.getParentFile().mkdirs();
+				if (!dfile.getParentFile().mkdirs()) return null;
 			}
 			downloadFile(realpath, dfile);
 			return dfile;
@@ -50,7 +50,7 @@ public abstract class AbstractDownloadGetter extends AbstractFileGetter implemen
         }
 		try {
 			if (!dfile.getParentFile().exists()) {
-				dfile.getParentFile().mkdirs();
+				if (!dfile.getParentFile().mkdirs()) return null;
 			}
 			downloadFile(realpath, dfile);
 			return calFileUrl(dfile);
@@ -80,7 +80,7 @@ public abstract class AbstractDownloadGetter extends AbstractFileGetter implemen
 	 * 设置临时文件存放目录的名称,是一个相对于当前AppPath的路径.
 	 *  (非必须,默认值为tmp_files)
 	 * 
-	 * @param tmpfolder
+	 * @param tmpfolderName
 	 */
 	public void setTmpfolderName(String tmpfolderName) {
 		if (FserviceUtil.isAbsolutePath(tmpfolderName)) {

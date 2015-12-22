@@ -35,13 +35,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LocalListener {
 
 	private final Object obj = new Object();
-	private ConcurrentHashMap<ThreadLocal<?>, Object> statics = new ConcurrentHashMap<ThreadLocal<?>, Object>();
-	private ThreadLocal<LinkedHashSet<ThreadLocal<?>>> tmps = new ThreadLocal<LinkedHashSet<ThreadLocal<?>>>();
+	private ConcurrentHashMap<ThreadLocal<?>, Object> statics = new ConcurrentHashMap<>();
+	private ThreadLocal<LinkedHashSet<ThreadLocal<?>>> tmps = new ThreadLocal<>();
 
 	private LinkedHashSet<ThreadLocal<?>> forTmps(boolean autoCreate) {
 		LinkedHashSet<ThreadLocal<?>> ts = tmps.get();
 		if (ts == null && autoCreate) {
-			ts = new LinkedHashSet<ThreadLocal<?>>();
+			ts = new LinkedHashSet<>();
 			ts.add(tmps);
 			tmps.set(ts);
 		}
@@ -53,12 +53,13 @@ public class LocalListener {
 	 * 必须在dispatcher控制器的finaly中调用该函数,以清除.
 	 */
 	public void clearContexts() {
-		for (ThreadLocal<?> tl : statics.keySet().toArray(new ThreadLocal[0])) {
+        ConcurrentHashMap.KeySetView<ThreadLocal<?>, Object> threadLocals = statics.keySet();
+        for (ThreadLocal<?> tl : threadLocals.toArray(new ThreadLocal[threadLocals.size()])) {
 			tl.remove();
 		}
 		LinkedHashSet<ThreadLocal<?>> tmps = forTmps(false);
 		if (tmps != null) {
-			for (ThreadLocal<?> tl : tmps.toArray(new ThreadLocal[0])) {
+			for (ThreadLocal<?> tl : tmps.toArray(new ThreadLocal[tmps.size()])) {
 				tl.remove();
 			}
 		}

@@ -43,7 +43,7 @@ public class PaginationInterceptor extends BaseInterceptor {
         //获取分页参数对象
         Page<Object> page = null;
         if (parameterObject != null) {
-            page = convertParameter(parameterObject, page);
+            page = convertParameter(parameterObject);
         }
 
         //如果设置了分页对象，则进行分页

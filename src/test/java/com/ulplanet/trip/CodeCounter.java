@@ -22,12 +22,11 @@ public class CodeCounter {
 		String path = file.replace("target/test-classes", "src");
 
 		ArrayList<File> al = getFile(new File(path));
-		for (File f : al) {
-			if (f.getName().matches(".*\\.java$")){ // 匹配java格式的文件
-				count(f);
-				System.out.println(f);
-			}
-		}
+        // 匹配java格式的文件
+        al.stream().filter(f -> f.getName().matches(".*\\.java$")).forEach(f -> { // 匹配java格式的文件
+            count(f);
+            System.out.println(f);
+        });
 		System.out.println("统计文件：" + files);
 		System.out.println("代码行数：" + codeLines);
 		System.out.println("注释行数：" + commentLines);

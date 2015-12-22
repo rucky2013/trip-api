@@ -1,6 +1,5 @@
 package com.ulplanet.trip.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.ulplanet.trip.bean.*;
 import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.constant.Constants;

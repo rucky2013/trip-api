@@ -52,7 +52,7 @@ public class WeatherGetter {
             }
             message = resultInfo.getMessage();
             JSONObject jsonObject = JSON.parseObject(message);
-            if(jsonObject.getInteger("cod").intValue() != 200){
+            if(jsonObject.getInteger("cod") != 200){
                 logger.error("请求每天天气接口错误:" + info.getMessage() + ";经度:" + lon + ";纬度:" + lat);
                 return null;
             }

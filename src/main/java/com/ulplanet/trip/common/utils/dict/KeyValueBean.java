@@ -78,13 +78,7 @@ public class KeyValueBean implements Serializable {
 	}
 
 	public String toString() {
-		return new StringBuilder() //
-			.append("KeyValueBean") //
-			.append(", key(").append(key).append(")") //
-			.append(", value(").append(value).append(")") //
-			.append(", valueid(").append(valueid).append(")") //
-
-			.toString();
+		return "KeyValueBean" + ", key(" + key + ")" + ", value(" + value + ")" + ", valueid(" + valueid + ")";
 	}
 
 }

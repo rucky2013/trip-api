@@ -70,11 +70,11 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreateDate() {
-		return createDate;
+		return new Date(createDate.getTime());
 	}
 
 	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+		this.createDate = new Date(createDate.getTime());
 	}
 
 	@JsonIgnore
@@ -88,11 +88,11 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdateDate() {
-		return updateDate;
+		return new Date(updateDate.getTime());
 	}
 
 	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+		this.updateDate = new Date(updateDate.getTime());
 	}
 
     public String getSearchValue() {

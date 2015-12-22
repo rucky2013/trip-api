@@ -1,7 +1,7 @@
 package com.ulplanet.trip.bean;
 
 
-
+import java.util.Date;
 
 public class UserJourney implements java.io.Serializable{
 
@@ -11,9 +11,9 @@ public class UserJourney implements java.io.Serializable{
 	private Integer active;
 	private String journeyId;
 	private String createBy;
-	private java.util.Date createDate;
+	private Date createDate;
 	private String updateBy;
-	private java.util.Date updateDate;
+	private Date updateDate;
 	private String remark;
 
 	public UserJourney(){
@@ -66,12 +66,12 @@ public class UserJourney implements java.io.Serializable{
 		return this.createBy;
 	}
 
-	public void setCreateDate(java.util.Date value) {
-		this.createDate = value;
+	public void setCreateDate(Date value) {
+		this.createDate = new Date(value.getTime());
 	}
 	
-	public java.util.Date getCreateDate() {
-		return this.createDate;
+	public Date getCreateDate() {
+		return new Date(createDate.getTime());
 	}
 
 	public void setUpdateBy(String value) {
@@ -82,12 +82,12 @@ public class UserJourney implements java.io.Serializable{
 		return this.updateBy;
 	}
 
-	public void setUpdateDate(java.util.Date value) {
-		this.updateDate = value;
+	public void setUpdateDate(Date value) {
+		this.updateDate = new Date(value.getTime());
 	}
 	
-	public java.util.Date getUpdateDate() {
-		return this.updateDate;
+	public Date getUpdateDate() {
+		return new Date(updateDate.getTime());
 	}
 
 	public void setRemark(String value) {

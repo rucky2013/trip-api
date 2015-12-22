@@ -1,29 +1,25 @@
 package com.ulplanet.trip.bean;
 
-
-
+import java.util.Date;
 
 public class JourneyPlan  implements java.io.Serializable{
 	private static final long serialVersionUID = 5454155825314635342L;
-	
-
-	
 
 	private String id;
 	private String dayId;
 	private String infoId;
 	private Integer type;
 	private String name;
-	private java.util.Date time;
+	private Date time;
 	private Integer timeFlag;
 	private String description;
 	private String message;
 	private Integer messageFlag;
 	private Integer sort;
 	private String createBy;
-	private java.util.Date createDate;
+	private Date createDate;
 	private String updateBy;
-	private java.util.Date updateDate;
+	private Date updateDate;
 	private String remark;
 	private String typeValue;
 	private String longitude;
@@ -95,12 +91,12 @@ public class JourneyPlan  implements java.io.Serializable{
 		return this.name;
 	}
 
-	public void setTime(java.util.Date value) {
-		this.time = value;
+	public void setTime(Date value) {
+		this.time = new Date(value.getTime());
 	}
 	
 	public java.util.Date getTime() {
-		return this.time;
+		return new Date(time.getTime());
 	}
 
 	public void setTimeFlag(Integer value) {
@@ -151,12 +147,12 @@ public class JourneyPlan  implements java.io.Serializable{
 		return this.createBy;
 	}
 
-	public void setCreateDate(java.util.Date value) {
-		this.createDate = value;
+	public void setCreateDate(Date value) {
+		this.createDate = new Date(value.getTime());
 	}
 	
 	public java.util.Date getCreateDate() {
-		return this.createDate;
+		return new Date(createDate.getTime());
 	}
 
 	public void setUpdateBy(String value) {
@@ -167,12 +163,12 @@ public class JourneyPlan  implements java.io.Serializable{
 		return this.updateBy;
 	}
 
-	public void setUpdateDate(java.util.Date value) {
-		this.updateDate = value;
+	public void setUpdateDate(Date value) {
+		this.updateDate = new Date(value.getTime());
 	}
 	
 	public java.util.Date getUpdateDate() {
-		return this.updateDate;
+		return new Date(updateDate.getTime());
 	}
 
 	public void setRemark(String value) {

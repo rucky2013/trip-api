@@ -1,9 +1,9 @@
 package com.ulplanet.trip.common.utils.fservice;
 
+import com.ulplanet.trip.common.utils.FileIOHelper;
+
 import java.io.File;
 import java.io.IOException;
-
-import com.ulplanet.trip.common.utils.FileIOHelper;
 
 /**
  * 
@@ -22,11 +22,6 @@ public class FileGetterDiskImpl extends AbstractDownloadGetter implements FileGe
 
 	public String getWorkfolderName() {
 		return workfolderName;
-	}
-
-	@Override
-	public File getFile(String realpath) {
-		return super.getFile(realpath);
 	}
 
 	/**

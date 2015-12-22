@@ -1,14 +1,5 @@
 package com.ulplanet.trip.common.persistence;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.Configuration;
@@ -26,6 +17,15 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Mybatis的mapper文件中的sql语句被修改后, 只能重启服务器才能被加载, 非常耗时,所以就写了一个自动加载的类,
  * 配置后检查xml文件更改,如果发生变化,重新加载xml里面的内容.
@@ -36,7 +36,7 @@ public class MapperLoader implements DisposableBean, InitializingBean, Applicati
 
 	private ConfigurableApplicationContext context = null;
 	private transient String basePackage = null;
-	private HashMap<String, String> fileMapping = new HashMap<String, String>();
+	private HashMap<String, String> fileMapping = new HashMap<>();
 	private Scanner scanner = null;
 	private ScheduledExecutorService service = null;
 
@@ -101,8 +101,7 @@ public class MapperLoader implements DisposableBean, InitializingBean, Applicati
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
 //					+ ClassUtils.convertClassNameToResourcePath(context.getEnvironment().resolveRequiredPlaceholders(basePackage))
 					+ "/" + pattern;
-			Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
-			return resources;
+            return resourcePatternResolver.getResources(packageSearchPath);
 		}
 
 		public void reloadXML() throws Exception {
@@ -114,20 +113,20 @@ public class MapperLoader implements DisposableBean, InitializingBean, Applicati
 			for (String basePackage : basePackages) {
 				Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
 				if (resources != null) {
-					for (int i = 0; i < resources.length; i++) {
-						if (resources[i] == null) {
-							continue;
-						}
-						try {
-							XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(resources[i].getInputStream(),
-									configuration, resources[i].toString(), configuration.getSqlFragments());
-							xmlMapperBuilder.parse();
-						} catch (Exception e) {
-							throw new NestedIOException("Failed to parse mapping resource: '" + resources[i] + "'", e);
-						} finally {
-							ErrorContext.instance().reset();
-						}
-					}
+                    for (Resource resource : resources) {
+                        if (resource == null) {
+                            continue;
+                        }
+                        try {
+                            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(resource.getInputStream(),
+                                    configuration, resource.toString(), configuration.getSqlFragments());
+                            xmlMapperBuilder.parse();
+                        } catch (Exception e) {
+                            throw new NestedIOException("Failed to parse mapping resource: '" + resource + "'", e);
+                        } finally {
+                            ErrorContext.instance().reset();
+                        }
+                    }
 				}
 			}
 
@@ -167,10 +166,10 @@ public class MapperLoader implements DisposableBean, InitializingBean, Applicati
 			for (String basePackage : basePackages) {
 				Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
 				if (resources != null) {
-					for (int i = 0; i < resources.length; i++) {
-						String multi_key = getValue(resources[i]);
-						fileMapping.put(resources[i].getFilename(), multi_key);
-					}
+                    for (Resource resource : resources) {
+                        String multi_key = getValue(resource);
+                        fileMapping.put(resource.getFilename(), multi_key);
+                    }
 				}
 			}
 		}
@@ -178,7 +177,7 @@ public class MapperLoader implements DisposableBean, InitializingBean, Applicati
 		private String getValue(Resource resource) throws IOException {
 			String contentLength = String.valueOf((resource.contentLength()));
 			String lastModified = String.valueOf((resource.lastModified()));
-			return new StringBuilder(contentLength).append(lastModified).toString();
+			return contentLength + lastModified;
 		}
 
 		public boolean isChanged() throws IOException {
@@ -186,15 +185,15 @@ public class MapperLoader implements DisposableBean, InitializingBean, Applicati
 			for (String basePackage : basePackages) {
 				Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
 				if (resources != null) {
-					for (int i = 0; i < resources.length; i++) {
-						String name = resources[i].getFilename();
-						String value = fileMapping.get(name);
-						String multi_key = getValue(resources[i]);
-						if (!multi_key.equals(value)) {
-							isChanged = true;
-							fileMapping.put(name, multi_key);
-						}
-					}
+                    for (Resource resource : resources) {
+                        String name = resource.getFilename();
+                        String value = fileMapping.get(name);
+                        String multi_key = getValue(resource);
+                        if (!multi_key.equals(value)) {
+                            isChanged = true;
+                            fileMapping.put(name, multi_key);
+                        }
+                    }
 				}
 			}
 			return isChanged;
