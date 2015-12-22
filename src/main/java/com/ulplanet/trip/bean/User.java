@@ -66,11 +66,11 @@ public class User extends DataEntity<User> {
     }
 
     public Date getBirth() {
-        return new Date(birth.getTime());
+        return birth == null ? null : new Date(birth.getTime());
     }
 
     public void setBirth(Date birth) {
-        this.birth = new Date(birth.getTime());
+        this.birth = birth == null ? null : new Date(birth.getTime());
     }
 
     public String getBirthPlace() {
