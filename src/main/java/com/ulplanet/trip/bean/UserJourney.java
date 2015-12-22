@@ -29,7 +29,7 @@ public class UserJourney implements java.io.Serializable{
 	public void setId(String value) {
 		this.id = value;
 	}
-	
+
 	public String getId() {
 		return this.id;
 	}
@@ -45,7 +45,7 @@ public class UserJourney implements java.io.Serializable{
 	public void setActive(Integer value) {
 		this.active = value;
 	}
-	
+
 	public Integer getActive() {
 		return this.active;
 	}
@@ -53,7 +53,7 @@ public class UserJourney implements java.io.Serializable{
 	public void setJourneyId(String value) {
 		this.journeyId = value;
 	}
-	
+
 	public String getJourneyId() {
 		return this.journeyId;
 	}
@@ -61,33 +61,33 @@ public class UserJourney implements java.io.Serializable{
 	public void setCreateBy(String value) {
 		this.createBy = value;
 	}
-	
+
 	public String getCreateBy() {
 		return this.createBy;
 	}
 
 	public void setCreateDate(Date value) {
-		this.createDate = new Date(value.getTime());
+		this.createDate = value;
 	}
-	
+
 	public Date getCreateDate() {
-		return new Date(createDate.getTime());
+		return this.createDate;
 	}
 
 	public void setUpdateBy(String value) {
 		this.updateBy = value;
 	}
-	
+
 	public String getUpdateBy() {
 		return this.updateBy;
 	}
 
 	public void setUpdateDate(Date value) {
-		this.updateDate = new Date(value.getTime());
+		this.updateDate = value;
 	}
-	
+
 	public Date getUpdateDate() {
-		return new Date(updateDate.getTime());
+		return this.updateDate;
 	}
 
 	public void setRemark(String value) {

@@ -91,12 +91,12 @@ public class JourneyPlan  implements java.io.Serializable{
 		return this.name;
 	}
 
-	public void setTime(Date value) {
-		this.time = new Date(value.getTime());
+	public void setTime(java.util.Date value) {
+		this.time = value;
 	}
 	
 	public java.util.Date getTime() {
-		return new Date(time.getTime());
+		return this.time;
 	}
 
 	public void setTimeFlag(Integer value) {
@@ -147,12 +147,12 @@ public class JourneyPlan  implements java.io.Serializable{
 		return this.createBy;
 	}
 
-	public void setCreateDate(Date value) {
-		this.createDate = new Date(value.getTime());
+	public void setCreateDate(java.util.Date value) {
+		this.createDate = value;
 	}
 	
 	public java.util.Date getCreateDate() {
-		return new Date(createDate.getTime());
+		return this.createDate;
 	}
 
 	public void setUpdateBy(String value) {
@@ -164,7 +164,7 @@ public class JourneyPlan  implements java.io.Serializable{
 	}
 
 	public void setUpdateDate(Date value) {
-		this.updateDate = new Date(value.getTime());
+		this.updateDate = value;
 	}
 	
 	public java.util.Date getUpdateDate() {

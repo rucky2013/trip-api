@@ -66,11 +66,11 @@ public class User extends DataEntity<User> {
     }
 
     public Date getBirth() {
-        return birth == null ? null : new Date(birth.getTime());
+        return birth;
     }
 
     public void setBirth(Date birth) {
-        this.birth = birth == null ? null : new Date(birth.getTime());
+        this.birth = birth;
     }
 
     public String getBirthPlace() {
@@ -90,19 +90,19 @@ public class User extends DataEntity<User> {
     }
 
     public Date getIssueDate() {
-        return new Date(issueDate.getTime());
+        return issueDate;
     }
 
     public void setIssueDate(Date issueDate) {
-        this.issueDate = new Date(issueDate.getTime());
+        this.issueDate = issueDate;
     }
 
     public Date getExpiryDate() {
-        return new Date(expiryDate.getTime());
+        return expiryDate;
     }
 
     public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = new Date(expiryDate.getTime());
+        this.expiryDate = expiryDate;
     }
 
     public String getPhoto() {
