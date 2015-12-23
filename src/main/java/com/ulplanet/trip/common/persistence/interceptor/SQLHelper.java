@@ -23,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 
@@ -152,34 +150,6 @@ public class SQLHelper {
         } else {
             return sql;
         }
-    }
-    
-    /** 
-     * 去除qlString的select子句。 
-     * @param hql 
-     * @return 
-     */  
-    @SuppressWarnings("unused")
-	private static String removeSelect(String qlString){  
-        int beginPos = qlString.toLowerCase().indexOf("from");  
-        return qlString.substring(beginPos);  
-    }  
-      
-    /** 
-     * 去除hql的orderBy子句。 
-     * @param hql 
-     * @return 
-     */  
-    @SuppressWarnings("unused")
-	private static String removeOrders(String qlString) {  
-        Pattern p = Pattern.compile("order\\s*by[\\w|\\W|\\s|\\S]*", Pattern.CASE_INSENSITIVE);  
-        Matcher m = p.matcher(qlString);  
-        StringBuffer sb = new StringBuffer();  
-        while (m.find()) {  
-            m.appendReplacement(sb, "");  
-        }
-        m.appendTail(sb);
-        return sb.toString();  
     }
     
 }

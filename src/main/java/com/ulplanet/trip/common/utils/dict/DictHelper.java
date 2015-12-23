@@ -1,15 +1,10 @@
 package com.ulplanet.trip.common.utils.dict;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -25,7 +20,7 @@ public class DictHelper {
 	/**
 	 * datas = Code - > data data = KeyValueBean, ....
 	 */
-	private static Map<String, List<KeyValueBean>> datas = new HashMap<String, List<KeyValueBean>>();
+	private static Map<String, List<KeyValueBean>> datas = new HashMap<>();
 
 	private static volatile boolean inited = false;
 
@@ -112,7 +107,8 @@ public class DictHelper {
 	}
 	
 	public static String[] allCodes() {
-		return datas.keySet().toArray(new String[0]);
+        Set<String> strings = datas.keySet();
+        return strings.toArray(new String[strings.size()]);
 	}
 
 	/**
@@ -123,7 +119,7 @@ public class DictHelper {
 	 */
 	public static List<KeyValueBean> getsCopy(String code) {
 		List<KeyValueBean> list = gets(code);
-		List<KeyValueBean> copy = new ArrayList<KeyValueBean>();
+		List<KeyValueBean> copy = new ArrayList<>();
 
 		if (list != null) {
 			copy.addAll(list);
@@ -141,7 +137,7 @@ public class DictHelper {
 	 */
 	public static List<KeyValueBean> getsCopy(String code, KeyValueBean topKv) {
 		List<KeyValueBean> list = gets(code);
-		List<KeyValueBean> copy = new ArrayList<KeyValueBean>();
+		List<KeyValueBean> copy = new ArrayList<>();
 
 		if (topKv != null) {
 			copy.add(topKv);

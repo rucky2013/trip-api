@@ -1,12 +1,6 @@
 package com.ulplanet.trip.common.utils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -240,14 +234,14 @@ public class OrderProperties extends Properties {
 		int index = line.length() - 1;
 		while ((index >= 0) && (line.charAt(index--) == '\\'))
 			slashCount++;
-		return (slashCount % 2 == 1);
+		return ((slashCount & 1) == 1);
 	}
 
 	/*
 	 * Converts unicodes to encoded &#92;uxxxx and writes out any of the
 	 * characters in specialSaveChars with a preceding slash
 	 */
-	private String saveConvert(String theString, boolean escapeSpace) {
+	private static String saveConvert(String theString, boolean escapeSpace) {
 		int len = theString.length();
 		StringBuilder outBuffer = new StringBuilder(len * 2);
 
@@ -320,7 +314,7 @@ public class OrderProperties extends Properties {
 		}
 	}
 
-	class PropertiesContext {
+	static class PropertiesContext implements Serializable {
 		/** 描述信息 */
 		private List<Object> commentOrEntrys = new ArrayList<>();
 
@@ -354,19 +348,17 @@ public class OrderProperties extends Properties {
 			for (int index = 0; index < commentOrEntrys.size(); index++) {
 				Object obj = commentOrEntrys.get(index);
 				if (obj instanceof PropertyEntry) {
-					if (obj != null) {
-						if (key.equals(((PropertyEntry) obj).getKey())) {
-							commentOrEntrys.remove(obj);
-							return index;
-						}
-					}
+                    if (key.equals(((PropertyEntry) obj).getKey())) {
+                        commentOrEntrys.remove(obj);
+                        return index;
+                    }
 				}
 			}
 			return commentOrEntrys.size();
 		}
 
 		/** 属性描述 */
-		class PropertyEntry {
+		static class PropertyEntry {
 			/** 属性KEY */
 			private String key;
 			/** 属性值 */
@@ -424,8 +416,16 @@ public class OrderProperties extends Properties {
 					String v = saveConvert(value, false);
 					return k + "=" + v;
 				}
-				return null;
+				return "";
 			}
 		}
 	}
+
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    public int hashCode(){
+        return super.hashCode();
+    }
 }

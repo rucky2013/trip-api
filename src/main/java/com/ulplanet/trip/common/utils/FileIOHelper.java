@@ -45,14 +45,13 @@ public class FileIOHelper {
 	 * @return
 	 */
 	public static boolean clearFolder(File folder) {
-		return folder.isFile() ? true : _clearFolder(folder);
+		return folder.isFile() || _clearFolder(folder);
 	}
 
-	/**
-	 * 关闭流.
-	 * 
-	 * @param os
-	 */
+    /**
+     * 关闭流
+     * @param closeable
+     */
 	public static void close(Closeable closeable) {
 		if (closeable != null) {
 			try {
@@ -68,7 +67,6 @@ public class FileIOHelper {
 	 * 
 	 * @param source
 	 * @param target
-	 * @param filter
 	 * @return
 	 */
 	public static boolean copy(File source, File target) {
@@ -103,8 +101,6 @@ public class FileIOHelper {
 			while ((len = reader.read(buf)) != -1) {
 				writer.write(buf, 0, len);
 			}
-		} catch (IOException e) {
-			throw e;
 		} finally {
 			close(reader);
 		}
@@ -126,8 +122,6 @@ public class FileIOHelper {
 			while ((c = is.read(buf)) != -1) {
 				os.write(buf, 0, c);
 			}
-		} catch (IOException e) {
-			throw e;
 		} finally {
 			close(is);
 		}
@@ -140,12 +134,9 @@ public class FileIOHelper {
 	 * @return
 	 */
 	public static boolean delete(File folder) {
-		if (!folder.exists()) {
-			return true;
-		}
+        return !folder.exists() || (folder.isFile() ? _deleteFile(folder) : _deleteFolder(folder));
 
-		return folder.isFile() ? _deleteFile(folder) : _deleteFolder(folder);
-	}
+    }
 
 	/**
 	 * 处理一个目录下的全部.
@@ -154,13 +145,16 @@ public class FileIOHelper {
 	 * @param executor
 	 */
 	public static void loopInFolder(File folder, FileExecutor executor) {
-		for (File child : folder.listFiles()) {
-			if (child.isDirectory()) {
-				loopInFolder(child, executor);
-			} else {
-				executor.execute(child);
-			}
-		}
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File child : files) {
+                if (child.isDirectory()) {
+                    loopInFolder(child, executor);
+                } else {
+                    executor.execute(child);
+                }
+            }
+        }
 	}
 
 	/**
@@ -237,7 +231,7 @@ public class FileIOHelper {
 	 */
 	public static void saveData(File file, String data) throws IOException {
 		if (!file.getParentFile().exists()) {
-			file.getParentFile().mkdirs();
+			if (!file.getParentFile().mkdirs()) return;
 		}
 		saveData(new FileOutputStream(file), data);
 	}
@@ -264,7 +258,7 @@ public class FileIOHelper {
 	 */
 	public static void saveData(File file, String data, Boolean append) throws IOException {
 		if (!file.getParentFile().exists()) {
-			file.getParentFile().mkdirs();
+            if (!file.getParentFile().mkdirs()) return;
 		}
 		saveData(new FileOutputStream(file, append), data);
 	}
@@ -279,8 +273,6 @@ public class FileIOHelper {
 	public static void saveData(OutputStream os, byte[] data) throws IOException {
 		try {
 			os.write(data);
-		} catch (IOException e) {
-			throw e;
 		} finally {
 			close(os);
 		}
@@ -299,8 +291,6 @@ public class FileIOHelper {
 			byte[] bs = data.getBytes(DEFAULT_ENCODING);
 			bos = new BufferedOutputStream(os, BUF_SIZE);
 			bos.write(bs);
-		} catch (IOException e) {
-			throw e;
 		} finally {
 			close(bos);
 		}
@@ -318,12 +308,15 @@ public class FileIOHelper {
 	}
 
 	private static boolean _clearFolder(File folder) {
-		for (File child : folder.listFiles()) {
-			boolean flag = child.isFile() ? _deleteFile(child) : _deleteFolder(child);
-			if (!flag) {
-				return false;
-			}
-		}
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File child : files) {
+                boolean flag = child.isFile() ? _deleteFile(child) : _deleteFolder(child);
+                if (!flag) {
+                    return false;
+                }
+            }
+        }
 
 		return true;
 	}
@@ -341,12 +334,12 @@ public class FileIOHelper {
 		try {
 			fis = new FileInputStream(source);
 			if (!target.getParentFile().exists()) {
-				target.getParentFile().mkdirs();
+                if (!target.getParentFile().mkdirs()) return false;
 			}
 			fos = new FileOutputStream(target);
 
 			byte[] buffer = new byte[BUF_SIZE];
-			int size = 0;
+			int size;
 			while ((size = fis.read(buffer)) != -1) {
 				fos.write(buffer, 0, size);
 			}
@@ -372,16 +365,21 @@ public class FileIOHelper {
 	 */
 	private static boolean _copyFolder(File source, File target) {
 		if (!target.exists()) {
-			target.mkdirs();
+			if (!target.mkdirs()) return false;
 		}
 
-		for (File child : source.listFiles()) {
-			File nchild = new File(target, child.getName());
-			boolean flag = child.isFile() ? _copyFile(child, nchild) : _copyFolder(child, nchild);
-			if (!flag) {
-				return false;
-			}
-		}
+        if (source != null) {
+            File[] files = source.listFiles();
+            if (files != null) {
+                for (File child : files) {
+                    File nchild = new File(target, child.getName());
+                    boolean flag = child.isFile() ? _copyFile(child, nchild) : _copyFolder(child, nchild);
+                    if (!flag) {
+                        return false;
+                    }
+                }
+            }
+        }
 
 		return true;
 	}
@@ -391,12 +389,15 @@ public class FileIOHelper {
 	}
 
 	private static boolean _deleteFolder(File folder) {
-		for (File child : folder.listFiles()) {
-			boolean flag = child.isFile() ? _deleteFile(child) : _deleteFolder(child);
-			if (!flag) {
-				return false;
-			}
-		}
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File child : files) {
+                boolean flag = child.isFile() ? _deleteFile(child) : _deleteFolder(child);
+                if (!flag) {
+                    return false;
+                }
+            }
+        }
 
 		return folder.delete();
 	}

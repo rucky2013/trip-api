@@ -1,9 +1,9 @@
 package com.ulplanet.trip.common.utils;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import java.text.ParseException;
 import java.util.Date;
-
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 /**
  * 
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
  */
 public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 	
-	private static String[] parsePatterns = {
+	private static final String[] parsePatterns = {
 		"yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM", 
 		"yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM",
 		"yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM"};
@@ -37,7 +37,10 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 	 * 得到日期字符串 默认格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
 	 */
 	public static String formatDate(Date date, Object... pattern) {
-		String formatDate = null;
+		String formatDate = "";
+        if (date == null) {
+            return formatDate;
+        }
 		if (pattern != null && pattern.length > 0) {
 			formatDate = DateFormatUtils.format(date, pattern[0].toString());
 		} else {
@@ -166,7 +169,7 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 	public static double getDistanceOfTwoDate(Date before, Date after) {
 		long beforeTime = before.getTime();
 		long afterTime = after.getTime();
-		return (afterTime - beforeTime) / (1000 * 60 * 60 * 24);
+		return (afterTime - beforeTime) / (double) (1000 * 60 * 60 * 24);
 	}
 	
 	/**

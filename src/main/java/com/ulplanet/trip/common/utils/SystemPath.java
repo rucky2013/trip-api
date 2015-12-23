@@ -1,5 +1,7 @@
 package com.ulplanet.trip.common.utils;
 
+import java.util.Objects;
+
 /**
  * 
  * 得到当前应用的系统路径
@@ -10,22 +12,18 @@ package com.ulplanet.trip.common.utils;
 public class SystemPath {
 
 	public static String getSysPath() {
-		String path = Thread.currentThread().getContextClassLoader()
-				.getResource("").toString();
+		String path = Objects.toString(Thread.currentThread().getContextClassLoader().getResource(""));
 		String temp = path.replaceFirst("file:/", "").replaceFirst(
 				"WEB-INF/classes/", "");
 		String separator = System.getProperty("file.separator");
-		String resultPath = temp.replaceAll("/", separator + separator);
-		return resultPath;
+        return temp.replaceAll("/", separator + separator);
 	}
 
 	public static String getClassPath() {
-		String path = Thread.currentThread().getContextClassLoader()
-				.getResource("").toString();
+		String path = Objects.toString(Thread.currentThread().getContextClassLoader().getResource(""));
 		String temp = path.replaceFirst("file:/", "");
 		String separator = System.getProperty("file.separator");
-		String resultPath = temp.replaceAll("/", separator + separator);
-		return resultPath;
+        return temp.replaceAll("/", separator + separator);
 	}
 
 	public static String getSystempPath() {

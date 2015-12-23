@@ -62,7 +62,7 @@ public class WorkDayUtils {
 	 * @return
 	 */
 	public int getWorkingDay(Calendar d1, Calendar d2) {
-		int result = -1;
+		int result;
 		if (d1.after(d2)) { // swap dates so that d1 is start and d2 is end
 			Calendar swap = d1;
 			d1 = d2;
@@ -110,7 +110,7 @@ public class WorkDayUtils {
 	 * @return
 	 */
 	public Calendar getNextMonday(Calendar date) {
-		Calendar result = null;
+		Calendar result;
 		result = date;
 		do {
 			result = (Calendar) result.clone();

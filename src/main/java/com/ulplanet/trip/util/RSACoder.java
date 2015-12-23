@@ -112,17 +112,17 @@ public class RSACoder {
     public static void main(String[] args) throws Exception {
         String inputStr = "timestamp="+new Date().getTime();
 //        String inputStr = "timestamp=1445594503644";
-        byte[] data = inputStr.getBytes();
+        byte[] data = inputStr.getBytes("UTF-8");
 //
         byte[] encodedData = encryptByPublicKey(data, PUBLIC_Key);
-        System.out.println(new String(encodedData));
+        System.out.println(new String(encodedData, "UTF-8"));
 //        byte[] base64 = "rsT74QloY5BmCw7G13KgiHb1ZuOUEbE3ylIf4gG1WBOjnV+YlnBbG9fzN0fTug0QrURIHNaEmcOJyassoPDavrKjruztZP0CLLh2NvAMO+RPYJF4s3VYc1fd71KdAikO2oSM06jk4ZNrBRH05A4/pZs+vNQ7HuLriIzeKGDCwM=".getBytes();
 
         byte[] decodedData = decryptByPrivateKey(encodedData,
                 PRIVATE_KEY);
 //
-        String outputStr = new String(decodedData);
-        System.err.println("加密: " + new String(Base64.decode(encodedData)) + "\n\r" + "解密后: " + outputStr);
+        String outputStr = new String(decodedData, "UTF-8");
+        System.err.println("加密: " + new String(Base64.decode(encodedData), "UTF-8") + "\n\r" + "解密后: " + outputStr);
 
     }
 }

@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
  */
 public class MacUtils {
 
+    private static final String CHARSET_NAME = "UTF-8";
+
 	/**
 	 * 获取当前操作系统名称. return 操作系统名称 例如:windows,Linux,Unix等.
 	 */
@@ -28,16 +30,15 @@ public class MacUtils {
 	public static String getUnixMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
-		Process process = null;
+		Process process;
 		try {
 			/**
 			 * Unix下的命令，一般取eth0作为本地主网卡 显示信息中包含有mac地址信息
 			 */
 			process = Runtime.getRuntime().exec("ifconfig eth0");
-			bufferedReader = new BufferedReader(new InputStreamReader(
-					process.getInputStream()));
-			String line = null;
-			int index = -1;
+			bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), CHARSET_NAME));
+			String line;
+			int index;
 			while ((line = bufferedReader.readLine()) != null) {
 				/**
 				 * 寻找标示字符串[hwaddr]
@@ -64,9 +65,7 @@ public class MacUtils {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			bufferedReader = null;
-			process = null;
-		}
+        }
 
 		return mac;
 	}
@@ -79,16 +78,15 @@ public class MacUtils {
 	public static String getLinuxMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
-		Process process = null;
+		Process process;
 		try {
 			/**
 			 * linux下的命令，一般取eth0作为本地主网卡 显示信息中包含有mac地址信息
 			 */
 			process = Runtime.getRuntime().exec("ifconfig eth0");
-			bufferedReader = new BufferedReader(new InputStreamReader(
-					process.getInputStream()));
-			String line = null;
-			int index = -1;
+			bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), CHARSET_NAME));
+			String line;
+			int index;
 			while ((line = bufferedReader.readLine()) != null) {
 				index = line.toLowerCase().indexOf("硬件地址");
 				/**
@@ -112,9 +110,7 @@ public class MacUtils {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			bufferedReader = null;
-			process = null;
-		}
+        }
 		
 		// 取不到，试下Unix取发
 		if (mac == null){
@@ -132,15 +128,15 @@ public class MacUtils {
 	public static String getWindowsMACAddress() {
 		String mac = null;
 		BufferedReader bufferedReader = null;
-		Process process = null;
+		Process process;
 		try {
 			/**
 			 * windows下的命令，显示信息中包含有mac地址信息
 			 */
 			process = Runtime.getRuntime().exec("ipconfig /all");
-			bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
-			int index = -1;
+			bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), CHARSET_NAME));
+			String line;
+			int index;
 			while ((line = bufferedReader.readLine()) != null) {
 				/**
 				 * 寻找标示字符串[physical address]
@@ -179,9 +175,7 @@ public class MacUtils {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			bufferedReader = null;
-			process = null;
-		}
+        }
 
 		return mac;
 	}

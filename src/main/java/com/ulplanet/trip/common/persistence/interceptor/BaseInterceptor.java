@@ -38,12 +38,11 @@ public abstract class BaseInterceptor implements Interceptor, Serializable {
     /**
      * 对参数进行转换和检查
      * @param parameterObject 参数对象
-     * @param page            分页对象
      * @return 分页对象
      * @throws NoSuchFieldException 无法找到参数
      */
     @SuppressWarnings("unchecked")
-	protected static Page<Object> convertParameter(Object parameterObject, Page<Object> page) {
+	protected static Page<Object> convertParameter(Object parameterObject) {
     	try{
             if (parameterObject instanceof Page) {
                 return (Page<Object>) parameterObject;

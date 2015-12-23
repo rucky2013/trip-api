@@ -50,7 +50,12 @@ public class IdGen {
 	 * 使用SecureRandom随机生成Long. 
 	 */
 	public static long randomLong() {
-		return Math.abs(random.nextLong());
+        long next = random.nextLong();
+        if (next == Long.MIN_VALUE) {
+            return 0l;
+        } else {
+            return Math.abs(random.nextLong());
+        }
 	}
 
 	/**
@@ -63,11 +68,13 @@ public class IdGen {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(IdGen.randomStringUpper());
-		System.out.println(IdGen.randomStringUpper().length());
+//		System.out.println(IdGen.randomStringUpper());
+//		System.out.println(IdGen.randomStringUpper().length());
 //		for (int i=0; i<1000; i++){
 //			System.out.println(IdGen.randomLong() + "  " + IdGen.randomBase62(5));
 //		}
+
+        System.out.println(Long.MIN_VALUE);
 	}
 
 }

@@ -35,19 +35,11 @@ public class BaseDto extends HashMap<String, Object> implements Dto {
 		super(m);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.norming.ess.base.util.Dto#getString(java.lang.String)
-	 */
 	@Override
 	public String getString(String key) {
 		return Objects.toString(this.get(key));
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.norming.ess.base.util.Dto#getList(java.lang.String)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <E> List<E> getList(String key) {
@@ -58,10 +50,6 @@ public class BaseDto extends HashMap<String, Object> implements Dto {
 		return new ArrayList<>();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.norming.ess.base.util.Dto#getInt(java.lang.String)
-	 */
 	@Override
 	public int getInt(String key) {
 		Object value = this.get(key);
@@ -71,9 +59,6 @@ public class BaseDto extends HashMap<String, Object> implements Dto {
 		return NumberHelper.toInt(Objects.toString(value));
 	}
 	
-	/** (non-Javadoc)
-	 * @see com.norming.admin.common.utils.Dto#getLong(String)
-	 */
 	public long getLong(String key) {
 		Object value = this.get(key);
 		if (value instanceof Long) {
@@ -82,10 +67,6 @@ public class BaseDto extends HashMap<String, Object> implements Dto {
 		return NumberHelper.toLong(Objects.toString(value));
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.norming.ess.base.util.Dto#getDouble(java.lang.String)
-	 */
 	@Override
 	public double getDouble(String key) {
 		Object value = this.get(key);
@@ -95,10 +76,6 @@ public class BaseDto extends HashMap<String, Object> implements Dto {
 		return NumberHelper.toDouble(Objects.toString(value));
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.norming.ess.base.util.Dto#getDecimal(java.lang.String)
-	 */
 	@Override
 	public BigDecimal getDecimal(String key) {
 		String str = this.getString(key);
@@ -108,10 +85,6 @@ public class BaseDto extends HashMap<String, Object> implements Dto {
 		return NumberHelper.createBigDecimal(str);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.norming.ess.base.util.Dto#getDate(java.lang.String)
-	 */
 	@Override
 	public Date getDate(String key) {
 		Object value = this.get(key);

@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  */
 public class RequestFilter implements Filter {
 
-    Logger logger = LoggerFactory.getLogger(RequestFilter.class);
+    private static Logger logger = LoggerFactory.getLogger(RequestFilter.class);
 
     private Pattern[] eps;
 
@@ -80,6 +80,7 @@ public class RequestFilter implements Filter {
             errorMap.put(Constants.RETURN_FIELD_MESSAGE, "未获取IMEI或Token");
             String errorMsg = new Gson().toJson(errorMap);
 
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(errorMsg);
             return;
         }

@@ -258,7 +258,9 @@ public class GeocodeService {
 //        System.out.println(g4.getCountry());
 //        System.out.println(g4.getCity());
         Geocode g5 = get(171.3312192, -42.180188); //新西兰
-        System.out.println(g5.getCountry());
-        System.out.println(g5.getCity());
+        if (g5 != null) {
+            System.out.println(g5.getCountry());
+            System.out.println(g5.getCity());
+        }
     }
 }

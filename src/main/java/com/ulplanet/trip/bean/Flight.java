@@ -127,11 +127,6 @@ public class Flight {
 
     @Override
     public String toString(){
-        StringBuffer sb = new StringBuffer();
-        sb.append("航班起飞时间："+this.departureTime);
-        sb.append(",航班起飞地点："+this.departureTerminal+":"+this.departureCity);
-        sb.append(",航班到达时间："+this.arrivalTime);
-        sb.append(",航班到达地点："+this.arrivalTerminal+":"+this.arrivalCity);
-        return sb.toString();
+        return ("航班起飞时间：" + this.departureTime) + ",航班起飞地点：" + this.departureTerminal + ":" + this.departureCity + ",航班到达时间：" + this.arrivalTime + ",航班到达地点：" + this.arrivalTerminal + ":" + this.arrivalCity;
     }
 }

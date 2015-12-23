@@ -1,7 +1,5 @@
 package com.ulplanet.trip.bean;
 
-import com.ulplanet.trip.common.persistence.DataEntity;
-
 import java.util.Date;
 
 /**

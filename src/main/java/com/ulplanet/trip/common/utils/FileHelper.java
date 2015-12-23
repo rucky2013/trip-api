@@ -1,14 +1,9 @@
 package com.ulplanet.trip.common.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
 
 /**
  * 
@@ -58,7 +53,7 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
 			// 如果目标文件存在，并且允许覆盖
 			if (coverlay) {
 				log.debug("目标文件已存在，准备删除!");
-				if (!FileHelper.delFile(descFileName)) {
+				if (FileHelper.delFile(descFileName)) {
 					log.debug("删除目标文件 " + descFileName + " 失败!");
 					return false;
 				}
@@ -80,7 +75,7 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
 
 		// 准备复制文件
 		// 读取的位数
-		int readByte = 0;
+		int readByte;
 		InputStream ins = null;
 		OutputStream outs = null;
 		try {
@@ -161,7 +156,7 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
 			if (coverlay) {
 				// 允许覆盖目标目录
 				log.debug("目标目录已存在，准备删除!");
-				if (!FileHelper.delFile(descDirNames)) {
+				if (FileHelper.delFile(descDirNames)) {
 					log.debug("删除目录 " + descDirNames + " 失败!");
 					return false;
 				}
@@ -182,26 +177,28 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
 		boolean flag = true;
 		// 列出源目录下的所有文件名和子目录名
 		File[] files = srcDir.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			// 如果是一个单个文件，则直接复制
-			if (files[i].isFile()) {
-				flag = FileHelper.copyFile(files[i].getAbsolutePath(),
-						descDirName + files[i].getName());
-				// 如果拷贝文件失败，则退出循环
-				if (!flag) {
-					break;
-				}
-			}
-			// 如果是子目录，则继续复制目录
-			if (files[i].isDirectory()) {
-				flag = FileHelper.copyDirectory(files[i]
-						.getAbsolutePath(), descDirName + files[i].getName());
-				// 如果拷贝目录失败，则退出循环
-				if (!flag) {
-					break;
-				}
-			}
-		}
+        if (files != null) {
+            for (File file : files) {
+                // 如果是一个单个文件，则直接复制
+                if (file.isFile()) {
+                    flag = FileHelper.copyFile(file.getAbsolutePath(),
+                            descDirName + file.getName());
+                    // 如果拷贝文件失败，则退出循环
+                    if (!flag) {
+                        break;
+                    }
+                }
+                // 如果是子目录，则继续复制目录
+                if (file.isDirectory()) {
+                    flag = FileHelper.copyDirectory(file
+                            .getAbsolutePath(), descDirName + file.getName());
+                    // 如果拷贝目录失败，则退出循环
+                    if (!flag) {
+                        break;
+                    }
+                }
+            }
+        }
 
 		if (!flag) {
 			log.debug("复制目录 " + srcDirName + " 到 " + descDirName + " 失败!");
@@ -223,12 +220,12 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
  		File file = new File(fileName);
 		if (!file.exists()) {
 			log.debug(fileName + " 文件不存在!");
-			return true;
+			return false;
 		} else {
 			if (file.isFile()) {
-				return FileHelper.deleteFile(fileName);
+				return !FileHelper.deleteFile(fileName);
 			} else {
-				return FileHelper.deleteDirectory(fileName);
+				return !FileHelper.deleteDirectory(fileName);
 			}
 		}
 	}
@@ -276,25 +273,27 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
 		boolean flag = true;
 		// 列出全部文件及子目录
 		File[] files = dirFile.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			// 删除子文件
-			if (files[i].isFile()) {
-				flag = FileHelper.deleteFile(files[i].getAbsolutePath());
-				// 如果删除文件失败，则退出循环
-				if (!flag) {
-					break;
-				}
-			}
-			// 删除子目录
-			else if (files[i].isDirectory()) {
-				flag = FileHelper.deleteDirectory(files[i]
-						.getAbsolutePath());
-				// 如果删除子目录失败，则退出循环
-				if (!flag) {
-					break;
-				}
-			}
-		}
+        if (files != null) {
+            for (File file : files) {
+                // 删除子文件
+                if (file.isFile()) {
+                    flag = FileHelper.deleteFile(file.getAbsolutePath());
+                    // 如果删除文件失败，则退出循环
+                    if (!flag) {
+                        break;
+                    }
+                }
+                // 删除子目录
+                else if (file.isDirectory()) {
+                    flag = FileHelper.deleteDirectory(file
+                            .getAbsolutePath());
+                    // 如果删除子目录失败，则退出循环
+                    if (!flag) {
+                        break;
+                    }
+                }
+            }
+        }
 
 		if (!flag) {
 			log.debug("删除目录失败!");
@@ -377,10 +376,12 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
 
 	}
 
-	/**
-	 * 写入文件
-	 * @param file 要写入的文件
-	 */
+    /**
+     * 写入文件
+     * @param fileName
+     * @param content
+     * @param append
+     */
 	public static void writeToFile(String fileName, String content, boolean append) {
 		try {
 			FileHelper.write(new File(fileName), content, "utf-8", append);
@@ -390,10 +391,13 @@ public class FileHelper extends org.apache.commons.io.FileUtils {
 		}
 	}
 
-	/**
-	 * 写入文件
-	 * @param file 要写入的文件
-	 */
+    /**
+     * 写入文件
+     * @param fileName
+     * @param content
+     * @param encoding
+     * @param append
+     */
 	public static void writeToFile(String fileName, String content, String encoding, boolean append) {
 		try {
 			FileHelper.write(new File(fileName), content, encoding, append);

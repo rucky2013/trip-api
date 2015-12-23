@@ -8,7 +8,8 @@ import com.ulplanet.trip.dao.StockOrderDao;
 import com.ulplanet.trip.service.StockService;
 import com.ulplanet.trip.util.RSACoder;
 import org.apache.http.client.utils.DateUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,7 +21,9 @@ import java.util.*;
 @Service("stockService")
 public class StockServiceImpl implements StockService{
 
-    Logger logger = Logger.getLogger(StockServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(StockServiceImpl.class);
+
+    private static final String CHARSET_NAME = "UTF-8";
 
     @Resource
     private StockOrderDao stockOrderDao;
@@ -42,9 +45,8 @@ public class StockServiceImpl implements StockService{
                 TimeZone destTimeZone = TimeZone.getTimeZone("GMT+8");
 
                 long now = Calendar.getInstance(destTimeZone).getTime().getTime();
-                byte [] b = RSACoder.decryptByPrivateKey(sign.getBytes(),
-                        RSACoder.PRIVATE_KEY);
-                String str = new String(b);
+                byte [] b = RSACoder.decryptByPrivateKey(sign.getBytes(CHARSET_NAME), RSACoder.PRIVATE_KEY);
+                String str = new String(b, CHARSET_NAME);
                 String time = str.substring(str.indexOf("timestamp=") + 10);
                 long timestamp = Long.parseLong(time);
 

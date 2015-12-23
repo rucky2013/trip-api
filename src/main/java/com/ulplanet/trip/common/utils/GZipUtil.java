@@ -1,13 +1,16 @@
 package com.ulplanet.trip.common.utils;
   
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;  
-import java.io.File;  
-import java.io.FileInputStream;  
-import java.io.FileOutputStream;  
-import java.io.InputStream;  
-import java.io.OutputStream;  
-import java.util.zip.GZIPInputStream;  
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;  
   
 /** 
@@ -18,6 +21,8 @@ public abstract class GZipUtil {
   
     public static final int BUFFER = 1024;
     public static final String EXT = ".gz";
+
+    private static Logger logger = LoggerFactory.getLogger(GZipUtil.class);
   
     /** 
      * 数据压缩.
@@ -61,18 +66,28 @@ public abstract class GZipUtil {
      *            是否删除原始文件 
      * @throws Exception 
      */  
-    public static void compress(File file, boolean delete) throws Exception {  
-        FileInputStream fis = new FileInputStream(file);  
-        FileOutputStream fos = new FileOutputStream(file.getPath() + EXT);  
-  
-        compress(fis, fos);  
-  
-        fis.close();  
-        fos.flush();  
-        fos.close();  
-  
-        if (delete) {  
-            file.delete();  
+    public static void compress(File file, boolean delete) throws Exception {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream(file);
+            fos = new FileOutputStream(file.getPath() + EXT);
+
+            compress(fis, fos);
+        } finally {
+            if (fis != null) {
+                fis.close();
+            }
+            if (fos != null) {
+                fos.flush();
+                fos.close();
+            }
+        }
+
+        if (delete) {
+            if (file.delete()) {
+                logger.error("文件删除失败");
+            }
         }  
     }  
   
@@ -166,17 +181,27 @@ public abstract class GZipUtil {
      *            是否删除原始文件 
      * @throws Exception 
      */  
-    public static void decompress(File file, boolean delete) throws Exception {  
-        FileInputStream fis = new FileInputStream(file);  
-        FileOutputStream fos = new FileOutputStream(file.getPath().replace(EXT,  
-                ""));  
-        decompress(fis, fos);  
-        fis.close();  
-        fos.flush();  
-        fos.close();  
-  
-        if (delete) {  
-            file.delete();  
+    public static void decompress(File file, boolean delete) throws Exception {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream(file);
+            fos = new FileOutputStream(file.getPath().replace(EXT, ""));
+            decompress(fis, fos);
+        } finally {
+            if (fis != null) {
+                fis.close();
+            }
+            if (fos != null) {
+                fos.flush();
+                fos.close();
+            }
+        }
+
+        if (delete) {
+            if (file.delete()) {
+                logger.error("文件删除失败");
+            }
         }  
     }  
   

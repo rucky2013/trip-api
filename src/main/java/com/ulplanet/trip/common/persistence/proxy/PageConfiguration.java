@@ -1,6 +1,5 @@
 package com.ulplanet.trip.common.persistence.proxy;
 
-import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 
@@ -13,7 +12,10 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class PageConfiguration extends Configuration {
 	
-    protected MapperRegistry mapperRegistry = new PaginationMapperRegistry(this);
+    public PageConfiguration() {
+        super();
+        this.mapperRegistry = new PaginationMapperRegistry(this);
+    }
 
     @Override
     public <T> void addMapper(Class<T> type) {
