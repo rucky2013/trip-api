@@ -1,6 +1,11 @@
 package com.ulplanet.trip.api.location;
 
 import com.google.gson.Gson;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
+import com.ulplanet.trip.common.config.Global;
 import com.ulplanet.trip.common.utils.HttpClientUtils;
 import com.ulplanet.trip.common.utils.JedisUtils;
 import org.apache.http.HttpEntity;
@@ -244,7 +249,7 @@ public class GeocodeService {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 //        Geocode g1 = get(116.451114, 39.940012); //北京
 //        System.out.println(g1.getCountry());
 //        System.out.println(g1.getCity());
@@ -257,10 +262,15 @@ public class GeocodeService {
 //        Geocode g4 = get(24.944801, 60.169583); //赫尔辛基
 //        System.out.println(g4.getCountry());
 //        System.out.println(g4.getCity());
-        Geocode g5 = get(171.3312192, -42.180188); //新西兰
-        if (g5 != null) {
-            System.out.println(g5.getCountry());
-            System.out.println(g5.getCity());
-        }
+//        Geocode g5 = get(171.3312192, -42.180188); //新西兰
+//        if (g5 != null) {
+//            System.out.println(g5.getCountry());
+//            System.out.println(g5.getCity());
+//        }
+
+        GeoApiContext context = new GeoApiContext().setApiKey(Global.getConfig("map.key"));
+        GeocodingResult[] results =  GeocodingApi.reverseGeocode(context,
+                new LatLng(-42.180188, 171.3312192)).await();
+        System.out.println(results[0].formattedAddress);
     }
 }

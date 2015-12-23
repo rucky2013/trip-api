@@ -383,6 +383,13 @@
             <version>${tomcat-catalina.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Google Map -->
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.1.9</version>
+        </dependency>
     </dependencies>
 
 	<build>
