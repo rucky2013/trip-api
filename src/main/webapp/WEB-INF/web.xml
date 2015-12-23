@@ -119,7 +119,7 @@
 		<init-param>
 			<param-name>excludingPattern</param-name>
 			<!-- 无需权限检查的url,多值以符号(,或;)分隔(空格回车换行tab等忽略),正则表达式 -->
-			<param-value>/login;/apk;/stock;/druid/; /files/; \.jpg$; \.gif$; \.png$; \.ico$; \.js$; \.css$; \.html$;</param-value>
+			<param-value>/login;/apk;/feedback;/stock;/druid/; /files/; \.jpg$; \.gif$; \.png$; \.ico$; \.js$; \.css$; \.html$;</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
