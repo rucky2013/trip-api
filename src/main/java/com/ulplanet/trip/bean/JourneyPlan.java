@@ -28,6 +28,15 @@ public class JourneyPlan  implements java.io.Serializable{
 	private String typeValue;
 	private String longitude;
 	private String latitude;
+	private Integer feedbackFlag;
+
+	public Integer getFeedbackFlag() {
+		return feedbackFlag;
+	}
+
+	public void setFeedbackFlag(Integer feedbackFlag) {
+		this.feedbackFlag = feedbackFlag;
+	}
 
 	public String getLongitude() {
 		return longitude;

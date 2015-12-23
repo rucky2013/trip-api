@@ -11,5 +11,5 @@ import java.util.Map;
  */
 public interface PhoneFeedbackService {
     Map<String,Object> getPhoneFunctions();
-    Map<String,Object> savePhoneFeedback(List<PhoneFeedback> phoneFeedback);
+    Map<String,Object> savePhoneFeedback(String json,String userCode);
 }

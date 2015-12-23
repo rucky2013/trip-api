@@ -21,6 +21,15 @@ public class JourneyPlans{
     private String longitude;
     private String latitude;
     private Integer score;
+    private Integer feedbackFlag;
+
+    public Integer getFeedbackFlag() {
+        return feedbackFlag;
+    }
+
+    public void setFeedbackFlag(Integer feedbackFlag) {
+        this.feedbackFlag = feedbackFlag;
+    }
 
     public String getPlanId() {
         return planId;

@@ -1,5 +1,7 @@
 package com.ulplanet.trip.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.ulplanet.trip.bean.PhoneFeedback;
 import com.ulplanet.trip.common.utils.IdGen;
 import com.ulplanet.trip.constant.Constants;
@@ -8,6 +10,8 @@ import com.ulplanet.trip.service.PhoneFeedbackService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +34,25 @@ public class PhoneFeedbackServiceImpl implements PhoneFeedbackService {
     }
 
     @Override
-    public Map<String, Object> savePhoneFeedback(List<PhoneFeedback> list) {
+    public Map<String, Object> savePhoneFeedback(String json,String userCode) {
+        List<PhoneFeedback> list;
         Map<String,Object> map = new HashMap<>();
-        for(PhoneFeedback phoneFeedback : list) {
-            phoneFeedback.setId(IdGen.uuid());
-            phoneFeedback.setCreateDate(new Date());
+        try {
+            json = URLDecoder.decode(json,"UTF-8");
+            list = JSON.parseArray(json,PhoneFeedback.class);
+
+            for(PhoneFeedback phoneFeedback : list) {
+                phoneFeedback.setUserCode(userCode);
+                phoneFeedback.setCreateDate(new Date());
+            }
+            phoneFeedbackDao.inserts(list);
+            map.put(Constants.RETURN_FIELD_STATUS,Constants.STATUS_SUCCESS);
+            return map;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-        phoneFeedbackDao.inserts(list);
-        map.put(Constants.RETURN_FIELD_STATUS,Constants.STATUS_SUCCESS);
-        return null;
+        map.put(Constants.RETURN_FIELD_STATUS,Constants.STATUS_FAILURE);
+        return map;
+
     }
 }

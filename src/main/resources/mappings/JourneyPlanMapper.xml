@@ -22,6 +22,7 @@
             <result property="remark" column="remark"/>
             <result property="longitude" column="longitude"/>
             <result property="latitude" column="latitude"/>
+            <result property="feedbackFlag" column="feedbackFlag"/>
 	</resultMap>
 
     <resultMap id="JourneyPlans" type="com.ulplanet.trip.bean.JourneyPlans">
@@ -39,6 +40,7 @@
         <result property="longitude" column="longitude"/>
         <result property="latitude" column="latitude"/>
         <result property="score" column="score"/>
+        <result property="feedbackFlag" column="feedbackFlag"/>
     </resultMap>
 
     <resultMap id="InfoBo" type="com.ulplanet.trip.bean.InfoBo">
@@ -56,7 +58,7 @@
                 jp.type as type,jp.name as name,jp.time_flag as hasTime,
                 jp.time as time,jp.description as description,jp.message_flag as hasMessage,
                 jp.message as message,jp.sort as sort,jp.longitude as longitude,jp.latitude as latitude,
-                e.score as score,jp.id as planId
+                e.score as score,jp.id as planId,jp.feedback_flag as feedbackFlag
         from  journey_day jd
               INNER JOIN journey_plan jp on jp.day_id = jd.id
               LEFT JOIN evaluate e on e.plan_id = jp.id and e.user_code = #{code}
@@ -124,56 +126,6 @@
 
  </sql>
 
-<sql id="UpdateWhere">
-    <where>
-                <if test="dayId != null and dayId != ''">
-                    AND day_id = #{dayId},
-                </if>
-                <if test="infoId != null and infoId != ''">
-                    AND info_id = #{infoId},
-                </if>
-                <if test="type != null and type != ''">
-                    AND type = #{type},
-                </if>
-                <if test="name != null and name != ''">
-                    AND name = #{name},
-                </if>
-                <if test="time != null and time != ''">
-                    AND time = #{time},
-                </if>
-                <if test="timeFlag != null and timeFlag != ''">
-                    AND time_flag = #{timeFlag},
-                </if>
-                <if test="description != null and description != ''">
-                    AND description = #{description},
-                </if>
-                <if test="message != null and message != ''">
-                    AND message = #{message},
-                </if>
-                <if test="messageFlag != null and messageFlag != ''">
-                    AND message_flag = #{messageFlag},
-                </if>
-                <if test="sort != null and sort != ''">
-                    AND sort = #{sort},
-                </if>
-                <if test="createBy != null and createBy != ''">
-                    AND create_by = #{createBy},
-                </if>
-                <if test="createDate != null and createDate != ''">
-                    AND create_date = #{createDate},
-                </if>
-                <if test="updateBy != null and updateBy != ''">
-                    AND update_by = #{updateBy},
-                </if>
-                <if test="updateDate != null and updateDate != ''">
-                    AND update_date = #{updateDate},
-                </if>
-                <if test="remark != null and remark != ''">
-                    AND remark = #{remark}
-                </if>
-        </where>
-
-    </sql>
 
 	<insert id="insert">
             <![CDATA[
@@ -275,7 +227,7 @@
                       remark = #{remark}
                   </if>
         </set>
-        	<include  refid="UpdateWhere" />
+        	WHERE id = #{id}
 	</update>
 
     <delete id="delete">
@@ -294,18 +246,6 @@
 	    ]]>
 	</select>
 	
-
-		
-    <select id="findPageCount" resultType="long">
-        SELECT count(1) FROM journey_plan
-		<include refid="BaseWhere"/>
-    </select>
-
-    <select id="findPage" resultMap="JourneyPlan">
-    	SELECT <include refid="BaseColumns" />
-	    FROM journey_plan 
-		<include refid="BaseWhere"/>
-    </select>
 
     <select id="findInfoByTableName" resultMap="InfoBo">
         SELECT id,name,address,city,${tableCol},longitude,latitude,description FROM ${table}
