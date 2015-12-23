@@ -80,6 +80,7 @@ public class RequestFilter implements Filter {
             errorMap.put(Constants.RETURN_FIELD_MESSAGE, "未获取IMEI或Token");
             String errorMsg = new Gson().toJson(errorMap);
 
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(errorMsg);
             return;
         }
