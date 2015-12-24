@@ -21,7 +21,7 @@ public class PositionController {
     public Map<String, Object> putPoint(HttpServletRequest request,
                                         @RequestParam("longitude") double longitude,
                                         @RequestParam("latitude") double latitude) {
-        return this.positionService.putPoint(request, longitude, latitude);
+        return this.positionService.savePoint(request, longitude, latitude);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
