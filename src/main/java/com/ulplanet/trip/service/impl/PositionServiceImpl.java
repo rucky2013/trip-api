@@ -1,14 +1,20 @@
 package com.ulplanet.trip.service.impl;
 
+import com.google.gson.Gson;
 import com.ulplanet.trip.api.location.GeocodeService;
 import com.ulplanet.trip.bean.User;
+import com.ulplanet.trip.common.persistence.Parameter;
+import com.ulplanet.trip.common.utils.IdGen;
 import com.ulplanet.trip.common.utils.JedisUtils;
+import com.ulplanet.trip.common.utils.NumberHelper;
 import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.constant.Constants;
+import com.ulplanet.trip.dao.PositionDao;
 import com.ulplanet.trip.dao.UserDao;
 import com.ulplanet.trip.service.PositionService;
 import com.ulplanet.trip.util.LocalContext;
-import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +24,25 @@ import java.util.*;
 @Service("positionService")
 public class PositionServiceImpl implements PositionService {
 
+    private static Logger logger = LoggerFactory.getLogger(PositionServiceImpl.class);
+
     @Autowired
     UserDao userDao;
+    @Autowired
+    PositionDao positionDao;
 
     @Override
-    public Map<String, Object> putPoint(HttpServletRequest request, double longitude,
+    public Map<String, Object> savePoint(HttpServletRequest request, double longitude,
                                         double latitude) {
         String groupid = LocalContext.getGroupId();
         String userid = LocalContext.getUserId();
+
+        logger.info(String.format("%s", userid));
+
         Map<String, Object> userMap = JedisUtils.getObjectMap(groupid);
         if (userMap == null) {
             userMap = new HashMap<>();
         }
-
 
         this.updateCountryAndCity(request, longitude, latitude);
 
@@ -38,6 +50,11 @@ public class PositionServiceImpl implements PositionService {
         pointMap.put("longitude", longitude);
         pointMap.put("latitude", latitude);
         userMap.put(userid, pointMap);
+
+        Parameter parameter = new Parameter(new Object[][]{{"id", IdGen.uuid()},
+                {"userId", userid}, {"lng", NumberHelper.round(longitude, 6)},
+                {"lat", NumberHelper.round(latitude, 6)}, {"timing", new Date()}});
+        positionDao.savePosition(parameter);
 
         JedisUtils.setObjectMap(groupid, userMap, 60 * 60 * 24 * 10);
 
