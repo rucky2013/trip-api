@@ -52,7 +52,7 @@
     <div style="border-bottom:1px solid #D7D7D7;text-align: center;padding-bottom: 3%">
         <img id="back" style="float:left" src="../img/left46.png" onclick="window.Feedback.callback();"/>
         <span style="font-weight: bold;font-size: 20px" id="title">意见反馈</span>
-        <a style="float: right;" id="submit">提交</a>
+        <a style="float: right;margin-right: 5%;margin-top:0.5%" id="submit">提交</a>
     </div>
     <div style="font-size: 14px;color: #797979;margin-top:3%;margin-bottom: 3%">请您对我们的功能进行评价：</div>
     <div>
@@ -76,7 +76,7 @@
                 if(obj.type == 1){//单选
                     option.push(obj.id);
                     var tr = '<tr class="tr">';
-                    tr += "<td class=\"title\"><div class='bg' style='margin-left:3%;width:14%;float:left;'></div>";
+                    tr += "<td class=\"title\"><div class='bg' style='margin-left:10%;width:14%;float:left;'></div>";
                     tr += "<span class='title_name' >"+obj.name+"</span>" + "</td>";
                     tr += "<td class=\"options\"><span class='selector'><input type=\"radio\" id=\"" + obj.id + "_3\" name=\""+ obj.id +"\" value='3' style='display:none;'/><label for=\'"+ obj.id +"_3\' class='hover'> 喜欢</label></span></td>";
                     tr += "<td class=\"options\"><span class='selector'><input type=\"radio\" id=\"" + obj.id + "_2\"  name=\""+ obj.id +"\" value='2' style='display:none;' /><label for=\'"+ obj.id +"_2\' class='hover'> 一般</label></span></td>";
@@ -161,14 +161,6 @@
                    json.push(obj);
                 }
                 if(option.length>0){
-                    var name = option[0];
-                    var obj = $('[name=\"' + name + '\"]');
-                    var title = obj.parent().parent().parent().parent().find('.title');
-                    if(title.find('.error').length == 0) {
-                        title.append("<br><a name='error' class='error'>*请选择</a>");
-                        title.find('span').addClass('msg');
-                    }
-                    window.location.href = '#error';
                     return false;
                 }
 
