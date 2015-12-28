@@ -86,7 +86,14 @@ public class PositionServiceImpl implements PositionService {
                 user.setCurrentCity(city);
                 user.setLastUpdate(now);
                 JedisUtils.set(token, new Gson().toJson(user), 60 * 60 * 24 * 10);
+                if (StringHelper.isEmpty(city)) {
+                    logger.error(String.format("用户'%s':坐标%s,%s解析失败(城市为空)",LocalContext.getUser().getName(), longitude, latitude));
+                }
+            } else {
+                logger.error(String.format("用户'%s':坐标%s,%s解析失败(国家为空)",LocalContext.getUser().getName(), longitude, latitude));
             }
+        } else {
+            logger.error(String.format("用户'%s':坐标%s,%s解析失败(geocode为null)",LocalContext.getUser().getName(), longitude, latitude));
         }
     }
 
