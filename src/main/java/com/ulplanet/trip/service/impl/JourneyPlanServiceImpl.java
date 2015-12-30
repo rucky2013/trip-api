@@ -1,6 +1,7 @@
 package com.ulplanet.trip.service.impl;
 
 import com.ulplanet.trip.bean.*;
+import com.ulplanet.trip.common.utils.DateHelper;
 import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.EvaluateDao;
@@ -36,6 +37,7 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
     private EvaluateDao evaluateDao;
 
 
+
     @Override
     public Map<String, Object> findList(String tag) {
         if(tag==null)tag = "";
@@ -65,10 +67,15 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         user.setGroup(group);
         user.setType("0");
         journeyPlans = journeyPlanDao.queryAllPlanByGroup(group,LocalContext.getUser().getCode());
+        Map<String,Date> map = journeyPlanDao.queryDate(group);
+        datas.put("guide", guides);
+        datas.put("passport",passport);
+        datas.put("newRecord",1);
+        datas.put("fromDate", DateHelper.formatDate(map.get("from_date"), "yyyy-MM-dd"));
+        datas.put("toDate", DateHelper.formatDate(map.get("to_date"), "yyyy-MM-dd"));
+        datas.put("tag",versionTag.getTag());
         if (journeyPlans.size()==0){
             datas.put("plans",journeyPlans);
-            datas.put("guide",guides);
-            datas.put("passport",passport);
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
             result.put(Constants.RETURN_FIELD_DATA, datas);
             return result;
@@ -109,10 +116,6 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
         temp.put("plan",jp1);
         planList.add(temp);
         datas.put("plans", planList);
-        datas.put("guide",guides);
-        datas.put("passport",passport);
-        datas.put("newRecord",1);
-        datas.put("tag",versionTag.getTag());
         result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
         result.put(Constants.RETURN_FIELD_DATA, datas);
         return  result;

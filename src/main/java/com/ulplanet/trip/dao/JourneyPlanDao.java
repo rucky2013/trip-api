@@ -7,7 +7,9 @@ import com.ulplanet.trip.common.persistence.CrudDao;
 import com.ulplanet.trip.common.persistence.annotation.MyBatisDao;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @MyBatisDao
 public interface  JourneyPlanDao extends CrudDao<JourneyPlan> {
@@ -17,5 +19,7 @@ public interface  JourneyPlanDao extends CrudDao<JourneyPlan> {
     List<InfoBo> findInfoByTableName(@Param(value = "table") String table,
                                      @Param(value = "ids") String[] ids, @Param(value = "infoId") String infoId,
                                      @Param(value = "tableCol") String tableCol);
+
+    Map<String,Date> queryDate(String id);
 
 }
