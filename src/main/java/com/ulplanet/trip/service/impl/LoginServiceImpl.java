@@ -124,6 +124,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("email", user.getEmail());
         data.put("birthPlace", user.getBirthPlace());
         data.put("positionFlag", user.getPositionFlag());
+        data.put("telFunction", user.getTelFunction());
 
         return data;
     }

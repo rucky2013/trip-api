@@ -32,6 +32,15 @@ public class User extends DataEntity<User> {
     private String currentCity;
     private Integer positionFlag;
     private long lastUpdate;
+    private String telFunction;
+
+    public String getTelFunction() {
+        return telFunction;
+    }
+
+    public void setTelFunction(String telFunction) {
+        this.telFunction = telFunction;
+    }
 
     public Integer getPositionFlag() {
         return positionFlag;
