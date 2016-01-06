@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.ulplanet.trip.api.location.GeocodeService;
 import com.ulplanet.trip.bean.User;
 import com.ulplanet.trip.common.persistence.Parameter;
-import com.ulplanet.trip.common.utils.IdGen;
-import com.ulplanet.trip.common.utils.JedisUtils;
-import com.ulplanet.trip.common.utils.NumberHelper;
-import com.ulplanet.trip.common.utils.StringHelper;
+import com.ulplanet.trip.common.utils.*;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.PositionDao;
 import com.ulplanet.trip.dao.UserDao;
@@ -33,7 +30,7 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Map<String, Object> savePoint(HttpServletRequest request, double longitude,
-                                        double latitude) {
+                                        double latitude, Long time) {
         String groupid = LocalContext.getGroupId();
         String userid = LocalContext.getUserId();
 
@@ -51,9 +48,11 @@ public class PositionServiceImpl implements PositionService {
         pointMap.put("latitude", latitude);
         userMap.put(userid, pointMap);
 
+        Date date = time == null ? new Date() : new Date(time);
+
         Parameter parameter = new Parameter(new Object[][]{{"id", IdGen.uuid()},
                 {"userId", userid}, {"lng", NumberHelper.round(longitude, 6)},
-                {"lat", NumberHelper.round(latitude, 6)}, {"timing", new Date()}});
+                {"lat", NumberHelper.round(latitude, 6)}, {"timing", date}});
         positionDao.savePosition(parameter);
 
         JedisUtils.setObjectMap(groupid, userMap, 60 * 60 * 24 * 10);
