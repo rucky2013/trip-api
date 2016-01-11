@@ -57,11 +57,13 @@
             `name`
         FROM
             `group`
+        WHERE id = #{groupId}
         UNION
         SELECT
             id,
             `name`
         FROM
             team
+        WHERE group_id = #{groupId}
     </select>
 </mapper>
