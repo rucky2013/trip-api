@@ -4,14 +4,19 @@ import com.ulplanet.trip.api.weather.bean.Temperature;
 import com.ulplanet.trip.api.weather.bean.Weather;
 import com.ulplanet.trip.api.weather.bean.WeatherInfo;
 import com.ulplanet.trip.api.weather.service.WeatherGetter;
+import com.ulplanet.trip.bean.VersionTag;
 import com.ulplanet.trip.common.persistence.Parameter;
+import com.ulplanet.trip.common.utils.IdGen;
 import com.ulplanet.trip.common.utils.NumberHelper;
+import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.InfoDao;
+import com.ulplanet.trip.dao.VersionTagDao;
 import com.ulplanet.trip.service.InfoService;
 import com.ulplanet.trip.util.LocalContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -20,6 +25,9 @@ public class InfoServiceImpl implements InfoService {
 
     @Autowired
     private InfoDao infoDao;
+
+    @Autowired
+    VersionTagDao versionTagDao;
 
     @Override
     public Map<String, Object> getEmergency() {
@@ -125,4 +133,31 @@ public class InfoServiceImpl implements InfoService {
         return result;
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public Map<String, Object> getChatGroup(String tag) {
+
+        VersionTag currentVersionTag = versionTagDao.get(new VersionTag("", Constants.VERSION_TAG_CHATGROUP));
+
+        String currentTag;
+        if (currentVersionTag == null) {
+            currentTag = IdGen.uuid();
+            versionTagDao.insert(new VersionTag("", Constants.VERSION_TAG_CHATGROUP, currentTag));
+        } else {
+            currentTag = currentVersionTag.getTag();
+        }
+
+        List<Map<String, Object>> groupInfos = new ArrayList<>();
+
+        if (StringHelper.isEmpty(tag) || !tag.equals(currentTag)) {
+            groupInfos = this.infoDao.getChatGroup();
+        }
+
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("tag", currentTag);
+        result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
+        result.put(Constants.RETURN_FIELD_DATA, groupInfos);
+        return result;
+    }
 }

@@ -51,4 +51,17 @@
             country.name = #{country}
             AND car_rental.type = '1'
     </select>
+    <select id="getChatGroup" resultType="java.util.Map">
+        SELECT
+            id,
+            `name`
+        FROM
+            `group`
+        UNION
+        SELECT
+            id,
+            `name`
+        FROM
+            team
+    </select>
 </mapper>

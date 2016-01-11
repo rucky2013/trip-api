@@ -30,5 +30,6 @@ public class Constants extends BaseConstants {
     //版本类型
     public static final int VERSION_TAG_USERLIST = 1;
     public static final int VERSION_TAG_JOURNEY = 2;
+    public static final int VERSION_TAG_CHATGROUP = 3;
 
 }
