@@ -16,8 +16,8 @@ public class PhoneFeedbackController {
     private PhoneFeedbackService phoneFeedbackService;
 
     @RequestMapping(value = "/getPhoneFunction", method = RequestMethod.GET)
-         public Map<String, Object> getPhoneFunction() {
-        return this.phoneFeedbackService.getPhoneFunctions();
+         public Map<String, Object> getPhoneFunction(@RequestParam String usercode) {
+        return this.phoneFeedbackService.getPhoneFunctions(usercode);
     }
 
     @RequestMapping(value = "/commit", method = RequestMethod.POST)

@@ -62,8 +62,11 @@
     </update>
 
     <select id="getPhoneFunction" resultType="com.ulplanet.trip.bean.PhoneFeedback">
-        SELECT id,name,`type`
-        FROM phone_function
+        SELECT pf.id,pf.name,pf.type,p.score,p.feedback
+        FROM phone_function pf
+        <if test="code!=null and code!=''">
+            LEFT JOIN phone_feedback p on pf.id = p.function_id and p.user_code = #{code}
+        </if>
     </select>
 
 </mapper>

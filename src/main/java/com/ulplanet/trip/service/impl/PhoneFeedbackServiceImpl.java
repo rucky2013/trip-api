@@ -25,8 +25,8 @@ public class PhoneFeedbackServiceImpl implements PhoneFeedbackService {
     @Resource
     private PhoneFeedbackDao phoneFeedbackDao;
     @Override
-    public Map<String, Object> getPhoneFunctions() {
-        List<PhoneFeedback> list = phoneFeedbackDao.getPhoneFunction();
+    public Map<String, Object> getPhoneFunctions(String code) {
+        List<PhoneFeedback> list = phoneFeedbackDao.getPhoneFunction(code);
         Map<String,Object> map = new HashMap<>();
         map.put(Constants.RETURN_FIELD_STATUS,Constants.STATUS_SUCCESS);
         map.put(Constants.RETURN_FIELD_DATA,list);
