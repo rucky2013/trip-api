@@ -54,7 +54,8 @@
             group_user.`group`,
             group_user.code,
             group_user.type,
-            group_user.im_token
+            group_user.im_token,
+            `group`.tel_function
         FROM
             user
             JOIN group_user ON user.id = group_user.`user`

@@ -56,15 +56,16 @@
         <a style="float: right;margin-right: 5%;margin-top:0.5%;color: #808080" id="submit">提交</a>
     </div>
     <div style="font-size: 14px;color: #797979;margin-top:3%;margin-bottom: 3%">请您对我们的功能进行评价：</div>
-    <div>
+    <div style="margin-top: 5%">
         <table class="commit" style="width: 100%;background-color: white">
         </table>
     </div>
 </div>
 <script type="text/javascript">
     var option = [];
+    var usercode = GetQueryString("usercode");
     $.ajax({
-        url : "/feedback/getPhoneFunction",
+        url : "/feedback/getPhoneFunction?usercode="+usercode,
         dataType:'json',
         data:'',
         type:'GET',
@@ -92,7 +93,11 @@
                              "</tr>";
                     var tr = "<tr class=\"tr\">";
                     tr += "<td class=\"options\" colspan=4 style='text-align: center'>";
-                    tr += "<textarea id=\""+ obj.id +"\" placeholder=\""+ obj.name +"\"></textarea>";
+                    tr += "<textarea id=\""+ obj.id +"\" placeholder=\""+ obj.name +"\">";
+                    if(obj.feedback!=undefined && obj.feedback.length>0){
+                        tr += obj.feedback;
+                    }
+                    tr += "</textarea>";
                     tr += "</td>";
                     tr += "</tr>";
                     table += tr;
@@ -114,12 +119,10 @@
             textarea.css('height',textarea.width()*0.4);
             $("#back").css("height",$("#title").height());
             $("#back").css("width",$("#title").height());
-
         }
 
     });
     $(function(){
-//
         $('.hover').on('click', function(event){
             var $this = $(event.target);
             var radio = $this.parent().find("input[type=radio]");
@@ -149,7 +152,6 @@
             }
         };
         $("#submit").click(function(){
-            var usercode = GetQueryString("usercode");
             var json = [];
             if(usercode != null && usercode.length > 0){
                 if($("input:radio:checked").length < option.length){
@@ -173,7 +175,7 @@
                 }
 
             }else{
-                alert('系统异常！');
+                alert('系统异常,请稍后再试！');
                 return false;
             }
             var str = JSON.stringify(json);
