@@ -162,4 +162,82 @@ public class InfoServiceImpl implements InfoService {
         result.put(Constants.RETURN_FIELD_DATA, groupInfos);
         return result;
     }
+
+    public Map<String, Object> getLocalPhone() {
+        String country = LocalContext.getCountry();
+        Parameter parameter = new Parameter(new Object[][]{
+                {"country", country}
+        });
+
+        List<Map<String, Object>> localPhones = new ArrayList<>();
+        List<Map<String, Object>> phones = this.infoDao.getLocalPhone(parameter);
+        if (phones != null && phones.size() > 0) {
+            localPhones.addAll(phones);
+        }
+        Map<String, Object> emergencyInfo = this.infoDao.findEmergency(parameter);
+        if (emergencyInfo != null) {
+
+            String ambulance = Objects.toString(emergencyInfo.get("ambulance"));
+            if (StringHelper.isNotBlank(ambulance)) {
+                Map<String, Object> ambulanceMap = new HashMap<>();
+                ambulanceMap.put("name", "急救电话");
+                ambulanceMap.put("phone", ambulance);
+                localPhones.add(ambulanceMap);
+            }
+
+            String police = Objects.toString(emergencyInfo.get("police"));
+            if (StringHelper.isNotBlank(police)) {
+                Map<String, Object> policeMap = new HashMap<>();
+                policeMap.put("name", "匪警");
+                policeMap.put("phone", police);
+                localPhones.add(policeMap);
+            }
+
+            String fire = Objects.toString(emergencyInfo.get("fire"));
+            if (StringHelper.isNotBlank(fire)) {
+                Map<String, Object> fireMap = new HashMap<>();
+                fireMap.put("name", "火警");
+                fireMap.put("phone", fire);
+                localPhones.add(fireMap);
+            }
+
+            String seaEmerg = Objects.toString(emergencyInfo.get("sea_emerg"));
+            if (StringHelper.isNotBlank(seaEmerg)) {
+                Map<String, Object> seaEmergMap = new HashMap<>();
+                seaEmergMap.put("name", "海上急救");
+                seaEmergMap.put("phone", seaEmerg);
+                localPhones.add(seaEmergMap);
+            }
+
+            String roadEmerg = Objects.toString(emergencyInfo.get("road_emerg"));
+            if (StringHelper.isNotBlank(roadEmerg)) {
+                Map<String, Object> roadEmergMap = new HashMap<>();
+                roadEmergMap.put("name", "公路抢险");
+                roadEmergMap.put("phone", roadEmerg);
+                localPhones.add(roadEmergMap);
+            }
+
+            String unionpayCall = Objects.toString(emergencyInfo.get("unionpay_call"));
+            if (StringHelper.isNotBlank(unionpayCall)) {
+                Map<String, Object> unionpayCallMap = new HashMap<>();
+                unionpayCallMap.put("name", "银联境外客服");
+                unionpayCallMap.put("phone", unionpayCall);
+                localPhones.add(unionpayCallMap);
+            }
+
+            String embassyCall = Objects.toString(emergencyInfo.get("embassy_call"));
+            if (StringHelper.isNotBlank(embassyCall)) {
+                Map<String, Object> embassyCallMap = new HashMap<>();
+                embassyCallMap.put("name", "大使馆");
+                embassyCallMap.put("phone", embassyCall);
+                localPhones.add(embassyCallMap);
+            }
+
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);
+        result.put(Constants.RETURN_FIELD_DATA, localPhones);
+        return result;
+    }
 }

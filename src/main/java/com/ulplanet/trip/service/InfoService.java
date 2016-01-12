@@ -13,4 +13,6 @@ public interface InfoService {
     Map<String, Object> getWeather(double longitude, double latitude);
 
     Map<String,Object> getChatGroup(String tag);
+
+    Map<String,Object> getLocalPhone();
 }

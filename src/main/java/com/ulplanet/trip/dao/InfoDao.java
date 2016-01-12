@@ -20,4 +20,6 @@ public interface InfoDao extends BaseDao {
 
     List<Map<String, Object>> getChatGroup(String groupId);
 
+    List<Map<String, Object>> getLocalPhone(Parameter parameter);
+
 }

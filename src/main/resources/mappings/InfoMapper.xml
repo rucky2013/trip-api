@@ -66,4 +66,14 @@
             team
         WHERE group_id = #{groupId}
     </select>
+    <select id="getLocalPhone" resultType="java.util.Map">
+        SELECT
+            local_phone.`name`,
+            phone
+        FROM
+            local_phone
+            JOIN country ON local_phone.country = country.id
+        WHERE
+            country.`name` = #{country}
+    </select>
 </mapper>
