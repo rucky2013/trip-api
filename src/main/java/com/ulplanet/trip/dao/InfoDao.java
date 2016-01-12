@@ -18,7 +18,7 @@ public interface InfoDao extends BaseDao {
 
     String findCarPhone(Parameter parameter);
 
-    List<Map<String, Object>> getChatGroup(String groupId);
+    List<Map<String, Object>> getChatGroup(Parameter parameter);
 
     List<Map<String, Object>> getLocalPhone(Parameter parameter);
 

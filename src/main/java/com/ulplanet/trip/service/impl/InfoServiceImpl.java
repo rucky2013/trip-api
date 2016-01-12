@@ -138,13 +138,14 @@ public class InfoServiceImpl implements InfoService {
     public Map<String, Object> getChatGroup(String tag) {
 
         String groupId = LocalContext.getGroupId();
+        String userId = LocalContext.getUserId();
 
-        VersionTag currentVersionTag = versionTagDao.get(new VersionTag(groupId, Constants.VERSION_TAG_CHATGROUP));
+        VersionTag currentVersionTag = versionTagDao.get(new VersionTag(userId, Constants.VERSION_TAG_CHATGROUP));
 
         String currentTag;
         if (currentVersionTag == null) {
             currentTag = IdGen.uuid();
-            versionTagDao.insert(new VersionTag(groupId, Constants.VERSION_TAG_CHATGROUP, currentTag));
+            versionTagDao.insert(new VersionTag(userId, Constants.VERSION_TAG_CHATGROUP, currentTag));
         } else {
             currentTag = currentVersionTag.getTag();
         }
@@ -152,7 +153,11 @@ public class InfoServiceImpl implements InfoService {
         List<Map<String, Object>> groupInfos = new ArrayList<>();
 
         if (StringHelper.isEmpty(tag) || !tag.equals(currentTag)) {
-            groupInfos = this.infoDao.getChatGroup(groupId);
+            Parameter parameter = new Parameter(new Object[][]{
+                {"group", groupId},
+                {"user", userId}
+            });
+            groupInfos = this.infoDao.getChatGroup(parameter);
         }
 
 

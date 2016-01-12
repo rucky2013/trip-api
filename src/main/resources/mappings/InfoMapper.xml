@@ -57,14 +57,24 @@
             `name`
         FROM
             `group`
-        WHERE id = #{groupId}
+        WHERE
+            id = #{group}
         UNION
         SELECT
             id,
             `name`
         FROM
             team
-        WHERE group_id = #{groupId}
+        WHERE
+            group_id = #{group}
+            AND id IN (
+                SELECT
+                    team_id
+                FROM
+                    team_user
+                WHERE
+                    user_id = #{user}
+            )
     </select>
     <select id="getLocalPhone" resultType="java.util.Map">
         SELECT
