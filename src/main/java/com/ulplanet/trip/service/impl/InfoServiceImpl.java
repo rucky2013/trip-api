@@ -4,7 +4,6 @@ import com.ulplanet.trip.api.weather.bean.Temperature;
 import com.ulplanet.trip.api.weather.bean.Weather;
 import com.ulplanet.trip.api.weather.bean.WeatherInfo;
 import com.ulplanet.trip.api.weather.service.WeatherGetter;
-import com.ulplanet.trip.bean.VersionTag;
 import com.ulplanet.trip.common.persistence.Parameter;
 import com.ulplanet.trip.common.utils.IdGen;
 import com.ulplanet.trip.common.utils.NumberHelper;
@@ -140,15 +139,15 @@ public class InfoServiceImpl implements InfoService {
         String groupId = LocalContext.getGroupId();
         String userId = LocalContext.getUserId();
 
-        VersionTag currentVersionTag = versionTagDao.get(new VersionTag(userId, Constants.VERSION_TAG_CHATGROUP));
-
-        String currentTag;
-        if (currentVersionTag == null) {
-            currentTag = IdGen.uuid();
-            versionTagDao.insert(new VersionTag(userId, Constants.VERSION_TAG_CHATGROUP, currentTag));
-        } else {
-            currentTag = currentVersionTag.getTag();
-        }
+//        VersionTag currentVersionTag = versionTagDao.get(new VersionTag(userId, Constants.VERSION_TAG_CHATGROUP));
+//
+        String currentTag = IdGen.uuid();
+//        if (currentVersionTag == null) {
+//            currentTag = IdGen.uuid();
+//            versionTagDao.insert(new VersionTag(userId, Constants.VERSION_TAG_CHATGROUP, currentTag));
+//        } else {
+//            currentTag = currentVersionTag.getTag();
+//        }
 
         List<Map<String, Object>> groupInfos = new ArrayList<>();
 
