@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ulplanet.trip.dao.CallRecordDao">
+
+    <select id="findList" resultType="com.ulplanet.trip.bean.CallRecord">
+        SELECT id,code,tel_function,call_type,phone_number,answer_status ,
+            start_date,end_date,answer_date,create_user,create_date
+        FROM call_records
+        ORDER BY create_date
+    </select>
+
+    <insert id="insert">
+        INSERT INTO call_records
+        (
+          id,
+          code,
+          tel_function,
+          call_type,
+          phone_number,
+          answer_status ,
+          start_date,
+          end_date,
+          <if test="answerDate != null">
+           answer_date,
+          </if>
+          create_user,
+          create_date
+        )VALUES
+        (
+          #{id},
+          #{code},
+          #{telFunction},
+          #{callType},
+          #{phoneNumber},
+          #{answerStatus} ,
+          #{startDate},
+          #{endDate},
+          <if test="answerDate != null">
+           #{answerDate},
+          </if>
+          #{createUser},
+          #{createDate}
+        )
+    </insert>
+
+
+
+
+
+</mapper>
