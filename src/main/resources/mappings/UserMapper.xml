@@ -4,7 +4,7 @@
     <select id="findUsers" resultType="java.util.Map">
         SELECT
             group_user.id,
-            user.id as userId,
+            user.id AS userId,
             user.name,
             user.weChat,
             user.qq,
@@ -55,7 +55,8 @@
             group_user.code,
             group_user.type,
             group_user.im_token,
-            `group`.tel_function
+            `group`.tel_function,
+            `group`.to_date AS 'endDate'
         FROM
             user
             JOIN group_user ON user.id = group_user.`user`

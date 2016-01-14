@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.ulplanet.trip.api.location.GeocodeService;
 import com.ulplanet.trip.bean.User;
 import com.ulplanet.trip.bean.VersionTag;
-import com.ulplanet.trip.common.utils.DateHelper;
-import com.ulplanet.trip.common.utils.JedisUtils;
-import com.ulplanet.trip.common.utils.StringHelper;
-import com.ulplanet.trip.common.utils.TokenUtils;
+import com.ulplanet.trip.common.utils.*;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.UserDao;
 import com.ulplanet.trip.dao.VersionTagDao;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,11 +73,17 @@ public class LoginServiceImpl implements LoginService {
             throw new LoginException("密码无效。");
         }
 
+        int endDate = NumberHelper.toInt(new SimpleDateFormat("yyyyMMdd").format(user.getEndDate()), 0);
+        if (endDate < DateHelper.getBjDate()) {
+            throw new LoginException("该行程已结束。");
+        }
+
         if (StringHelper.isNotEmpty(cphone) && !cphone.equals(user.getCphone())) {
             user.setCphone(cphone);
             userdao.updateCPhone(user);
             versionTagDao.update(new VersionTag(user.getGroup(), Constants.VERSION_TAG_USERLIST));
         }
+
 
         String country = "中国";
         String city = "北京";
