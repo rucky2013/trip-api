@@ -33,6 +33,15 @@ public class User extends DataEntity<User> {
     private Integer positionFlag;
     private long lastUpdate;
     private String telFunction;
+    private String chatId;
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
 
     public String getTelFunction() {
         return telFunction;

@@ -64,7 +64,7 @@ public class LoginServiceImpl implements LoginService {
             throw new LoginException("设备无效。");
         }
 
-        User user = this.userdao.findUser(userid);
+        User user = this.userdao.queryUser(userid);
 
         if (user == null) {
             throw new LoginException("用户名不存在。");
@@ -113,6 +113,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("photo", user.getPhoto());
         data.put("name", user.getName());
         data.put("phone", user.getPhone());
+        data.put("chatId", user.getChatId());
         data.put("cphone", user.getCphone());
         data.put("userid", user.getId());
         data.put("passport", user.getPassport());
