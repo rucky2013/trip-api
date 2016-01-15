@@ -23,7 +23,7 @@
         group_user.position_flag,
         group_user.cphone,
         group_user.type,
-        group_user.code,
+        group_user.code
         FROM
             user
             JOIN group_user ON user.id = group_user.user
