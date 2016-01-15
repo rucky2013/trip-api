@@ -3,7 +3,10 @@ package com.ulplanet.trip.common.utils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * 
@@ -171,6 +174,15 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 		long afterTime = after.getTime();
 		return (afterTime - beforeTime) / (double) (1000 * 60 * 60 * 24);
 	}
+
+    public static int getBjDate() {
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00");
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        dateFormat.setTimeZone(tz);
+        return NumberHelper.toInt(dateFormat.format(date), 0);
+    }
 	
 	/**
 	 * @param args

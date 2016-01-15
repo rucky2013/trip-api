@@ -33,6 +33,7 @@ public class User extends DataEntity<User> {
     private Integer positionFlag;
     private long lastUpdate;
     private String telFunction;
+    private Date endDate;
     private String chatId;
 
     public String getChatId() {
@@ -243,4 +244,11 @@ public class User extends DataEntity<User> {
         this.currentCountry = currentCountry;
     }
 
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 }
