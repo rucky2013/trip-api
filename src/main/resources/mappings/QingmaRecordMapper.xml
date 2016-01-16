@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.ulplanet.trip.dao.QingmaRecordDao">
+
+	<resultMap id="QingmaRecord" type="com.ulplanet.trip.bean.QingmaRecord">
+            <result property="id" column="id"/>
+            <result property="appId" column="app_id"/>
+            <result property="clientNumber" column="client_number"/>
+            <result property="callType" column="call_type"/>
+            <result property="caller" column="caller"/>
+            <result property="called" column="called"/>
+            <result property="fromSerNum" column="from_ser_num"/>
+            <result property="toSerNum" column="to_ser_num"/>
+            <result property="callId" column="callId"/>
+            <result property="startTime" column="start_time"/>
+            <result property="stopTime" column="stop_time"/>
+            <result property="calledPickTime" column="called_pick_time"/>
+            <result property="byeType" column="bye_type"/>
+            <result property="callTime" column="call_time"/>
+            <result property="reason" column="reason"/>
+            <result property="recordUrl" column="record_url"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="BaseColumns">
+	    <![CDATA[
+            id,app_id,client_number,call_type,caller,called,from_ser_num,to_ser_num,callId,start_time,stop_time,called_pick_time,bye_type,call_time,reason,record_url
+	    ]]>
+	</sql>
+
+	<insert id="insert">
+            <![CDATA[
+                INSERT INTO qingma_record (
+                    id ,
+                    app_id ,
+                    client_number ,
+                    call_type ,
+                    caller ,
+                    called ,
+                    from_ser_num ,
+                    to_ser_num ,
+                    callId ,
+                    start_time ,
+                    stop_time ,
+                    called_pick_time ,
+                    bye_type ,
+                    call_time ,
+                    reason ,
+                    record_url 
+                ) VALUES (
+                    #{id} ,
+                    #{appId} ,
+                    #{clientNumber} ,
+                    #{callType} ,
+                    #{caller} ,
+                    #{called} ,
+                    #{fromSerNum} ,
+                    #{toSerNum} ,
+                    #{callId} ,
+                    #{startTime} ,
+                    #{stopTime} ,
+                    #{calledPickTime} ,
+                    #{byeType} ,
+                    #{callTime} ,
+                    #{reason} ,
+                    #{recordUrl} 
+                )
+            ]]>
+
+	</insert>
+    
+	<update id="update" >
+        UPDATE qingma_record
+         <set>
+                 <if test="appId != null">
+                      app_id = #{appId},
+                  </if>
+                 <if test="clientNumber != null">
+                      client_number = #{clientNumber},
+                  </if>
+                 <if test="callType != null">
+                      call_type = #{callType},
+                  </if>
+                 <if test="caller != null">
+                      caller = #{caller},
+                  </if>
+                 <if test="called != null">
+                      called = #{called},
+                  </if>
+                 <if test="fromSerNum != null">
+                      from_ser_num = #{fromSerNum},
+                  </if>
+                 <if test="toSerNum != null">
+                      to_ser_num = #{toSerNum},
+                  </if>
+                 <if test="callId != null">
+                      callId = #{callId},
+                  </if>
+                 <if test="startTime != null">
+                      start_time = #{startTime},
+                  </if>
+                 <if test="stopTime != null">
+                      stop_time = #{stopTime},
+                  </if>
+                 <if test="calledPickTime != null">
+                      called_pick_time = #{calledPickTime},
+                  </if>
+                 <if test="byeType != null">
+                      bye_type = #{byeType},
+                  </if>
+                 <if test="callTime != null">
+                      call_time = #{callTime},
+                  </if>
+                 <if test="reason != null">
+                      reason = #{reason},
+                  </if>
+                 <if test="recordUrl != null">
+                      record_url = #{recordUrl}
+                  </if>
+        </set>
+        	WHERE id = #{id}
+	</update>
+
+    <delete id="delete">
+        <![CDATA[
+            DELETE FROM qingma_record WHERE
+            id = #{id} 
+        ]]>
+    </delete>
+    
+    <select id="get" resultMap="QingmaRecord">
+		SELECT <include refid="BaseColumns" />
+	    <![CDATA[
+		    FROM qingma_record 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+	</select>
+	
+
+		
+
+    <select id="findList" resultMap="QingmaRecord">
+    	SELECT <include refid="BaseColumns" />
+	    FROM qingma_record 
+    </select>
+
+	
+</mapper>
+

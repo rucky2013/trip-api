@@ -35,6 +35,24 @@ public class User extends DataEntity<User> {
     private String telFunction;
     private Date endDate;
     private String chatId;
+    private String clientNumber;
+    private String clientPwd;
+
+    public String getClientNumber() {
+        return clientNumber;
+    }
+
+    public void setClientNumber(String clientNumber) {
+        this.clientNumber = clientNumber;
+    }
+
+    public String getClientPwd() {
+        return clientPwd;
+    }
+
+    public void setClientPwd(String clientPwd) {
+        this.clientPwd = clientPwd;
+    }
 
     public String getChatId() {
         return chatId;
