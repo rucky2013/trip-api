@@ -61,6 +61,14 @@
             id = #{group}
         UNION
         SELECT
+            chat_id AS 'id',
+            chat_name AS 'name'
+        FROM
+            `group`
+        WHERE
+            id = #{group}
+        UNION
+        SELECT
             id,
             `name`
         FROM
