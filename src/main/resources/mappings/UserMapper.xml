@@ -23,7 +23,7 @@
         group_user.position_flag,
         group_user.cphone,
         group_user.type,
-        group_user.code,
+        group_user.code
         FROM
             user
             JOIN group_user ON user.id = group_user.user
@@ -58,11 +58,14 @@
             group_user.im_token,
             `group`.tel_function,
             `group`.chat_id,
-+           `group`.to_date AS 'endDate'
+            `group`.to_date AS 'endDate',
+            qc.client_number,
+            qc.client_pwd
         FROM
             user
             JOIN group_user ON user.id = group_user.`user`
             JOIN `group` ON group_user.`group` = `group`.id
+            LEFT JOIN qingma_client qc on qc.id = user.id
         WHERE
             group_user.code = #{code}
     </select>

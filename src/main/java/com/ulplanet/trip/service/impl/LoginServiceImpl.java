@@ -130,6 +130,8 @@ public class LoginServiceImpl implements LoginService {
         data.put("birthPlace", user.getBirthPlace());
         data.put("positionFlag", user.getPositionFlag());
         data.put("telFunction", user.getTelFunction());
+        data.put("clientNumber", user.getClientNumber());
+        data.put("clientPwd", user.getClientPwd());
 
         return data;
     }
