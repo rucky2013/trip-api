@@ -1,27 +1,29 @@
 package com.ulplanet.trip.bean;
 
-import java.util.Date;
 
 /**
  * Created by makun on 2016/1/16.
  */
-public class QingmaRecord {
+public class QingmaRecord implements java.io.Serializable{
+    private static final long serialVersionUID = -3203921037101965153L;
     private String id;
     private String appId;
+    private String accountId;
     private String clientNumber;
-    private Integer callType;
+    private String callType;
     private String caller;
     private String called;
     private String fromSerNum;
     private String toSerNum;
     private String callId;
-    private Date startTime;
-    private Date stopTime;
-    private Date calledPickTime;
+    private String startTime;
+    private String stopTime;
+    private String calledPickTime;
     private String byeType;
-    private Integer callTime;
+    private String callTime;
     private String reason;
     private String recordUrl;
+
 
     public String getId() {
         return id;
@@ -39,6 +41,14 @@ public class QingmaRecord {
         this.appId = appId;
     }
 
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
     public String getClientNumber() {
         return clientNumber;
     }
@@ -47,11 +57,11 @@ public class QingmaRecord {
         this.clientNumber = clientNumber;
     }
 
-    public Integer getCallType() {
+    public String getCallType() {
         return callType;
     }
 
-    public void setCallType(Integer callType) {
+    public void setCallType(String callType) {
         this.callType = callType;
     }
 
@@ -95,27 +105,27 @@ public class QingmaRecord {
         this.callId = callId;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getStopTime() {
+    public String getStopTime() {
         return stopTime;
     }
 
-    public void setStopTime(Date stopTime) {
+    public void setStopTime(String stopTime) {
         this.stopTime = stopTime;
     }
 
-    public Date getCalledPickTime() {
+    public String getCalledPickTime() {
         return calledPickTime;
     }
 
-    public void setCalledPickTime(Date calledPickTime) {
+    public void setCalledPickTime(String calledPickTime) {
         this.calledPickTime = calledPickTime;
     }
 
@@ -127,11 +137,11 @@ public class QingmaRecord {
         this.byeType = byeType;
     }
 
-    public Integer getCallTime() {
+    public String getCallTime() {
         return callTime;
     }
 
-    public void setCallTime(Integer callTime) {
+    public void setCallTime(String callTime) {
         this.callTime = callTime;
     }
 
