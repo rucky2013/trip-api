@@ -175,15 +175,19 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 		return (afterTime - beforeTime) / (double) (1000 * 60 * 60 * 24);
 	}
 
-    public static int getBjDate() {
+    /**
+     * 获取北京当前时间
+     * @return
+     */
+    public static Date getBjDate() {
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00");
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setTimeZone(tz);
-        return NumberHelper.toInt(dateFormat.format(date), 0);
+        return parseDate(dateFormat.format(date));
     }
-	
+
 	/**
 	 * @param args
 	 * @throws ParseException
@@ -193,5 +197,6 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 		System.out.println(getDate("yyyy年MM月dd日 E"));
 		long time = new Date().getTime()-parseDate("2012-11-19").getTime();
 		System.out.println(time/(24*60*60*1000));
+		System.out.println(getBjDate());
 	}
 }

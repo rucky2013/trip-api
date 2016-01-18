@@ -68,13 +68,15 @@ public class LoginServiceImpl implements LoginService {
             throw new LoginException("用户名不存在。");
         }
 
-        if (StringHelper.isEmpty(userpwd) ||
-                !StringHelper.equals(userpwd, user.getPhone())) {
+        if (StringHelper.isEmpty(userpwd)
+                || !StringHelper.equals(userpwd, user.getPhone())) {
             throw new LoginException("密码无效。");
         }
 
         int endDate = NumberHelper.toInt(new SimpleDateFormat("yyyyMMdd").format(user.getEndDate()), 0);
-        if (endDate < DateHelper.getBjDate()) {
+        int bjDate = NumberHelper.toInt(new SimpleDateFormat("yyyyMMdd").format(DateHelper.getBjDate()), 0);
+        if (endDate < bjDate) {
+            // 如果当前日期超过行程结束日期，禁止登陆
             throw new LoginException("该行程已结束。");
         }
 
@@ -106,8 +108,10 @@ public class LoginServiceImpl implements LoginService {
         user.setLastUpdate(new Date().getTime());
         user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : user.getPhoto());
         String token = TokenUtils.getToken(imei);
-        JedisUtils.set(token, new Gson().toJson(user), 60 * 60 * 24 * 10);
-        JedisUtils.set(user.getId(), token, 60 * 60 * 24 * 10);
+
+        int period = getPeriod(user.getEndDate());
+        JedisUtils.set(token, new Gson().toJson(user), period);
+        JedisUtils.set(user.getId(), token, period);
 
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);
@@ -134,6 +138,11 @@ public class LoginServiceImpl implements LoginService {
         data.put("clientPwd", user.getClientPwd());
 
         return data;
+    }
+
+    private int getPeriod(Date endDate) {
+        Date bjDate = DateHelper.getBjDate();
+        return NumberHelper.getInt((endDate.getTime() + 86400000 - bjDate.getTime()) / 1000, 0);
     }
 
 }
