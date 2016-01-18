@@ -30,7 +30,6 @@
 	</sql>
 
 	<insert id="insert">
-            <![CDATA[
                 INSERT INTO qingma_record (
                     id ,
                     app_id ,
@@ -43,7 +42,9 @@
                     callId ,
                     start_time ,
                     stop_time ,
+                    <if test="calledPickTime!=null and calledPickTime!=''">
                     called_pick_time ,
+                    </if>
                     bye_type ,
                     call_time ,
                     reason ,
@@ -60,13 +61,14 @@
                     #{callId} ,
                     #{startTime} ,
                     #{stopTime} ,
-                    #{calledPickTime} ,
+                    <if test="calledPickTime!=null and calledPickTime!=''">
+                      #{calledPickTime} ,
+                    </if>
                     #{byeType} ,
                     #{callTime} ,
                     #{reason} ,
                     #{recordUrl} 
                 )
-            ]]>
 
 	</insert>
     
