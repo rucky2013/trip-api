@@ -2,7 +2,10 @@ package com.ulplanet.trip.filter;
 
 import com.google.gson.Gson;
 import com.ulplanet.trip.bean.User;
-import com.ulplanet.trip.common.utils.*;
+import com.ulplanet.trip.common.utils.JedisUtils;
+import com.ulplanet.trip.common.utils.LocalHelper;
+import com.ulplanet.trip.common.utils.StringHelper;
+import com.ulplanet.trip.common.utils.TokenUtils;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.util.LocalContext;
 import org.slf4j.Logger;
@@ -12,8 +15,10 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 
@@ -88,13 +93,7 @@ public class RequestFilter implements Filter {
             if (user != null) {
                 // 用户是否被踢出
                 if (token.equals(JedisUtils.get(user.getId()))) {
-                    // 比较当前日期与团队截止日期
-                    int endDate = NumberHelper.toInt(new SimpleDateFormat("yyyyMMdd").format(user.getEndDate()), 0);
-                    if (endDate >= DateHelper.getBjDate()) {
-                        LocalContext.setUser(user);
-                    } else {
-                        invalid = true;
-                    }
+                    LocalContext.setUser(user);
                 } else {
                     invalid = true;
                 }
