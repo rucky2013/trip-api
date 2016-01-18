@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,16 +25,20 @@ public class QingmaCallController{
      * @return
      */
     @RequestMapping(value = "/callAuth",method = RequestMethod.POST)
-    public String callAuth(){
-        return "{\"respCode\": \"00000\"}";
+    public Map<String,Object> callAuth(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("respCode","00000");
+        return map;
     }
 
     /**
      * 呼叫建立请求
      */
     @RequestMapping(value = "/callEstablish",method = RequestMethod.POST)
-    public String callEstablish(){
-        return "{\"respCode\": \"00000\"}";
+    public Map<String,Object> callEstablish(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("respCode","00000");
+        return map;
     }
 
     @RequestMapping(value = "/hangup",method = RequestMethod.POST)
