@@ -2,6 +2,7 @@ package com.ulplanet.trip.controller;
 
 import com.ulplanet.trip.bean.QingmaRecord;
 import com.ulplanet.trip.service.QingmaRecordService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +43,7 @@ public class QingmaCallController{
     }
 
     @RequestMapping(value = "/hangup",method = RequestMethod.POST)
-    public Map<String,Object> hangup(QingmaRecord qingmaRecord){
+    public Map<String,Object> hangup(@RequestBody QingmaRecord qingmaRecord){
         return qingmaRecordService.saveRecord(qingmaRecord);
     }
 
