@@ -36,9 +36,9 @@ public class QingmaValidator {
 
     }
     public static void main(String[] args) throws ParseException {
-        String timestamp = "20160119163610";
+        String timestamp = "20160119182950";
         long time = DateHelper.parseDate(timestamp, "yyyyMMddHHmmss").getTime();
-        String key = ACCOUNT_SID + AUTH_TOKEN + timestamp;
+        String key = "64498043813883" + "2NxVMVpy" + timestamp;
         System.out.print(DigestUtils.md5Hex(key));
     }
 }

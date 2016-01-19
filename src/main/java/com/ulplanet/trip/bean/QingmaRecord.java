@@ -10,6 +10,7 @@ public class QingmaRecord implements java.io.Serializable{
     private String appId;
     private String accountId;
     private String clientNumber;
+    private String clientPwd;
     private String callType;
     private String caller;
     private String called;
@@ -176,5 +177,13 @@ public class QingmaRecord implements java.io.Serializable{
 
     public void setRecordUrl(String recordUrl) {
         this.recordUrl = recordUrl;
+    }
+
+    public String getClientPwd() {
+        return clientPwd;
+    }
+
+    public void setClientPwd(String clientPwd) {
+        this.clientPwd = clientPwd;
     }
 }
