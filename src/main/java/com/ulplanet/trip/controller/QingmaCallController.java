@@ -30,6 +30,7 @@ public class QingmaCallController{
         Map<String,Object> map = new HashMap<>();
         map.put("respCode","00000");
         map.put("fromSerNum",qingmaRecord.getFromSerNum());
+        map.put("toSerNum",qingmaRecord.getToSerNum());
         map.put("callId",qingmaRecord.getCallId());
         return map;
     }
