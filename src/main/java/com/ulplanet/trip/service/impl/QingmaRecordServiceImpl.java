@@ -25,13 +25,13 @@ public class QingmaRecordServiceImpl implements QingmaRecordService {
 
     @Override
     public Map<String, Object> saveRecord(QingmaRecord qingmaRecord) {
-        String respCode = QingmaValidator.validator(qingmaRecord.getTimestamp(), qingmaRecord.getSig());
-        logger.error(respCode);
+//        String respCode = QingmaValidator.validator(qingmaRecord.getTimestamp(), qingmaRecord.getSig());
+//        logger.error(respCode);
         Map<String,Object> map = new HashMap<>();
-        if(!"00000".equals(respCode)){
-            map.put("respCode", respCode);
-            return map;
-        }
+//        if(!"00000".equals(respCode)){
+//            map.put("respCode", respCode);
+//            return map;
+//        }
         qingmaRecord.setId(IdGen.uuid());
         int i = qingmaRecordDao.insert(qingmaRecord);
         if(i > 0) {
