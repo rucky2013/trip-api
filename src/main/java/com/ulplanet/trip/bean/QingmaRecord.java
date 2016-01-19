@@ -23,7 +23,24 @@ public class QingmaRecord implements java.io.Serializable{
     private String callTime;
     private String reason;
     private String recordUrl;
+    private String timestamp;
+    private String sig;
 
+    public String getSig() {
+        return sig;
+    }
+
+    public void setSig(String sig) {
+        this.sig = sig;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public String getId() {
         return id;

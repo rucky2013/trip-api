@@ -4,6 +4,7 @@ import com.ulplanet.trip.bean.QingmaRecord;
 import com.ulplanet.trip.common.utils.IdGen;
 import com.ulplanet.trip.dao.QingmaRecordDao;
 import com.ulplanet.trip.service.QingmaRecordService;
+import com.ulplanet.trip.util.QingmaValidator;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,9 +22,14 @@ public class QingmaRecordServiceImpl implements QingmaRecordService {
 
     @Override
     public Map<String, Object> saveRecord(QingmaRecord qingmaRecord) {
+        String respCode = QingmaValidator.validator(qingmaRecord.getTimestamp(), qingmaRecord.getSig());
+        Map<String,Object> map = new HashMap<>();
+        if(!"00000".equals(respCode)){
+            map.put("respCode", respCode);
+            return map;
+        }
         qingmaRecord.setId(IdGen.uuid());
         int i = qingmaRecordDao.insert(qingmaRecord);
-        Map<String,Object> map = new HashMap<>();
         if(i > 0) {
             map.put("respCode", "00000");
         }else{
