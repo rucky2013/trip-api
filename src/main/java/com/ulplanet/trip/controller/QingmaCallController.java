@@ -26,9 +26,11 @@ public class QingmaCallController{
      * @return
      */
     @RequestMapping(value = "/callAuth",method = RequestMethod.POST)
-    public Map<String,Object> callAuth(){
+    public Map<String,Object> callAuth(@RequestBody QingmaRecord qingmaRecord){
         Map<String,Object> map = new HashMap<>();
         map.put("respCode","00000");
+        map.put("fromSerNum",qingmaRecord.getFromSerNum());
+        map.put("callId",qingmaRecord.getCallId());
         return map;
     }
 
