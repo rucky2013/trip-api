@@ -21,6 +21,7 @@ import java.util.Map;
 public class QingmaCallController{
 
 
+    Logger logger = LoggerFactory.getLogger(QingmaCallController.class);
     @Resource
     private QingmaRecordService qingmaRecordService;
     /**
@@ -31,7 +32,8 @@ public class QingmaCallController{
     public Map<String,Object> callAuth(@RequestBody QingmaRecord qingmaRecord){
 
         Map<String,Object> map = new HashMap<>();
-        map.put("respCode", QingmaValidator.validator(qingmaRecord.getTimestamp(),qingmaRecord.getSig()));
+        map.put("respCode", QingmaValidator.validator(qingmaRecord.getTimestamp(), qingmaRecord.getSig()));
+        logger.error(QingmaValidator.validator(qingmaRecord.getTimestamp(), qingmaRecord.getSig()));
         map.put("fromSerNum",qingmaRecord.getFromSerNum());
         map.put("toSerNum",qingmaRecord.getToSerNum());
         return map;
