@@ -1,5 +1,10 @@
 package com.ulplanet.trip.util;
 
+
+import com.ulplanet.trip.common.utils.DateHelper;
+import org.apache.commons.codec.digest.DigestUtils;
+
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -11,21 +16,29 @@ public class QingmaValidator {
     private final static long TIME_DIFFERENCE = 600000;
 
     public static String validator(String timestamp,String sig){
-        Long time = Long.parseLong(timestamp);
-        long now = new Date().getTime();
-        if(now - time > TIME_DIFFERENCE){
-            return "00005";
+        Long time;
+        try {
+            time = DateHelper.parseDate(timestamp, "yyyyMMddHHmmss").getTime();
+            long now = new Date().getTime();
+            if(now - time > TIME_DIFFERENCE){
+                return "00005";
+            }
+            String key = ACCOUNT_SID + AUTH_TOKEN + timestamp;
+            String _sig = DigestUtils.md5Hex(key);
+            if(!_sig.equals(sig)){
+                return "00006";
+            }
+            return "00000";
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "00000";
         }
-        String key = ACCOUNT_SID + AUTH_TOKEN + timestamp;
-        String _sig = SecurityUtils.MD5(key);
-        if(!_sig.equals(sig)){
-            return "00006";
-        }
-        return "00000";
+
     }
-    public static void main(String[] args){
-        long timestamp = new Date().getTime();
+    public static void main(String[] args) throws ParseException {
+        String timestamp = "20160119163610";
+        long time = DateHelper.parseDate(timestamp, "yyyyMMddHHmmss").getTime();
         String key = ACCOUNT_SID + AUTH_TOKEN + timestamp;
-        System.out.print(validator(String.valueOf(timestamp),SecurityUtils.MD5(key)));
+        System.out.print(DigestUtils.md5Hex(key));
     }
 }

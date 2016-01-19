@@ -32,8 +32,8 @@ public class QingmaCallController{
     public Map<String,Object> callAuth(@RequestBody QingmaRecord qingmaRecord){
         logger.error(JSON.toJSONString(qingmaRecord));
         Map<String,Object> map = new HashMap<>();
-        map.put("respCode", "00000");
 //        map.put("respCode", QingmaValidator.validator(qingmaRecord.getTimestamp(), qingmaRecord.getSig()));
+        map.put("respCode", "00000");
         map.put("fromSerNum",qingmaRecord.getFromSerNum());
         map.put("toSerNum",qingmaRecord.getToSerNum());
         return map;
