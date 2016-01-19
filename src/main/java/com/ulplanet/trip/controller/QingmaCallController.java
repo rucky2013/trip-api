@@ -1,7 +1,10 @@
 package com.ulplanet.trip.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.ulplanet.trip.bean.QingmaRecord;
 import com.ulplanet.trip.service.QingmaRecordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +22,7 @@ import java.util.Map;
 public class QingmaCallController{
 
 
+    Logger logger = LoggerFactory.getLogger(QingmaCallController.class);
     @Resource
     private QingmaRecordService qingmaRecordService;
     /**
@@ -27,6 +31,7 @@ public class QingmaCallController{
      */
     @RequestMapping(value = "/callAuth",method = RequestMethod.POST)
     public Map<String,Object> callAuth(@RequestBody QingmaRecord qingmaRecord){
+        logger.error(JSON.toJSONString(qingmaRecord));
         Map<String,Object> map = new HashMap<>();
         map.put("respCode","00000");
         map.put("fromSerNum",qingmaRecord.getFromSerNum());
