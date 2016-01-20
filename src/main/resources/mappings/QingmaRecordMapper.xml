@@ -142,7 +142,7 @@
 
     <select id="getPwd" resultType="java.lang.String">
         SELECT client_pwd
-		    FROM qingma_record
+		    FROM qingma_client
 	        WHERE
 		        client_number = #{clientNumber}
     </select>
