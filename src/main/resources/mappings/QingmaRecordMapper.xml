@@ -139,6 +139,13 @@
 		        id = #{id} 
 	    ]]>
 	</select>
+
+    <select id="getPwd" resultType="java.lang.String">
+        SELECT client_pwd
+		    FROM qingma_record
+	        WHERE
+		        client_number = #{clientNumber}
+    </select>
 	
 
 		

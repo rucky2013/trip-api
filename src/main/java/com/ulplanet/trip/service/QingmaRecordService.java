@@ -9,4 +9,5 @@ import java.util.Map;
  */
 public interface QingmaRecordService {
     Map<String,Object> saveRecord(QingmaRecord qingmaRecord);
+    String getPwd(QingmaRecord qingmaRecord);
 }
