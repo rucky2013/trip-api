@@ -20,7 +20,6 @@ import java.util.Map;
 public class QingmaCallController{
 
 
-    Logger logger = LoggerFactory.getLogger(QingmaCallController.class);
     @Resource
     private QingmaRecordService qingmaRecordService;
     /**
@@ -30,7 +29,6 @@ public class QingmaCallController{
     @RequestMapping(value = "/callAuth",method = RequestMethod.POST)
     public Map<String,Object> callAuth(@RequestBody QingmaRecord qingmaRecord){
         Map<String,Object> map = new HashMap<>();
-        logger.error(JSON.toJSONString(qingmaRecord));
         qingmaRecord.setClientPwd(qingmaRecordService.getPwd(qingmaRecord));
         map.put("respCode", QingmaValidator.validator(qingmaRecord));
         map.put("respCode", "00000");
