@@ -32,6 +32,43 @@ public class User extends DataEntity<User> {
     private String currentCity;
     private Integer positionFlag;
     private long lastUpdate;
+    private String telFunction;
+    private Date endDate;
+    private String chatId;
+    private String clientNumber;
+    private String clientPwd;
+
+    public String getClientNumber() {
+        return clientNumber;
+    }
+
+    public void setClientNumber(String clientNumber) {
+        this.clientNumber = clientNumber;
+    }
+
+    public String getClientPwd() {
+        return clientPwd;
+    }
+
+    public void setClientPwd(String clientPwd) {
+        this.clientPwd = clientPwd;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getTelFunction() {
+        return telFunction;
+    }
+
+    public void setTelFunction(String telFunction) {
+        this.telFunction = telFunction;
+    }
 
     public Integer getPositionFlag() {
         return positionFlag;
@@ -225,4 +262,11 @@ public class User extends DataEntity<User> {
         this.currentCountry = currentCountry;
     }
 
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 }

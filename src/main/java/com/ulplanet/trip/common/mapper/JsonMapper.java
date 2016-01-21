@@ -1,30 +1,19 @@
 package com.ulplanet.trip.common.mapper;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.JsonParser.Feature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 
@@ -59,8 +48,7 @@ public class JsonMapper extends ObjectMapper {
 		this.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>(){
 			@Override
 			public void serialize(Object value, JsonGenerator jgen,
-					SerializerProvider provider) throws IOException,
-					JsonProcessingException {
+					SerializerProvider provider) throws IOException {
 				jgen.writeString("");
 			}
         });
@@ -68,8 +56,7 @@ public class JsonMapper extends ObjectMapper {
 		this.registerModule(new SimpleModule().addSerializer(String.class, new JsonSerializer<String>(){
 			@Override
 			public void serialize(String value, JsonGenerator jgen,
-					SerializerProvider provider) throws IOException,
-					JsonProcessingException {
+					SerializerProvider provider) throws IOException {
 				jgen.writeString(StringEscapeUtils.unescapeHtml4(value));
 			}
         }));
@@ -165,8 +152,6 @@ public class JsonMapper extends ObjectMapper {
 	public <T> T update(String jsonString, T object) {
 		try {
 			return (T) this.readerForUpdating(object).readValue(jsonString);
-		} catch (JsonProcessingException e) {
-			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		} catch (IOException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		}

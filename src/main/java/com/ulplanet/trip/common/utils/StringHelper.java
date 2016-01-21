@@ -1,20 +1,19 @@
 package com.ulplanet.trip.common.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.ulplanet.trip.base.SpringContextHolder;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.LocaleResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -47,7 +46,7 @@ public class StringHelper extends org.apache.commons.lang3.StringUtils {
     
     /**
      * 转换为字节数组
-     * @param str
+     * @param bytes
      * @return
      */
     public static String toString(byte[] bytes){
@@ -85,8 +84,7 @@ public class StringHelper extends org.apache.commons.lang3.StringUtils {
 		String regEx = "<.+?>";
 		Pattern p = Pattern.compile(regEx);
 		Matcher m = p.matcher(html);
-		String s = m.replaceAll("");
-		return s;
+        return m.replaceAll("");
 	}
 	
 	/**
@@ -146,7 +144,7 @@ public class StringHelper extends org.apache.commons.lang3.StringUtils {
 		if (param == null) {
 			return "";
 		}
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		int n = 0;
 		char temp;
 		boolean isCode = false; // 是不是HTML代码
@@ -244,7 +242,7 @@ public class StringHelper extends org.apache.commons.lang3.StringUtils {
 	 * 获得i18n字符串
 	 */
 	public static String getMessage(String code, Object[] args) {
-		LocaleResolver localLocaleResolver = (LocaleResolver) SpringContextHolder.getBean(LocaleResolver.class);
+		LocaleResolver localLocaleResolver = SpringContextHolder.getBean(LocaleResolver.class);
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
 		Locale localLocale = localLocaleResolver.resolveLocale(request);
 		return SpringContextHolder.getApplicationContext().getMessage(code, args, localLocale);
@@ -351,17 +349,6 @@ public class StringHelper extends org.apache.commons.lang3.StringUtils {
     }
     
     /**
-     * 如果不为空，则设置值
-     * @param target
-     * @param source
-     */
-    public static void setValueIfNotBlank(String target, String source) {
-		if (isNotBlank(source)){
-			target = source;
-		}
-	}
- 
-    /**
      * 转换为JS获取对象值，生成三目运算返回结果
      * @param objectString 对象串
      *   例如：row.user.id
@@ -371,16 +358,21 @@ public class StringHelper extends org.apache.commons.lang3.StringUtils {
     	StringBuilder result = new StringBuilder();
     	StringBuilder val = new StringBuilder();
     	String[] vals = split(objectString, ".");
-    	for (int i=0; i<vals.length; i++){
-    		val.append("." + vals[i]);
-    		result.append("!"+(val.substring(1))+"?'':");
-    	}
+        for (String val1 : vals) {
+            val.append(".").append(val1);
+            result.append("!").append(val.substring(1)).append("?'':");
+        }
     	result.append(val.substring(1));
     	return result.toString();
     }
     
     public static String encodeBase64(byte[] b) {
-		return new String(Base64.encodeBase64(b));
-	}
+        try {
+            return new String(Base64.encodeBase64(b), CHARSET_NAME);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
     
 }

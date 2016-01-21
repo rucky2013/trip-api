@@ -23,15 +23,20 @@ public abstract class HttpDownloadTools {
 		f = f.replaceAll("%2F", "/");
 		f = StringHelper.replace(f, "+", "%20");
 		url = new URL(url.getProtocol() + "://" + url.getHost() + ":" + url.getPort() + f);
-		
-		FileOutputStream fos = new FileOutputStream(target);		
-		InputStream is = url.openStream();
-		byte[] buf = new byte[102400];
-		int rc;
-		while ((rc = is.read(buf)) != -1) {
-			fos.write(buf, 0, rc);
-		}		
-		FileIOHelper.close(is);
-		FileIOHelper.close(fos);
+
+        FileOutputStream fos = null;
+        InputStream is = null;
+        try {
+            fos = new FileOutputStream(target);
+            is = url.openStream();
+            byte[] buf = new byte[102400];
+            int rc;
+            while ((rc = is.read(buf)) != -1) {
+                fos.write(buf, 0, rc);
+            }
+        } finally {
+            FileIOHelper.close(is);
+            FileIOHelper.close(fos);
+        }
 	}
 }

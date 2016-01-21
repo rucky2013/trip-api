@@ -51,4 +51,47 @@
             country.name = #{country}
             AND car_rental.type = '1'
     </select>
+    <select id="getChatGroup" resultType="java.util.Map">
+        SELECT
+            id,
+            `name`
+        FROM
+            `group`
+        WHERE
+            id = #{group}
+        UNION
+        SELECT
+            chat_id AS 'id',
+            chat_name AS 'name'
+        FROM
+            `group`
+        WHERE
+            id = #{group}
+        UNION
+        SELECT
+            id,
+            `name`
+        FROM
+            team
+        WHERE
+            group_id = #{group}
+            AND id IN (
+                SELECT
+                    team_id
+                FROM
+                    team_user
+                WHERE
+                    user_id = #{user}
+            )
+    </select>
+    <select id="getLocalPhone" resultType="java.util.Map">
+        SELECT
+            local_phone.`name`,
+            phone
+        FROM
+            local_phone
+            JOIN country ON local_phone.country = country.id
+        WHERE
+            country.`name` = #{country}
+    </select>
 </mapper>

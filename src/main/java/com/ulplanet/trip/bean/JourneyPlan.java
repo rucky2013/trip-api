@@ -1,33 +1,38 @@
 package com.ulplanet.trip.bean;
 
-
-
+import java.util.Date;
 
 public class JourneyPlan  implements java.io.Serializable{
 	private static final long serialVersionUID = 5454155825314635342L;
-	
-
-	
 
 	private String id;
 	private String dayId;
 	private String infoId;
 	private Integer type;
 	private String name;
-	private java.util.Date time;
+	private Date time;
 	private Integer timeFlag;
 	private String description;
 	private String message;
 	private Integer messageFlag;
 	private Integer sort;
 	private String createBy;
-	private java.util.Date createDate;
+	private Date createDate;
 	private String updateBy;
-	private java.util.Date updateDate;
+	private Date updateDate;
 	private String remark;
 	private String typeValue;
 	private String longitude;
 	private String latitude;
+	private Integer feedbackFlag;
+
+	public Integer getFeedbackFlag() {
+		return feedbackFlag;
+	}
+
+	public void setFeedbackFlag(Integer feedbackFlag) {
+		this.feedbackFlag = feedbackFlag;
+	}
 
 	public String getLongitude() {
 		return longitude;
@@ -167,12 +172,12 @@ public class JourneyPlan  implements java.io.Serializable{
 		return this.updateBy;
 	}
 
-	public void setUpdateDate(java.util.Date value) {
+	public void setUpdateDate(Date value) {
 		this.updateDate = value;
 	}
 	
 	public java.util.Date getUpdateDate() {
-		return this.updateDate;
+		return new Date(updateDate.getTime());
 	}
 
 	public void setRemark(String value) {

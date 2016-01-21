@@ -1,7 +1,5 @@
 package com.ulplanet.trip.common.utils;
 
-import java.lang.reflect.Field;
-
 /**
  * ThreadLocal对象,"注册"到本助手类下,在任务结束时候"统一"释放,避免因为线程池原因而产生的对象无法释放问题.
  * 如果是类下面的static的变量,请调用registStatic,否则请调用regist
@@ -64,71 +62,4 @@ public class LocalHelper {
 		return listener.unregistStatic(tl);
 	}
 	
-}
-
-class LocalTest {
-
-	public static void main(String[] args) {
-		test1();
-	}
-
-	private static void test1() {
-		C1 c1 = new C1();
-		try {
-			c1.tl.set("tl value");
-			C1.stl.set("stl value");
-			showLocals(Thread.currentThread());
-			showC1(c1);
-		} catch (Throwable tr) {
-		    tr.printStackTrace();
-
-		} finally {
-			LocalHelper.clearContexts();
-			showLocals(Thread.currentThread());
-			showC1(c1);
-		}
-	}
-	
-	private static void showLocals(Thread t) {
-		System.out.println("Show Thread:" + t);
-		Object m = getValue(t, "threadLocals");
-		Object[] es = (Object[]) getValue(m, "table");
-		for (Object e : es) {
-			if (e != null) {
-				System.out.println(getValue(e, "value"));
-			}
-		}
-	}
-	
-	private static void showC1(C1 c1) {
-		System.out.println("Show c1, stl(" + C1.stl.get() + "), tl(" + c1.tl.get() + ")");
-	}
-	
-	private static Object getValue(Object o, String f) {
-		Class<?> c = (Class<?>) (o instanceof Class ? o : o.getClass());
-		try {
-			Field field = c.getDeclaredField(f);
-			if (!field.isAccessible()) {
-				field.setAccessible(true);
-			}
-			return field.get(o);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-
-	static class C1 {
-		static ThreadLocal<Object> stl = LocalHelper.registStatic(new ThreadLocal<Object>() {
-			public String toString() {
-				return "stl:" + this.get();
-			}
-		});
-		ThreadLocal<Object> tl = LocalHelper.regist(new ThreadLocal<Object>() {
-			public String toString() {
-				return "tl:" + this.get();
-			}
-		});
-	}
 }

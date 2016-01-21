@@ -52,9 +52,10 @@ public class PreparePaginationInterceptor extends BaseInterceptor {
                 final String sql = boundSql.getSql();
                 //记录统计
                 final int count = SQLHelper.getCount(sql, connection, mappedStatement, parameterObject, boundSql, log);
-                Page<Object> page = null;
-                page = convertParameter(parameterObject, page);
-                page.setCount(count);
+                Page<Object> page = convertParameter(parameterObject);
+                if (page != null) {
+                    page.setCount(count);
+                }
                 String pagingSql = SQLHelper.generatePageSql(sql, page, DIALECT);
                 if (log.isDebugEnabled()) {
                     log.debug("PAGE SQL:" + pagingSql);

@@ -1,7 +1,6 @@
 package com.ulplanet.trip.common.config;
 
 import com.ulplanet.trip.common.utils.PropertiesLoader;
-import com.ulplanet.trip.common.utils.StringHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +61,7 @@ public class Global {
 		String value = map.get(key);
 		if (value == null){
 			value = loader.getProperty(key);
-			map.put(key, value != null ? value : StringHelper.EMPTY);
+			map.put(key, value);
 		}
 		return value;
 	}

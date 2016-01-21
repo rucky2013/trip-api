@@ -1,5 +1,6 @@
 package com.ulplanet.trip.filter;
 
+import com.google.gson.Gson;
 import com.ulplanet.trip.bean.User;
 import com.ulplanet.trip.common.utils.JedisUtils;
 import com.ulplanet.trip.common.utils.LocalHelper;
@@ -7,7 +8,6 @@ import com.ulplanet.trip.common.utils.StringHelper;
 import com.ulplanet.trip.common.utils.TokenUtils;
 import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.util.LocalContext;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  */
 public class RequestFilter implements Filter {
 
-    Logger logger = LoggerFactory.getLogger(RequestFilter.class);
+    private static Logger logger = LoggerFactory.getLogger(RequestFilter.class);
 
     private Pattern[] eps;
 
@@ -80,14 +80,18 @@ public class RequestFilter implements Filter {
             errorMap.put(Constants.RETURN_FIELD_MESSAGE, "未获取IMEI或Token");
             String errorMsg = new Gson().toJson(errorMap);
 
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(errorMsg);
             return;
         }
 
         boolean invalid = false;
+        // 校验token是否与设备号匹配
         if (TokenUtils.validToken(token, imei)) {
             User user = new Gson().fromJson(JedisUtils.get(token), User.class);
+            // 用户是否已经登录
             if (user != null) {
+                // 用户是否被踢出
                 if (token.equals(JedisUtils.get(user.getId()))) {
                     LocalContext.setUser(user);
                 } else {

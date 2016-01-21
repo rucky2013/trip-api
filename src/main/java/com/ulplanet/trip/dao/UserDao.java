@@ -12,7 +12,7 @@ public interface UserDao extends BaseDao {
 
     List<Map<String, Object>> findUsers(String groupid);
 
-    User findUser(String code);
+    User queryUser(String code);
 
     List<User> findUserByParam(User user);
 

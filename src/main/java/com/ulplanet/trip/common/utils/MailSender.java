@@ -9,6 +9,8 @@ import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
@@ -81,15 +83,13 @@ public class MailSender {
 	 */
 	public static void asyncSend(final String targetEmail, final String title, final String content) {
 		
-		new Thread(new Runnable() {  
-			public void run() {  
-				try {  
-					MailSender.send(targetEmail, title, content);  
-				} catch (Exception ex) {  
-					logger.error("mail sender error To: " + targetEmail + " Mail Title: " + title + " Content: " + content, ex);  
-				}
-			}
-		}).start();
+		new Thread(() -> {
+            try {
+                MailSender.send(targetEmail, title, content);
+            } catch (Exception ex) {
+                logger.error("mail sender error To: " + targetEmail + " Mail Title: " + title + " Content: " + content, ex);
+            }
+        }).start();
 	} 
 	
 	/**
@@ -151,16 +151,14 @@ public class MailSender {
 	public static void asyncSend(final String targetEmail,
 			final String ccTargetEmail, final String title, final String content) {
 		
-		new Thread(new Runnable() {  
-			public void run() {  
-				try {
-					MailSender.send(targetEmail, ccTargetEmail, title, content);  
-				} catch (Exception ex) {  
-					logger.error("mail sender error To: " + targetEmail
-							+ "CC: " + ccTargetEmail + " Mail Title: " + title + " Content: " + content, ex);  
-				}
-			}
-		}).start();
+		new Thread(() -> {
+            try {
+                MailSender.send(targetEmail, ccTargetEmail, title, content);
+            } catch (Exception ex) {
+                logger.error("mail sender error To: " + targetEmail
+                        + "CC: " + ccTargetEmail + " Mail Title: " + title + " Content: " + content, ex);
+            }
+        }).start();
 	} 
 	
 	/**
@@ -185,16 +183,14 @@ public class MailSender {
 	public static void asyncSend(final String targetEmail,
 			final String title, final String content, final String[] filePath) {
 		
-		new Thread(new Runnable() {  
-			public void run() {  
-				try {
-					MailSender.send(targetEmail, title, content, filePath);  
-				} catch (Exception ex) {  
-					logger.error("mail sender error To: " + targetEmail
-							+ " Mail Title: " + title + " Content: " + content + " File: " + filePath, ex);  
-				}
-			}
-		}).start();
+		new Thread(() -> {
+            try {
+                MailSender.send(targetEmail, title, content, filePath);
+            } catch (Exception ex) {
+                logger.error("mail sender error To: " + targetEmail
+                        + " Mail Title: " + title + " Content: " + content + " File: " + Arrays.toString(filePath), ex);
+            }
+        }).start();
 	}
 	
 	/**
@@ -264,9 +260,13 @@ public class MailSender {
 			Transport.send(msg);
 			transport.close();
 			return true;
-		}catch (Exception ee){
-			ee.printStackTrace();
-			try {if(transport != null) transport.close();} catch (MessagingException e) {e.printStackTrace();}
+		} catch (MessagingException | UnsupportedEncodingException ee) {
+            ee.printStackTrace();
+			try {
+                if(transport != null) transport.close();
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
 			return false;
 		}
 	}
@@ -282,16 +282,14 @@ public class MailSender {
 	public static void asyncSend(final String targetEmail, final String ccTargetEmail,
 			final String title, final String content, final String[] filePath) {
 		
-		new Thread(new Runnable() {  
-			public void run() {  
-				try {
-					MailSender.send(targetEmail, ccTargetEmail, title, content, filePath);  
-				} catch (Exception ex) {  
-					logger.error("mail sender error To: " + targetEmail + " CC: " + ccTargetEmail
-							+ " Mail Title: " + title + " Content: " + content + " File: " + filePath, ex);  
-				}
-			}
-		}).start();
+		new Thread(() -> {
+            try {
+                MailSender.send(targetEmail, ccTargetEmail, title, content, filePath);
+            } catch (Exception ex) {
+                logger.error("mail sender error To: " + targetEmail + " CC: " + ccTargetEmail
+                        + " Mail Title: " + title + " Content: " + content + " File: " + Arrays.toString(filePath), ex);
+            }
+        }).start();
 	}
 	
 	public static void main(String[] args){

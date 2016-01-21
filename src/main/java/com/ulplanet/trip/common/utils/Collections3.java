@@ -1,14 +1,10 @@
 package com.ulplanet.trip.common.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -142,7 +138,7 @@ public class Collections3 {
 	 * 返回a+b的新List.
 	 */
 	public static <T> List<T> union(final Collection<T> a, final Collection<T> b) {
-		List<T> result = new ArrayList<T>(a);
+		List<T> result = new ArrayList<>(a);
 		result.addAll(b);
 		return result;
 	}
@@ -151,10 +147,8 @@ public class Collections3 {
 	 * 返回a-b的新List.
 	 */
 	public static <T> List<T> subtract(final Collection<T> a, final Collection<T> b) {
-		List<T> list = new ArrayList<T>(a);
-		for (T element : b) {
-			list.remove(element);
-		}
+		List<T> list = new ArrayList<>(a);
+        b.forEach(list::remove);
 
 		return list;
 	}
@@ -163,13 +157,7 @@ public class Collections3 {
 	 * 返回a与b的交集的新List.
 	 */
 	public static <T> List<T> intersection(Collection<T> a, Collection<T> b) {
-		List<T> list = new ArrayList<T>();
 
-		for (T element : a) {
-			if (b.contains(element)) {
-				list.add(element);
-			}
-		}
-		return list;
+        return a.stream().filter(b::contains).collect(Collectors.toList());
 	}
 }

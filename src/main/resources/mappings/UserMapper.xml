@@ -3,37 +3,38 @@
 <mapper namespace="com.ulplanet.trip.dao.UserDao">
     <select id="findUsers" resultType="java.util.Map">
         SELECT
-            group_user.id,
-            user.id as userId,
-            user.name,
-            user.weChat,
-            user.qq,
-            user.birth,
-            user.issue_date,
-            user.expiry_date,
-            user.birth_place,
-            user.issue_place,
-            user.gender,
-            user.identity_card,
-            user.passport,
-            user.phone,
-            group_user.cphone,
-            user.email,
-            user.photo,
-            group_user.position_flag,
-            group_user.cphone,
-            group_user.type,
-            group_user.code
+        group_user.id,
+        user.id AS userId,
+        user.name,
+        user.weChat,
+        user.qq,
+        user.birth,
+        user.issue_date,
+        user.expiry_date,
+        user.birth_place,
+        user.issue_place,
+        user.gender,
+        user.identity_card,
+        user.passport,
+        user.phone,
+        group_user.cphone,
+        user.email,
+        user.photo,
+        group_user.position_flag,
+        group_user.cphone,
+        group_user.type,
+        group_user.code
         FROM
             user
             JOIN group_user ON user.id = group_user.user
         WHERE
             group_user.group = #{groupid}
     </select>
-    <select id="findUser" resultType="User">
+
+    <select id="queryUser" resultType="com.ulplanet.trip.bean.User">
         SELECT
             group_user.id,
-            user.id as userId,
+            user.id AS userId,
             user.name,
             user.weChat,
             user.qq,
@@ -54,11 +55,17 @@
             group_user.`group`,
             group_user.code,
             group_user.type,
-            group_user.im_token
+            group_user.im_token,
+            `group`.tel_function,
+            `group`.chat_id,
+            `group`.to_date AS 'endDate',
+            qc.client_number,
+            qc.client_pwd
         FROM
             user
             JOIN group_user ON user.id = group_user.`user`
             JOIN `group` ON group_user.`group` = `group`.id
+            LEFT JOIN qingma_client qc on qc.id = user.id
         WHERE
             group_user.code = #{code}
     </select>
@@ -85,7 +92,8 @@
         group_user.`group`,
         group_user.code,
         group_user.type,
-        group_user.im_token
+        group_user.im_token,
+        `group`.chat_id
         FROM
         user
         JOIN group_user ON user.id = group_user.`user`

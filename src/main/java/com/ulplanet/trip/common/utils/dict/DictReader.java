@@ -1,16 +1,16 @@
 
 package com.ulplanet.trip.common.utils.dict;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.ulplanet.trip.common.utils.StringHelper;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -60,11 +60,11 @@ class DictXmlReader implements DictReader {
 	private static final String	TAG_TEXTID	= "textid";
 
 	public Map<String, List<KeyValueBean>> getDict() {
-		Map<String, List<KeyValueBean>> nds = new HashMap<String, List<KeyValueBean>>();
+		Map<String, List<KeyValueBean>> nds = new HashMap<>();
 
 		Document doc;
 		try {
-			doc = (Document) new SAXReader().read(DictHelper.class.getClassLoader().getResourceAsStream(CFG_FILE));
+			doc = new SAXReader().read(DictHelper.class.getClassLoader().getResourceAsStream(CFG_FILE));
 		} catch (DocumentException e) {
 			throw new RuntimeException("Cannot read config file:" + CFG_FILE, e);
 		}
@@ -78,7 +78,7 @@ class DictXmlReader implements DictReader {
 
 			String textbid = dnode.attributeValue(TAG_RSPRE);
 
-			List<KeyValueBean> data = new ArrayList<KeyValueBean>();
+			List<KeyValueBean> data = new ArrayList<>();
 
 			for (Object node2 : dnode.elements()) {
 				Element enode = (Element) node2;

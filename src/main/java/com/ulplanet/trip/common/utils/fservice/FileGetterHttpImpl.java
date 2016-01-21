@@ -1,9 +1,9 @@
 package com.ulplanet.trip.common.utils.fservice;
 
+import com.ulplanet.trip.common.utils.HttpDownloadTools;
+
 import java.io.File;
 import java.io.IOException;
-
-import com.ulplanet.trip.common.utils.HttpDownloadTools;
 
 /**
  * 
@@ -29,11 +29,7 @@ public class FileGetterHttpImpl extends AbstractDownloadGetter implements FileGe
 
 	@Override
 	protected void downloadFile(String realpath, File target) throws IOException {
-		try {
-			HttpDownloadTools.downloadFile(serverurl, realpath, target);
-		} catch (IOException e) {
-			throw e;
-		}
-	}
+        HttpDownloadTools.downloadFile(serverurl, realpath, target);
+    }
 
 }

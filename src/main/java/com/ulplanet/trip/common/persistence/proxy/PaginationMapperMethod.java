@@ -27,7 +27,6 @@ public class PaginationMapperMethod {
     private final SqlSession sqlSession;
     private final Configuration config;
 
-    private SqlCommandType type;
     private String commandName;
     private String commandCountName;
 
@@ -44,8 +43,8 @@ public class PaginationMapperMethod {
 
     public PaginationMapperMethod(Class<?> declaringInterface, Method method,
                                   SqlSession sqlSession) {
-        paramNames = new ArrayList<String>();
-        paramPositions = new ArrayList<Integer>();
+        paramNames = new ArrayList<>();
+        paramPositions = new ArrayList<>();
         this.sqlSession = sqlSession;
         this.method = method;
         this.config = sqlSession.getConfiguration();
@@ -73,7 +72,7 @@ public class PaginationMapperMethod {
             rowBounds =  new RowBounds(page.getFirstResult(), page.getMaxResults());
         } else if (rowBoundsIndex != null) {
             rowBounds = (RowBounds) args[rowBoundsIndex];
-            page = new Page<Object>();
+            page = new Page<>();
         } else {
             throw new BindingException("Invalid bound statement (not found rowBounds or pagination in paramenters)");
         }
@@ -89,7 +88,7 @@ public class PaginationMapperMethod {
      * @return 查询的总记录数
      */
     private long executeForCount(Object param) {
-        Number result = (Number) sqlSession.selectOne(commandCountName, param);
+        Number result = sqlSession.selectOne(commandCountName, param);
         return result.longValue();
     }
 
@@ -117,7 +116,7 @@ public class PaginationMapperMethod {
         } else if (!hasNamedParameters && paramCount == 1) {
             return args[paramPositions.get(0)];
         } else {
-            Map<String, Object> param = new HashMap<String, Object>();
+            Map<String, Object> param = new HashMap<>();
             for (int i = 0; i < paramCount; i++) {
                 param.put(paramNames.get(i), args[paramPositions.get(i)]);
             }
@@ -165,7 +164,7 @@ public class PaginationMapperMethod {
      */
     private void setupCommandType() {
         MappedStatement ms = config.getMappedStatement(commandName);
-        type = ms.getSqlCommandType();
+        SqlCommandType type = ms.getSqlCommandType();
         if (type != SqlCommandType.SELECT) {
             throw new BindingException("Unsupport execution method for: " + commandName);
         }

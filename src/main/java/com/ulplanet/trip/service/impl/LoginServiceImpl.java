@@ -9,7 +9,6 @@ import com.ulplanet.trip.constant.Constants;
 import com.ulplanet.trip.dao.UserDao;
 import com.ulplanet.trip.dao.VersionTagDao;
 import com.ulplanet.trip.service.LoginService;
-import com.ulplanet.trip.util.LoginConstants;
 import com.ulplanet.trip.util.LoginException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ import java.util.Objects;
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
 
-    Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     @Autowired
     UserDao userdao;
@@ -59,18 +59,25 @@ public class LoginServiceImpl implements LoginService {
 
         String imei = request.getHeader(Constants.HEADER_IMEI);
         if (StringHelper.isEmpty(imei)) {
-            throw LoginConstants.USER_INVALID_DEVICE;
+            throw new LoginException("设备无效。");
         }
 
-        User user = this.userdao.findUser(userid);
+        User user = this.userdao.queryUser(userid);
 
         if (user == null) {
-            throw LoginConstants.USER_NOT_EXISTS;
+            throw new LoginException("用户名不存在。");
         }
 
-        if (StringHelper.isEmpty(userpwd) ||
-                !StringHelper.equals(userpwd, user.getPhone())) {
-            throw LoginConstants.USER_INVALID_PASSWORD;
+        if (StringHelper.isEmpty(userpwd)
+                || !StringHelper.equals(userpwd, user.getPhone())) {
+            throw new LoginException("密码无效。");
+        }
+
+        int endDate = NumberHelper.toInt(new SimpleDateFormat("yyyyMMdd").format(user.getEndDate()), 0);
+        int bjDate = NumberHelper.toInt(new SimpleDateFormat("yyyyMMdd").format(DateHelper.getBjDate()), 0);
+        if (endDate < bjDate) {
+            // 如果当前日期超过行程结束日期，禁止登陆
+            throw new LoginException("该行程已结束。");
         }
 
         if (StringHelper.isNotEmpty(cphone) && !cphone.equals(user.getCphone())) {
@@ -78,6 +85,7 @@ public class LoginServiceImpl implements LoginService {
             userdao.updateCPhone(user);
             versionTagDao.update(new VersionTag(user.getGroup(), Constants.VERSION_TAG_USERLIST));
         }
+
 
         String country = "中国";
         String city = "北京";
@@ -100,8 +108,10 @@ public class LoginServiceImpl implements LoginService {
         user.setLastUpdate(new Date().getTime());
         user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : user.getPhoto());
         String token = TokenUtils.getToken(imei);
-        JedisUtils.set(token, new Gson().toJson(user), 60 * 60 * 24 * 10);
-        JedisUtils.set(user.getId(), token, 60 * 60 * 24 * 10);
+
+        int period = getPeriod(user.getEndDate());
+        JedisUtils.set(token, new Gson().toJson(user), period);
+        JedisUtils.set(user.getId(), token, period);
 
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);
@@ -111,6 +121,7 @@ public class LoginServiceImpl implements LoginService {
         data.put("photo", user.getPhoto());
         data.put("name", user.getName());
         data.put("phone", user.getPhone());
+        data.put("chatId", user.getChatId());
         data.put("cphone", user.getCphone());
         data.put("userid", user.getId());
         data.put("passport", user.getPassport());
@@ -118,12 +129,20 @@ public class LoginServiceImpl implements LoginService {
         data.put("identityCard", user.getIdentityCard());
         data.put("weChat", user.getWeChat());
         data.put("qq", user.getQq());
-        data.put("birth", user.getBirth()!=null?DateHelper.formatDate(user.getBirth(), "yyyy/MM/dd"):null);
+        data.put("birth", DateHelper.formatDate(user.getBirth(), "yyyy/MM/dd"));
         data.put("email", user.getEmail());
         data.put("birthPlace", user.getBirthPlace());
         data.put("positionFlag", user.getPositionFlag());
+        data.put("telFunction", user.getTelFunction());
+        data.put("clientNumber", user.getClientNumber());
+        data.put("clientPwd", user.getClientPwd());
 
         return data;
+    }
+
+    private int getPeriod(Date endDate) {
+        Date bjDate = DateHelper.getBjDate();
+        return NumberHelper.getInt((endDate.getTime() + 86400000 - bjDate.getTime()) / 1000, 0);
     }
 
 }

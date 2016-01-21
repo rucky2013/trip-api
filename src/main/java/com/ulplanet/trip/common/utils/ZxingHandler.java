@@ -6,6 +6,8 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,6 +22,8 @@ import java.util.Hashtable;
  *
  */
 public class ZxingHandler {
+
+    private static Logger logger = LoggerFactory.getLogger(ZxingHandler.class);
 
 	/**
 	 * 条形码编码
@@ -55,12 +59,13 @@ public class ZxingHandler {
 	 * @return String
 	 */
 	public static String decode(String imgPath) {
-		BufferedImage image = null;
-		Result result = null;
+		BufferedImage image;
+		Result result;
 		try {
 			image = ImageIO.read(new File(imgPath));
 			if (image == null) {
-				System.out.println("the decode image may be not exit.");
+                logger.error("the decode image may be not exit.");
+                return null;
 			}
 			LuminanceSource source = new BufferedImageLuminanceSource(image);
 			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -106,17 +111,18 @@ public class ZxingHandler {
 	 * @return String
 	 */
 	public static String decode2(String imgPath) {
-		BufferedImage image = null;
-		Result result = null;
+		BufferedImage image;
+		Result result;
 		try {
 			image = ImageIO.read(new File(imgPath));
-			if (image == null) {
-				System.out.println("the decode image may be not exit.");
-			}
+            if (image == null) {
+                logger.error("the decode image may be not exit.");
+                return null;
+            }
 			LuminanceSource source = new BufferedImageLuminanceSource(image);
 			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-			Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>();
+			Hashtable<DecodeHintType, Object> hints = new Hashtable<>();
 			hints.put(DecodeHintType.CHARACTER_SET, "GBK");
 
 			result = new MultiFormatReader().decode(bitmap, hints);

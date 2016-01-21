@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ulplanet.trip</groupId>
 	<artifactId>trip-api</artifactId>
-	<version>1.0.0beta</version>
+	<version>1.1.0</version>
 	<packaging>war</packaging>
 	<description>旅游项目</description>
 

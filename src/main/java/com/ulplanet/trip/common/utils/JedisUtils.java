@@ -1,20 +1,15 @@
 package com.ulplanet.trip.common.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.ulplanet.trip.base.SpringContextHolder;
 import com.ulplanet.trip.common.config.Global;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisException;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -218,11 +213,8 @@ public class JedisUtils {
 			if (jedis.exists(getBytesKey(key))) {
 				jedis.del(key);
 			}
-			List<byte[]> list = new ArrayList<>();
-			for (Object o : value){
-				list.add(toBytes(o));
-			}
-			result = jedis.rpush(getBytesKey(key), (byte[][])list.toArray());
+			List<byte[]> list = value.stream().map(JedisUtils::toBytes).collect(Collectors.toList());
+            result = jedis.rpush(getBytesKey(key), (byte[][])list.toArray());
 			if (cacheSeconds != 0) {
 				jedis.expire(key, cacheSeconds);
 			}
@@ -373,11 +365,8 @@ public class JedisUtils {
 			if (jedis.exists(getBytesKey(key))) {
 				jedis.del(key);
 			}
-			Set<byte[]> set = new HashSet<>();
-			for (Object o : value){
-				set.add(toBytes(o));
-			}
-			result = jedis.sadd(getBytesKey(key), (byte[][])set.toArray());
+			Set<byte[]> set = value.stream().map(JedisUtils::toBytes).collect(Collectors.toSet());
+            result = jedis.sadd(getBytesKey(key), (byte[][])set.toArray());
 			if (cacheSeconds != 0) {
 				jedis.expire(key, cacheSeconds);
 			}
@@ -531,7 +520,7 @@ public class JedisUtils {
 			for (Map.Entry<String, Object> e : value.entrySet()){
 				map.put(getBytesKey(e.getKey()), toBytes(e.getValue()));
 			}
-			result = jedis.hmset(getBytesKey(key), (Map<byte[], byte[]>)map);
+			result = jedis.hmset(getBytesKey(key), map);
 			if (cacheSeconds != 0) {
 				jedis.expire(key, cacheSeconds);
 			}
@@ -580,7 +569,7 @@ public class JedisUtils {
 			for (Map.Entry<String, Object> e : value.entrySet()){
 				map.put(getBytesKey(e.getKey()), toBytes(e.getValue()));
 			}
-			result = jedis.hmset(getBytesKey(key), (Map<byte[], byte[]>)map);
+			result = jedis.hmset(getBytesKey(key), map);
 			logger.debug("mapObjectPut {} = {}", key, value);
 		} catch (Exception e) {
 			logger.warn("mapObjectPut {} = {}", key, value, e);
@@ -593,7 +582,7 @@ public class JedisUtils {
 	/**
 	 * 移除Map缓存中的值
 	 * @param key 键
-	 * @param value 值
+	 * @param mapKey
 	 * @return
 	 */
 	public static long mapRemove(String key, String mapKey) {
@@ -614,7 +603,7 @@ public class JedisUtils {
 	/**
 	 * 移除Map缓存中的值
 	 * @param key 键
-	 * @param value 值
+	 * @param mapKey
 	 * @return
 	 */
 	public static long mapObjectRemove(String key, String mapKey) {
@@ -635,7 +624,7 @@ public class JedisUtils {
 	/**
 	 * 判断Map缓存中的Key是否存在
 	 * @param key 键
-	 * @param value 值
+	 * @param mapKey
 	 * @return
 	 */
 	public static boolean mapExists(String key, String mapKey) {
@@ -656,7 +645,7 @@ public class JedisUtils {
 	/**
 	 * 判断Map缓存中的Key是否存在
 	 * @param key 键
-	 * @param value 值
+	 * @param mapKey
 	 * @return
 	 */
 	public static boolean mapObjectExists(String key, String mapKey) {
@@ -789,12 +778,12 @@ public class JedisUtils {
 			jedis.close();
 		}
 	}
-	
-	/**
-	 * 获取byte[]类型Key
-	 * @param key
-	 * @return
-	 */
+
+    /**
+     * 获取byte[]类型Key
+     * @param object
+     * @return
+     */
 	public static byte[] getBytesKey(Object object){
 		if(object instanceof String){
     		return StringHelper.getBytes((String)object);
@@ -802,21 +791,21 @@ public class JedisUtils {
     		return ObjectHelper.serialize(object);
     	}
 	}
-	
-	/**
-	 * Object转换byte[]类型
-	 * @param key
-	 * @return
-	 */
+
+    /**
+     * Object转换byte[]类型
+     * @param object
+     * @return
+     */
 	public static byte[] toBytes(Object object){
     	return ObjectHelper.serialize(object);
 	}
 
-	/**
-	 * byte[]型转换Object
-	 * @param key
-	 * @return
-	 */
+    /**
+     * byte[]型转换Object
+     * @param bytes
+     * @return
+     */
 	public static Object toObject(byte[] bytes){
 		return ObjectHelper.unserialize(bytes);
 	}

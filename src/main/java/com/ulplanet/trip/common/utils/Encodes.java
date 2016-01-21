@@ -1,13 +1,13 @@
 package com.ulplanet.trip.common.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * 
@@ -47,15 +47,20 @@ public class Encodes {
 	 * Base64编码.
 	 */
 	public static String encodeBase64(byte[] input) {
-		return new String(Base64.encodeBase64(input));
-	}
+        try {
+            return new String(Base64.encodeBase64(input), DEFAULT_URL_ENCODING);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 	
 	/**
 	 * Base64编码.
 	 */
 	public static String encodeBase64(String input) {
 		try {
-			return new String(Base64.encodeBase64(input.getBytes(DEFAULT_URL_ENCODING)));
+			return new String(Base64.encodeBase64(input.getBytes(DEFAULT_URL_ENCODING)), DEFAULT_URL_ENCODING);
 		} catch (UnsupportedEncodingException e) {
 			return "";
 		}
@@ -65,15 +70,20 @@ public class Encodes {
 	 * Base64解码.
 	 */
 	public static byte[] decodeBase64(String input) {
-		return Base64.decodeBase64(input.getBytes());
-	}
+        try {
+            return Base64.decodeBase64(input.getBytes(DEFAULT_URL_ENCODING));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 	
 	/**
 	 * Base64解码.
 	 */
 	public static String decodeBase64String(String input) {
 		try {
-			return new String(Base64.decodeBase64(input.getBytes()), DEFAULT_URL_ENCODING);
+			return new String(Base64.decodeBase64(input.getBytes(DEFAULT_URL_ENCODING)), DEFAULT_URL_ENCODING);
 		} catch (UnsupportedEncodingException e) {
 			return "";
 		}

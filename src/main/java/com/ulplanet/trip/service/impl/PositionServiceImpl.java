@@ -1,16 +1,20 @@
 package com.ulplanet.trip.service.impl;
 
+import com.google.gson.Gson;
 import com.ulplanet.trip.api.location.GeocodeService;
 import com.ulplanet.trip.bean.User;
-import com.ulplanet.trip.common.utils.JedisUtils;
-import com.ulplanet.trip.common.utils.StringHelper;
+import com.ulplanet.trip.common.persistence.Parameter;
+import com.ulplanet.trip.common.utils.*;
 import com.ulplanet.trip.constant.Constants;
+import com.ulplanet.trip.dao.PositionDao;
 import com.ulplanet.trip.dao.UserDao;
 import com.ulplanet.trip.service.PositionService;
 import com.ulplanet.trip.util.LocalContext;
-import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -18,19 +22,25 @@ import java.util.*;
 @Service("positionService")
 public class PositionServiceImpl implements PositionService {
 
+    private static Logger logger = LoggerFactory.getLogger(PositionServiceImpl.class);
+
     @Autowired
     UserDao userDao;
+    @Autowired
+    PositionDao positionDao;
 
     @Override
-    public Map<String, Object> putPoint(HttpServletRequest request, double longitude,
-                                        double latitude) {
+    public Map<String, Object> savePoint(HttpServletRequest request, double longitude,
+                                        double latitude, Long time) {
         String groupid = LocalContext.getGroupId();
         String userid = LocalContext.getUserId();
+
+        logger.info(String.format("%s", userid));
+
         Map<String, Object> userMap = JedisUtils.getObjectMap(groupid);
         if (userMap == null) {
             userMap = new HashMap<>();
         }
-
 
         this.updateCountryAndCity(request, longitude, latitude);
 
@@ -38,6 +48,13 @@ public class PositionServiceImpl implements PositionService {
         pointMap.put("longitude", longitude);
         pointMap.put("latitude", latitude);
         userMap.put(userid, pointMap);
+
+        Date date = time == null ? new Date() : new Date(time);
+
+        Parameter parameter = new Parameter(new Object[][]{{"id", IdGen.uuid()},
+                {"userId", userid}, {"lng", NumberHelper.round(longitude, 6)},
+                {"lat", NumberHelper.round(latitude, 6)}, {"timing", date}});
+        positionDao.savePosition(parameter);
 
         JedisUtils.setObjectMap(groupid, userMap, 60 * 60 * 24 * 10);
 
@@ -69,13 +86,25 @@ public class PositionServiceImpl implements PositionService {
                 user.setCurrentCity(city);
                 user.setLastUpdate(now);
                 JedisUtils.set(token, new Gson().toJson(user), 60 * 60 * 24 * 10);
+                if (StringHelper.isEmpty(city)) {
+                    logger.error(String.format("用户'%s':坐标%s,%s解析失败(城市为空)",LocalContext.getUser().getName(), longitude, latitude));
+                }
+            } else {
+                logger.error(String.format("用户'%s':坐标%s,%s解析失败(国家为空)",LocalContext.getUser().getName(), longitude, latitude));
             }
+        } else {
+            logger.error(String.format("用户'%s':坐标%s,%s解析失败(geocode为null)",LocalContext.getUser().getName(), longitude, latitude));
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, Object> getPoint() {
+    @Transactional(readOnly = false)
+    public Map<String, Object> getPoint(HttpServletRequest request, double longitude,
+                                        double latitude, Long time) {
+
+        this.savePoint(request, longitude, latitude, time);
+
         String groupid = LocalContext.getGroupId();
         Map<String, Object> userMap = JedisUtils.getObjectMap(groupid);
         List<Map<String, Object>> datas = new ArrayList<>();

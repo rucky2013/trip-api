@@ -1,9 +1,9 @@
 package com.ulplanet.trip.common.utils;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import java.util.Arrays;
 import java.util.Date;
-
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 /**
  * 
@@ -251,12 +251,12 @@ public class TimeUtils {
         String t = time;
         int field = DAY;
         set(field--, 0);
-        int p = -1;
+        int p;
         while((p = t.indexOf(timeSeparator)) > -1) {
             parseTimeField(time, t.substring(0, p), field--);
             t = t.substring(p + timeSeparator.length());
         }
-        parseTimeField(time, t, field--);
+        parseTimeField(time, t, field);
     }
 
     private void parseTimeField(String time, String t, int field) {
@@ -265,12 +265,12 @@ public class TimeUtils {
         }
         char[] chs = t.toCharArray();
         int n = 0;
-        for(int i = 0; i < chs.length; i++) {
-            if(chs[i] <= ' ') {
+        for (char ch : chs) {
+            if (ch <= ' ') {
                 continue;
             }
-            if(chs[i] >= '0' && chs[i] <= '9') {
-                n = n * 10 + chs[i] - '0';
+            if (ch >= '0' && ch <= '9') {
+                n = n * 10 + ch - '0';
                 continue;
             }
             parseTimeException(time);
@@ -314,10 +314,7 @@ public class TimeUtils {
         if (getClass() != obj.getClass())
             return false;
         final TimeUtils other = (TimeUtils) obj;
-        if (!Arrays.equals(fields, other.fields)) {
-            return false;
-        }
-        return true;
+        return Arrays.equals(fields, other.fields);
     }
     
 }

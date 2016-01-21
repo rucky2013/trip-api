@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimun-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="apple-mobile-web-status-bar-style" content="black">
+    <meta name="application-name" content="telephone=no">
+    <title>意见反馈</title>
+
+    <script type="text/javascript" src="../js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="../css/sweetalert/sweetalert.min.js"></script>
+    <link href="../css/sweetalert/sweetalert.css"  rel="stylesheet"/>
+    <style type="text/css">
+
+        .title{width:40%;padding-top: 5%;padding-bottom: 5%}
+        .msg{
+            color: red;
+        }
+        .options{
+            text-align: center;
+            vertical-align: middle;
+        }
+        .error{
+            text-decoration:none;
+            color: red;
+            font-size: 10px;
+            margin-left: 10px;
+        }
+        .selector{cursor: pointer;}
+        textarea{width:90%;background-color: #F8F8F8}
+        .bg{
+            background: url(../img/feedback.png);
+            background-repeat:no-repeat;
+            background-size: 100% 600%;
+        }
+        .title_name{
+            vertical-align: sub;
+            font-size: medium;
+            margin-left: 5%;
+        }
+        table tr{
+            background-color:white;
+        }
+        table tr td{
+            border-bottom:1px solid #F8F8F8;
+        }
+    </style>
+</head>
+
+<body style="background-color:rgba(244, 244, 244, 0.96);height: auto">
+<div style="margin:5px 0;">
+    <div style="border-bottom:1px solid #D7D7D7;text-align: center;padding-bottom: 3%">
+        <img id="back" style="float:left" src="../img/left46.png" onclick="window.Feedback.callback();"/>
+        <span style="font-weight: bold;font-size: 20px" id="title">意见反馈</span>
+        <a style="float: right;margin-right: 5%;margin-top:0.5%;color: #808080" id="submit">提交</a>
+    </div>
+    <div style="font-size: 14px;color: #797979;margin-top:3%;margin-bottom: 3%">请您对我们的功能进行评价：</div>
+    <div style="margin-top: 5%">
+        <table class="commit" style="width: 100%;background-color: white">
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    var option = [];
+    var usercode = GetQueryString("usercode");
+    $.ajax({
+        url : "/feedback/getPhoneFunction?usercode="+usercode,
+        dataType:'json',
+        data:'',
+        type:'GET',
+        async:false,
+        success:function(data){
+            var _data = data.data;
+            var table = "";
+            for(var i = 0; i < _data.length;i++){
+                var obj = _data[i];
+                if(obj.type == 1){//单选
+                    option.push(obj.id);
+                    var tr = '<tr class="tr">';
+                    tr += "<td class=\"title\"><div class='bg' style='margin-left:10%;width:14%;float:left;'></div>";
+                    tr += "<span class='title_name' >"+obj.name+"</span>" + "</td>";
+                    tr += "<td class=\"options\"><span class='selector'><input type=\"radio\" id=\"" + obj.id + "_3\" name=\""+ obj.id +"\" value='3' style='display:none;'/><label for=\'"+ obj.id +"_3\' class='hover'> 喜欢</label></span></td>";
+                    tr += "<td class=\"options\"><span class='selector'><input type=\"radio\" id=\"" + obj.id + "_2\"  name=\""+ obj.id +"\" value='2' style='display:none;' /><label for=\'"+ obj.id +"_2\' class='hover'> 一般</label></span></td>";
+                    tr += "<td class=\"options\"><span class='selector'><input type=\"radio\" id=\"" + obj.id + "_1\"  name=\"" + obj.id + "\" value='1' style='display:none;'/><label for=\'"+ obj.id +"_1\' class='hover'> 不喜欢</label></span></td>";
+                    tr += "</tr>";
+                    table += tr;
+                }else if(obj.type == 3){
+                    table += "<tr class=\"tr\">"+
+                             "<td class=\"options\" colspan=4 style='text-align: center'>"+
+                             "<label style='color: #808080;float: left;font-size: small;'>注：完成所有评价后才可提交</label>"+
+                             "</td>"+
+                             "</tr>";
+                    var tr = "<tr class=\"tr\">";
+                    tr += "<td class=\"options\" colspan=4 style='text-align: center'>";
+                    tr += "<textarea id=\""+ obj.id +"\" placeholder=\""+ obj.name +"\">";
+                    if(obj.feedback!=undefined && obj.feedback.length>0){
+                        tr += obj.feedback;
+                    }
+                    tr += "</textarea>";
+                    tr += "</td>";
+                    tr += "</tr>";
+                    table += tr;
+                }
+            }
+            $(".commit").html(table);
+            var divs = $('.bg');
+            for(var i = 0;i < divs.length;i++){
+                var div = $(divs[i]);
+                var width = div.width();
+                div.css('height',width);
+                div.css('background-position','0px -'+(width*i)+'px');
+                var span = div.next();
+                var top = span.get(0).offsetTop - div.get(0).offsetTop;
+                div.css('margin-top',top);
+                $('.tr').css('height',width*1.5);
+            }
+            var textarea = $('textarea');
+            textarea.css('height',textarea.width()*0.4);
+            $("#back").css("height",$("#title").height());
+            $("#back").css("width",$("#title").height());
+        }
+
+    });
+    $(function(){
+        $('.hover').on('click', function(event){
+            var $this = $(event.target);
+            var radio = $this.parent().find("input[type=radio]");
+            var radios = $('input[name='+ radio.attr('name') +']');
+            for(var i = 0;i < radios.length;i++){
+                var r = $(radios[i]);
+                r.parent().find('label').css("color","black");
+                r.attr('checked',false);
+            }
+            radio.attr('checked',true);
+            $this.css("color","#E34957");
+            if($("input:radio:checked").length >= option.length){
+                $("#submit").css("color","black");
+            }
+        });
+
+        Array.prototype.indexOf = function(val) {
+            for (var i = 0; i < this.length; i++) {
+                if (this[i] == val) return i;
+            }
+            return -1;
+        };
+        Array.prototype.remove = function(val) {
+            var index = this.indexOf(val);
+            if (index > -1) {
+                this.splice(index, 1);
+            }
+        };
+        $("#submit").click(function(){
+            var json = [];
+            if(usercode != null && usercode.length > 0){
+                if($("input:radio:checked").length < option.length){
+                    return false;
+                }
+                var radios = $("input[type='radio']:checked");
+                for(var i = 0;i < radios.length;i++){
+                    var radio = radios[i];
+                    var obj = {};
+                    obj.functionId = $(radio).attr('name');
+                    obj.score = $(radio).attr('value');
+                    json.push(obj);
+                }
+                var arr = $("textarea");
+                for(var i = 0;i < arr.length;i++){
+                    var textarea = arr[i];
+                    var obj = {};
+                    obj.functionId = $(textarea).attr("id");
+                    obj.feedback = textarea.value;
+                    json.push(obj);
+                }
+
+            }else{
+                alert('系统异常,请稍后再试！');
+                return false;
+            }
+            var str = JSON.stringify(json);
+            str = encodeURIComponent(str);
+            $.ajax({
+                url : '/feedback/commit',
+                dataType : 'json',
+                type : 'POST',
+                data : {json:str,userCode:usercode},
+                success:function(data){
+                    if(data.status == '1'){
+                        swal({title:'',text:'提交成功，感谢支持！！'},function(){
+                            $("#back").click();
+                        });
+                    }
+                }
+            });
+
+
+        });
+    });
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  r[2]; return null;
+    }
+</script>
+
+</body>
+</html>

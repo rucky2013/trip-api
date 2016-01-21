@@ -1,7 +1,7 @@
 package com.ulplanet.trip.bean;
 
 
-
+import java.util.Date;
 
 public class UserJourney implements java.io.Serializable{
 
@@ -11,9 +11,9 @@ public class UserJourney implements java.io.Serializable{
 	private Integer active;
 	private String journeyId;
 	private String createBy;
-	private java.util.Date createDate;
+	private Date createDate;
 	private String updateBy;
-	private java.util.Date updateDate;
+	private Date updateDate;
 	private String remark;
 
 	public UserJourney(){
@@ -29,7 +29,7 @@ public class UserJourney implements java.io.Serializable{
 	public void setId(String value) {
 		this.id = value;
 	}
-	
+
 	public String getId() {
 		return this.id;
 	}
@@ -45,7 +45,7 @@ public class UserJourney implements java.io.Serializable{
 	public void setActive(Integer value) {
 		this.active = value;
 	}
-	
+
 	public Integer getActive() {
 		return this.active;
 	}
@@ -53,7 +53,7 @@ public class UserJourney implements java.io.Serializable{
 	public void setJourneyId(String value) {
 		this.journeyId = value;
 	}
-	
+
 	public String getJourneyId() {
 		return this.journeyId;
 	}
@@ -61,32 +61,32 @@ public class UserJourney implements java.io.Serializable{
 	public void setCreateBy(String value) {
 		this.createBy = value;
 	}
-	
+
 	public String getCreateBy() {
 		return this.createBy;
 	}
 
-	public void setCreateDate(java.util.Date value) {
+	public void setCreateDate(Date value) {
 		this.createDate = value;
 	}
-	
-	public java.util.Date getCreateDate() {
+
+	public Date getCreateDate() {
 		return this.createDate;
 	}
 
 	public void setUpdateBy(String value) {
 		this.updateBy = value;
 	}
-	
+
 	public String getUpdateBy() {
 		return this.updateBy;
 	}
 
-	public void setUpdateDate(java.util.Date value) {
+	public void setUpdateDate(Date value) {
 		this.updateDate = value;
 	}
-	
-	public java.util.Date getUpdateDate() {
+
+	public Date getUpdateDate() {
 		return this.updateDate;
 	}
 

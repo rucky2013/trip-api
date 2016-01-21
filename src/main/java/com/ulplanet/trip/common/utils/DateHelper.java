@@ -1,9 +1,12 @@
 package com.ulplanet.trip.common.utils;
 
-import java.text.ParseException;
-import java.util.Date;
-
 import org.apache.commons.lang3.time.DateFormatUtils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * 
@@ -14,7 +17,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
  */
 public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 	
-	private static String[] parsePatterns = {
+	private static final String[] parsePatterns = {
 		"yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM", 
 		"yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM",
 		"yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM"};
@@ -37,7 +40,10 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 	 * 得到日期字符串 默认格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
 	 */
 	public static String formatDate(Date date, Object... pattern) {
-		String formatDate = null;
+		String formatDate = "";
+        if (date == null) {
+            return formatDate;
+        }
 		if (pattern != null && pattern.length > 0) {
 			formatDate = DateFormatUtils.format(date, pattern[0].toString());
 		} else {
@@ -166,9 +172,22 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 	public static double getDistanceOfTwoDate(Date before, Date after) {
 		long beforeTime = before.getTime();
 		long afterTime = after.getTime();
-		return (afterTime - beforeTime) / (1000 * 60 * 60 * 24);
+		return (afterTime - beforeTime) / (double) (1000 * 60 * 60 * 24);
 	}
-	
+
+    /**
+     * 获取北京当前时间
+     * @return
+     */
+    public static Date getBjDate() {
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00");
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(tz);
+        return parseDate(dateFormat.format(date));
+    }
+
 	/**
 	 * @param args
 	 * @throws ParseException
@@ -178,5 +197,6 @@ public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 		System.out.println(getDate("yyyy年MM月dd日 E"));
 		long time = new Date().getTime()-parseDate("2012-11-19").getTime();
 		System.out.println(time/(24*60*60*1000));
+		System.out.println(getBjDate());
 	}
 }

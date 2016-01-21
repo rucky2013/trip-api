@@ -1,17 +1,15 @@
 package com.ulplanet.trip.common.utils.dict;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
+import com.google.gson.Gson;
 import com.ulplanet.trip.base.AppContext;
 import com.ulplanet.trip.common.utils.FileIOHelper;
 import com.ulplanet.trip.common.utils.GZipUtil;
-import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 
@@ -23,6 +21,8 @@ import com.google.gson.Gson;
 public class DictUtil {
 	
 	private static final String PATH = AppContext.getAppPath() + "/scripts/common/dictionary/";
+
+    private static Logger logger = LoggerFactory.getLogger(DictUtil.class);
 	
 	/**
 	 * 初始化数据字典，并按语言生成单独的
@@ -32,7 +32,7 @@ public class DictUtil {
 	public static void loadDict() {
 		Gson gson = new Gson();
 			
-		StringBuffer dicts = new StringBuffer();
+		StringBuilder dicts = new StringBuilder();
 		
 		dicts
 			.append("Ext.define('DictModel',{")
@@ -64,8 +64,12 @@ public class DictUtil {
 			GZipUtil.compress(file, false);
 			File gzFile = new File(PATH + fname + ".js" + GZipUtil.EXT);
 			File gzjsFile = new File(PATH + fname + ".gzjs");
-			gzjsFile.delete();
-			gzFile.renameTo(gzjsFile);
+			if (!gzjsFile.delete()) {
+                logger.debug("文件删除失败");
+            }
+			if (!gzFile.renameTo(gzjsFile)) {
+                logger.debug("文件重命名失败");
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -40,7 +40,7 @@ public class ApkServiceImpl implements ApkService {
     @Override
     public int saveApk(Apk apk) {
         List<Apk> list = apkDao.findByParam(apk);
-        int i = 0;
+        int i;
         if(list.size()>0){
             Apk apk1 = list.get(0);
             apk1.setVersion(apk.getVersion());

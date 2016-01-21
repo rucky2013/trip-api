@@ -36,4 +36,15 @@ public class InfoController {
                                           @RequestParam("latitude") double latitude) {
         return this.infoService.getWeather(longitude, latitude);
     }
+
+    @RequestMapping(value = "/chatGroup", method = RequestMethod.GET)
+    public Map<String, Object> getChatGroup(@RequestParam(value = "tag", required = false) String tag) {
+        return this.infoService.getChatGroup(tag);
+    }
+
+    @RequestMapping(value = "/localPhone", method = RequestMethod.GET)
+    public Map<String, Object> getLocalPhone() {
+        return this.infoService.getLocalPhone();
+    }
+
 }
