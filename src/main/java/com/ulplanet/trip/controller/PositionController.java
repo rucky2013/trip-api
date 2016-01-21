@@ -25,8 +25,11 @@ public class PositionController {
         return this.positionService.savePoint(request, longitude, latitude, time);
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public Map<String, Object> getPoint() {
-        return this.positionService.getPoint();
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    public Map<String, Object> getPoint(HttpServletRequest request,
+                                        @RequestParam("longitude") double longitude,
+                                        @RequestParam("latitude") double latitude,
+                                        @RequestParam(value = "time", required = false) Long time) {
+        return this.positionService.getPoint(request, longitude, latitude, time);
     }
 }

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -98,7 +99,12 @@ public class PositionServiceImpl implements PositionService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, Object> getPoint() {
+    @Transactional(readOnly = false)
+    public Map<String, Object> getPoint(HttpServletRequest request, double longitude,
+                                        double latitude, Long time) {
+
+        this.savePoint(request, longitude, latitude, time);
+
         String groupid = LocalContext.getGroupId();
         Map<String, Object> userMap = JedisUtils.getObjectMap(groupid);
         List<Map<String, Object>> datas = new ArrayList<>();
