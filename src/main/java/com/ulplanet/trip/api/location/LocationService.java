@@ -1,5 +1,6 @@
 package com.ulplanet.trip.api.location;
 
+import com.ulplanet.trip.common.config.Global;
 import com.ulplanet.trip.common.utils.HttpClientUtils;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class LocationService {
 
     private static final String URL = "https://maps.googleapis.com/maps/api/geocode/json";
-    private static final String KEY = "AIzaSyAObFcwI1lG4WjSFQkEsSz09d5nMlyrhj8";
+    private static final String KEY = Global.getConfig("google.key");
 
     public static Geocode get(String address) {
         HttpClient client = HttpClientUtils.getConnection();

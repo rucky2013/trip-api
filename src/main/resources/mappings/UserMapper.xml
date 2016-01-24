@@ -47,7 +47,6 @@
             user.identity_card,
             user.passport,
             user.phone,
-            group_user.cphone,
             user.email,
             user.photo,
             group_user.position_flag,
