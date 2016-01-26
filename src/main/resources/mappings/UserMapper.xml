@@ -58,46 +58,24 @@
             group_user.im_token,
             `group`.tel_function,
             `group`.chat_id,
-            `group`.to_date AS 'endDate',
-            qc.client_number,
-            qc.client_pwd
+            `group`.to_date AS 'endDate'
         FROM
             user
             JOIN group_user ON user.id = group_user.`user`
             JOIN `group` ON group_user.`group` = `group`.id
-            LEFT JOIN qingma_client qc on qc.id = user.id
         WHERE
             group_user.code = #{code}
     </select>
 
     <select id="findUserByParam" resultType="User">
         SELECT
-        user.id as userId,
-        user.name,
-        user.weChat,
-        user.qq,
-        user.birth,
-        user.issue_date,
-        user.expiry_date,
-        user.birth_place,
-        user.issue_place,
-        user.gender,
-        user.identity_card,
-        group_user.cphone,
-        user.passport,
-        user.phone,
-        user.email,
-        user.photo,
-        group_user.position_flag,
-        group_user.`group`,
-        group_user.code,
-        group_user.type,
-        group_user.im_token,
-        `group`.chat_id
+            user.name,
+            user.passport,
+            user.phone,
+            user.email
         FROM
         user
         JOIN group_user ON user.id = group_user.`user`
-        JOIN `group` ON group_user.`group` = `group`.id
         <where>
             1 = 1
             <if test="group!=null and group!=''">
@@ -112,7 +90,6 @@
             <if test="type!=null and type!=''">
                 AND group_user.type = #{type}
             </if>
-
         </where>
     </select>
 
