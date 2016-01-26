@@ -102,11 +102,11 @@ public class UserServiceImpl implements UserService {
         ufi.setMcode("user");
         ufi = FileManager.save(ufi);
         user.setUserId(LocalContext.getUser().getUserId());
-        user.setPhoto(FileManager.getFileUrlByRealpath(ufi.getPath()));
+        user.setPhoto(ufi.getPath());
         int i = userDao.update(user);
         Map<String, Object> result = new HashMap<>();
         Map<String, String> data = new HashMap<>();
-        data.put("photo",user.getPhoto());
+        data.put("photo", FileManager.getFileUrlByRealpath(user.getPhoto()));
         if(i > 0){
             versionTagDao.update(new VersionTag(LocalContext.getUser().getGroup(),1));
             result.put(Constants.RETURN_FIELD_STATUS, Constants.STATUS_SUCCESS);

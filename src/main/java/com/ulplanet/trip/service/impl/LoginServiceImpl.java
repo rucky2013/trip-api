@@ -126,7 +126,7 @@ public class LoginServiceImpl implements LoginService {
         user.setCurrentCountry(country);
         user.setCurrentCity(city);
         user.setLastUpdate(new Date().getTime());
-        user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : user.getPhoto());
+        user.setPhoto(StringUtils.isBlank(user.getPhoto()) ? "" : FileManager.getFileUrlByRealpath(user.getPhoto()));
         String token = TokenUtils.getToken(imei);
 
         int period = getPeriod(user.getEndDate());

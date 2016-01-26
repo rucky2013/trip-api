@@ -1,8 +1,8 @@
 package com.ulplanet.trip.api.location;
 
 import com.google.gson.Gson;
+import com.ulplanet.trip.common.config.Global;
 import com.ulplanet.trip.common.utils.HttpClientUtils;
-import com.ulplanet.trip.common.utils.JedisUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 坐标获取国家城市
@@ -24,7 +26,7 @@ public class GeocodeService {
     private static final Logger logger = LoggerFactory.getLogger(GeocodeService.class);
 
     private static final String URL = "https://maps.googleapis.com/maps/api/geocode/json";
-    private static final String KEY = "AIzaSyAZ_fueeljtF_ZTv9kCjRi9MQchqw7EWOU";
+    private static final String KEY = Global.getConfig("google.key");
 
     private static final Map<String, String> CITY_NODE_MAP = new HashMap<>();
     private static final Map<String, String> CITY_REVERT_MAP = new HashMap<>();
@@ -71,21 +73,12 @@ public class GeocodeService {
 
                 Gson gson = new Gson();
                 Geocode geocode = gson.fromJson(message, Geocode.class);
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-                int i = 1;
-                String date = format.format(new Date());
-                date = "googleMapCount"+date;
-                if(JedisUtils.exists(date)){
-                    i = Integer.parseInt(JedisUtils.get(date));
-                }
-                JedisUtils.set(date, Integer.toString(++i), 0);
 
                 String status = geocode.getStatus();
                 if ("OK".equals(status)) {
                     return geocode;
                 } else {
                     logger.error("地理位置接口错误:" + status + ";经度:" + longitude + ";纬度:" + latitude);
-                    logger.error(date + " google map 当前访问次数为 " + i);
                     return null;
                 }
             } else {
