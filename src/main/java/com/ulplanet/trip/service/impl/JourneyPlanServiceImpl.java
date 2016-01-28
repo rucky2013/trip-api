@@ -80,7 +80,7 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
             result.put(Constants.RETURN_FIELD_DATA, datas);
             return result;
         }
-//        List<User> users  = userService.findUserByParam(user);
+        List<User> users  = userService.findUserByParam(user);
 //        for(User u : users){
 //            Map<String,Object> temp = new HashMap<>();
 //            temp.put("guideName",u.getName());
