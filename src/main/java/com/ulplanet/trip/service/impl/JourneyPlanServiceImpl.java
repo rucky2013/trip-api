@@ -81,14 +81,14 @@ public class JourneyPlanServiceImpl implements JourneyPlanService {
             return result;
         }
         List<User> users  = userService.findUserByParam(user);
-        for(User u : users){
-            Map<String,Object> temp = new HashMap<>();
-            temp.put("guideName",u.getName());
-            temp.put("guidePassport",u.getPassport());
-            temp.put("guidePhone",u.getPhone());
-            temp.put("guideEmail",u.getEmail());
-            guides.add(temp);
-        }
+//        for(User u : users){
+//            Map<String,Object> temp = new HashMap<>();
+//            temp.put("guideName",u.getName());
+//            temp.put("guidePassport",u.getPassport());
+//            temp.put("guidePhone",u.getPhone());
+//            temp.put("guideEmail",u.getEmail());
+//            guides.add(temp);
+//        }
         int num = 0;
         List<JourneyPlans> jp1 = new ArrayList<>();
         List<Map<String,Object>> planList = new ArrayList<>();

@@ -146,7 +146,13 @@
 	        WHERE
 		        client_number = #{clientNumber}
     </select>
-	
+
+    <select id="getClient" resultMap="QingmaRecord">
+        SELECT client_number,client_pwd
+        FROM qingma_client
+        WHERE
+          id = #{id}
+    </select>
 
 		
 

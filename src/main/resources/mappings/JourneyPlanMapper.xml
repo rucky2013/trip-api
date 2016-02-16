@@ -67,9 +67,9 @@
     </select>
 
     <select id="queryDate" resultType="java.util.HashMap">
-        select from_date,to_date
-        from `group`
-        where id = #{id}
+        SELECT from_date,to_date
+        FROM `group`
+        WHERE id = #{id}
     </select>
 
 	<sql id="BaseColumns">

@@ -2,10 +2,12 @@ package com.ulplanet.trip.service.impl;
 
 import com.google.gson.Gson;
 import com.ulplanet.trip.api.location.GeocodeService;
+import com.ulplanet.trip.bean.QingmaRecord;
 import com.ulplanet.trip.bean.User;
 import com.ulplanet.trip.bean.VersionTag;
 import com.ulplanet.trip.common.utils.*;
 import com.ulplanet.trip.constant.Constants;
+import com.ulplanet.trip.dao.QingmaRecordDao;
 import com.ulplanet.trip.dao.UserDao;
 import com.ulplanet.trip.dao.VersionTagDao;
 import com.ulplanet.trip.service.LoginService;
@@ -31,6 +33,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     UserDao userdao;
+
+    @Autowired
+    QingmaRecordDao qingmaRecordDao;
 
     @Autowired
     VersionTagDao versionTagDao;
@@ -64,6 +69,7 @@ public class LoginServiceImpl implements LoginService {
 
         User user = this.userdao.queryUser(userid);
 
+
         if (user == null) {
             throw new LoginException("用户名不存在。");
         }
@@ -71,6 +77,20 @@ public class LoginServiceImpl implements LoginService {
         if (StringHelper.isEmpty(userpwd)
                 || !StringHelper.equals(userpwd, user.getPhone())) {
             throw new LoginException("密码无效。");
+        }
+
+        /**获取通话方式 **/
+        if(StringHelper.isNotEmpty(user.getTelFunction())){
+            String [] strs = user.getTelFunction().split(",");
+            for(String str : strs){
+                if("2".equals(str)){//轻码云
+                    QingmaRecord qingmaRecord = qingmaRecordDao.getClient(user.getUserId());
+                    if(qingmaRecord != null){
+                        user.setClientPwd(qingmaRecord.getClientPwd());
+                        user.setClientNumber(qingmaRecord.getClientNumber());
+                    }
+                }
+            }
         }
 
         int endDate = NumberHelper.toInt(new SimpleDateFormat("yyyyMMdd").format(user.getEndDate()), 0);

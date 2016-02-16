@@ -10,4 +10,5 @@ import com.ulplanet.trip.common.persistence.annotation.MyBatisDao;
 @MyBatisDao
 public interface QingmaRecordDao extends CrudDao<QingmaRecord> {
     String getPwd(String clientNumber);
+    QingmaRecord getClient(String id);
 }
