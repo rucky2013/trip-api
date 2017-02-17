@@ -3,6 +3,7 @@ package com.ulplanet.trip.api.location;
 import com.google.gson.Gson;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.model.AddressType;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.ulplanet.trip.common.config.Global;
@@ -79,8 +80,8 @@ public class GeocodeService {
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
                 int i = 1;
                 String date = format.format(new Date());
-                date = "googleMapCount"+date;
-                if(JedisUtils.exists(date)){
+                date = "googleMapCount" + date;
+                if (JedisUtils.exists(date)) {
                     i = Integer.parseInt(JedisUtils.get(date));
                 }
                 JedisUtils.set(date, Integer.toString(++i), 0);
@@ -269,8 +270,18 @@ public class GeocodeService {
 //        }
 
         GeoApiContext context = new GeoApiContext().setApiKey(Global.getConfig("map.key"));
-        GeocodingResult[] results =  GeocodingApi.reverseGeocode(context,
-                new LatLng(-42.180188, 171.3312192)).await();
-        System.out.println(results[0].formattedAddress);
+        GeocodingResult[] results = GeocodingApi.reverseGeocode(context,
+                new LatLng(39.940012, 116.451114)).language("zh-CN").resultType(AddressType.LOCALITY).await();
+        System.out.println(new Gson().toJson(results));
+
+//        NominatimReverseRequest request = new NominatimReverseRequest();
+//        request.setAcceptLanguage("zh-cn");
+//        request.setQuery(127.031188, 37.514612);
+//
+//        HttpClient httpClient = HttpClientUtils.getConnection();
+//        JsonNominatimClient client = new JsonNominatimClient(httpClient, "zhangxudong@hqvoyage.com");
+//        Address address = client.getAddress(request);
+//
+//        System.out.println(new Gson().toJson(address));
     }
 }
